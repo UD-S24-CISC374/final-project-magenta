@@ -53,9 +53,11 @@ export default class TestScene extends LevelClass {
         this.posX = this.player.x;
         this.posY = this.player.y;
 
-        const offsetX = -125;
-        const offsetY = -100;
+        //offset for where text appears relative to the player pos
+        const offsetX = -600;
+        const offsetY = -300;
 
+        //create/update text (float -> int for readability)
         this.playerPos?.setText(
             `Player Position: (${Math.floor(this.posX)}, ${Math.floor(
                 this.posY

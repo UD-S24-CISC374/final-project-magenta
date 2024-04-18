@@ -4,12 +4,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     //private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y, "cat", 1);
-        //scene.physics.add.sprite(100, 500, "cat", 1);
         this.setVisible(true);
-        this.setScale(2); // Ensure the scale is correct
+        this.setScale(2); //set scale 2 (32x32 -> 64x64)
         scene.add.existing(this);
         scene.physics.world.enable(this);
-        this.setDepth(10);
+
+        this.setDepth(10); //set player to top layer
 
         this.initAnimations();
         //this.initPhysics();
@@ -39,9 +39,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             frameRate: 10,
             repeat: -1,
         });
-        // Add more animations as needed
     }
 
+    //currently disabled as it was only used to set world bounds true
+    //may be needed in the future
     /*
     private initPhysics(): void {
         const body = this.body as Phaser.Physics.Arcade.Body;
