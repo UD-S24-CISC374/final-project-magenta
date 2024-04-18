@@ -4,6 +4,7 @@ export interface Platform {
     x: number;
     y: number;
     texture: string;
+    frame?: number | string;
     scale?: { x: number; y: number };
     dropEvent?: string;
 }
@@ -20,7 +21,8 @@ export function createPlatforms(
         const plat = platformGroup.create(
             platform.x,
             platform.y,
-            platform.texture
+            platform.texture,
+            platform.frame
         );
         if (platform.scale) {
             plat.setScale(platform.scale.x, platform.scale.y).refreshBody();

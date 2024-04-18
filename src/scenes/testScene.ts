@@ -8,8 +8,14 @@ export default class TestScene extends LevelClass {
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
     private platforms?: Phaser.Physics.Arcade.StaticGroup;
     private playerPos?: Phaser.GameObjects.Text;
+    private background1?: Phaser.Physics.Arcade.StaticGroup;
+    private background2?: Phaser.Physics.Arcade.StaticGroup;
     private posX = 0;
     private posY = 0;
+    private levelWidth: number = 2560; // Width of the level
+    private levelHeight: number = 1440; // Height of the level
+    private showGrid = false;
+    private showColl = false;
 
     constructor() {
         super({ key: "TestScene" });
@@ -20,8 +26,62 @@ export default class TestScene extends LevelClass {
         this.cameras.main.startFollow(this.player, true, 0.08, 0.08);
         this.cursors = this.input.keyboard?.createCursorKeys();
 
-        const level_1_bg = this.add.image(640, 360, "level_1_bg");
-        level_1_bg.setScale(1);
+        //will eventually make this a loop
+        this.background1 = this.physics.add.staticGroup();
+        const sizeOfBackgroundY = 416;
+        const sizeOfBackgroundX = 640;
+        this.background1.create(
+            sizeOfBackgroundX * 0,
+            sizeOfBackgroundY,
+            "background-1-level1"
+        );
+        this.background1.create(
+            sizeOfBackgroundX * 1,
+            sizeOfBackgroundY,
+            "background-1-level1"
+        );
+        this.background1.create(
+            sizeOfBackgroundX * 2,
+            sizeOfBackgroundY,
+            "background-1-level1"
+        );
+        this.background1.create(
+            sizeOfBackgroundX * 3,
+            sizeOfBackgroundY,
+            "background-1-level1"
+        );
+        this.background1.create(
+            sizeOfBackgroundX * 4,
+            sizeOfBackgroundY,
+            "background-1-level1"
+        );
+        //second bg
+        this.background2 = this.physics.add.staticGroup();
+        this.background2.create(
+            sizeOfBackgroundX * 0,
+            sizeOfBackgroundY * 0,
+            "background-2-level1"
+        );
+        this.background2.create(
+            sizeOfBackgroundX * 1,
+            sizeOfBackgroundY * 0,
+            "background-2-level1"
+        );
+        this.background2.create(
+            sizeOfBackgroundX * 2,
+            sizeOfBackgroundY * 0,
+            "background-2-level1"
+        );
+        this.background2.create(
+            sizeOfBackgroundX * 3,
+            sizeOfBackgroundY * 0,
+            "background-2-level1"
+        );
+        this.background2.create(
+            sizeOfBackgroundX * 4,
+            sizeOfBackgroundY * 0,
+            "background-2-level1"
+        );
 
         this.add.text(400, 250, "Test Scene", {
             color: "#0f0",
@@ -30,23 +90,97 @@ export default class TestScene extends LevelClass {
             color: "#0f0",
         });
 
-        this.physics.world.createDebugGraphic();
-
         this.platforms = this.physics.add.staticGroup();
 
+        const unit = 64;
+        const offset = 32;
         const platforms: Platform[] = [
-            { x: 230, y: 550, texture: "brown_plat_1" },
-            { x: 600, y: 550, texture: "brown_plat_1" },
-            { x: 970, y: 550, texture: "brown_plat_1" },
+            //plat 1
+            // height=1, width=3, frame (2, 1, 3) in sprite sheet
+            {
+                x: offset + unit * 3,
+                y: offset + unit * 8,
+                texture: "mars-tileset-1",
+                frame: 2,
+            },
+            {
+                x: offset + unit * 4,
+                y: offset + unit * 8,
+                texture: "mars-tileset-1",
+                frame: 1,
+            },
+            {
+                x: offset + unit * 5,
+                y: offset + unit * 8,
+                texture: "mars-tileset-1",
+                frame: 3,
+            },
+            //plat 2
+            {
+                x: offset + unit * 9,
+                y: offset + unit * 8,
+                texture: "mars-tileset-1",
+                frame: 2,
+            },
+            {
+                x: offset + unit * 10,
+                y: offset + unit * 8,
+                texture: "mars-tileset-1",
+                frame: 1,
+            },
+            {
+                x: offset + unit * 11,
+                y: offset + unit * 8,
+                texture: "mars-tileset-1",
+                frame: 3,
+            },
+            //plat 3
+            {
+                x: offset + unit * 15,
+                y: offset + unit * 8,
+                texture: "mars-tileset-1",
+                frame: 2,
+            },
+            {
+                x: offset + unit * 16,
+                y: offset + unit * 8,
+                texture: "mars-tileset-1",
+                frame: 1,
+            },
+            {
+                x: offset + unit * 17,
+                y: offset + unit * 8,
+                texture: "mars-tileset-1",
+                frame: 3,
+            },
             { x: 640, y: 720, texture: "brown_plat_1", scale: { x: 40, y: 2 } }, // Ground
         ];
         createPlatforms(this, platforms, this.platforms, [this.player]);
+        if (this.showGrid) {
+            this.drawGrid(64);
+        }
+        if (this.showColl) {
+            this.physics.world.createDebugGraphic();
+        }
     }
     preload() {
         this.load.spritesheet("cat", "assets/Art/cat_1.png", {
             frameWidth: 32,
             frameHeight: 32,
         });
+    }
+    drawGrid(gridSize: number): void {
+        const graphics = this.add.graphics({
+            lineStyle: { width: 1, color: 0x00ff00 },
+        });
+        // Draw vertical lines
+        for (let x = 0; x < this.levelWidth; x += gridSize) {
+            graphics.lineBetween(x, 0, x, this.levelHeight);
+        }
+        // Draw horizontal lines
+        for (let y = 0; y < this.levelHeight; y += gridSize) {
+            graphics.lineBetween(0, y, this.levelWidth, y);
+        }
     }
 
     private handlePrintPos() {

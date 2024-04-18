@@ -19,6 +19,14 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image("spikes_hor", "assets/Art/spikes_hor.png");
         this.load.image("spikes_vert", "assets/Art/spikes_vert.png");
         this.load.image("level_1_bg", "assets/Art/level_1_bg.png");
+        this.load.image(
+            "background-1-level1",
+            "assets/Art/background-1-level1.png"
+        );
+        this.load.image(
+            "background-2-level1",
+            "assets/Art/background-2-level1.png"
+        );
 
         //Sprite sheets
         this.load.spritesheet("button", "assets/Art/buttons.png", {
@@ -41,6 +49,14 @@ export default class PreloadScene extends Phaser.Scene {
             frameWidth: 32,
             frameHeight: 32,
         });
+        this.load.spritesheet(
+            "mars-tileset-1",
+            "assets/Art/mars-tileset-1.png",
+            {
+                frameWidth: 64,
+                frameHeight: 64,
+            }
+        );
 
         //Sounds
         this.load.audio("bg_music_1", "assets/Sound/gitcat_chill_demo2.mp3");
