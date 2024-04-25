@@ -57,6 +57,22 @@ export default class PreloadScene extends Phaser.Scene {
                 frameHeight: 64,
             }
         );
+        this.load.spritesheet("spacecraft", "assets/Art/Spacecraft.png", {
+            frameWidth: 84,
+            frameHeight: 84,
+        });
+        this.load.spritesheet("cat_black", "assets/Art/cat_black.png", {
+            frameWidth: 32,
+            frameHeight: 48,
+        });
+        this.load.spritesheet("cat_brown", "assets/Art/cat_brown.png", {
+            frameWidth: 32,
+            frameHeight: 48,
+        });
+        this.load.spritesheet("cat_orange", "assets/Art/cat_orange.png", {
+            frameWidth: 32,
+            frameHeight: 48,
+        });
 
         //Sounds
         this.load.audio("bg_music_1", "assets/Sound/gitcat_chill_demo2.mp3");

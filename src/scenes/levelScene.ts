@@ -12,8 +12,8 @@ export default class LevelScene extends Phaser.Scene {
 
     create() {
         /* ---------------     BACKGROUND    ------------------- */
-        const level_1_bg = this.add.image(640, 360, "level_1_bg");
-        level_1_bg.setScale(1);
+        const level_scn_bg = this.add.image(640, 360, "level_1_bg");
+        level_scn_bg.setScale(1);
         /* ---------------     LEVEL PLANETS    ------------------- */
         const lvl1 = this.add.image(200, 600, "planet-1");
         const lvl2 = this.add.image(400, 550, "planet-4");
