@@ -24,7 +24,7 @@ export default class MainScene extends Phaser.Scene {
         const main_scn_bg = this.add.image(640, 360, "background-2-level1");
         main_scn_bg.setScale(2);
         /* ---------------     MOVING SHIP    ------------------- */
-        this.ship = this.physics.add.sprite(100, 800, "spacecraft");
+        this.ship = this.physics.add.sprite(800, 800, "spacecraft");
         this.moveShip();
         /* ---------------     MOVING CATS    ------------------- */
         this.catStart = this.physics.add
