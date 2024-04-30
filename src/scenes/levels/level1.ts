@@ -8,7 +8,7 @@ export default class Level1Scene extends LevelClass {
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
     private platforms?: Phaser.Physics.Arcade.StaticGroup;
     private playerPos?: Phaser.GameObjects.Text;
-    private background1?: Phaser.GameObjects.TileSprite;
+    private background1: Phaser.GameObjects.TileSprite;
     private background2?: Phaser.Physics.Arcade.StaticGroup;
     private posX = 0;
     private posY = 0;
@@ -23,12 +23,12 @@ export default class Level1Scene extends LevelClass {
 
     create() {
         this.player = new Player(this, 100, 0);
-        this.cameras.main.startFollow(this.player, true, 0.08, 0.08);
+        this.cameras.main.startFollow(this.player, true, 0.08, 0.08, 0, 100);
         this.cursors = this.input.keyboard?.createCursorKeys();
 
-        this.background1 = this.add.tileSprite(0, 0, this.levelWidth, this.levelHeight, "background-1-level1");
+        this.background1 = this.add.tileSprite(0, 0, this.levelWidth * 2, this.levelHeight * 2, "level_1_mars");
         this.background1.setOrigin(0);
-        this.background1.setScrollFactor(0);
+        this.background1.setScrollFactor(0, 0);
 
         this.add.text(400, 250, "Test Scene", {
             color: "#0f0",
