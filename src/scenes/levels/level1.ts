@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import LevelClass from "../../Classes/LevelClass";
 import { Player } from "../../objects/player";
 import { Platform, createPlatforms } from "../../components/platform";
+import { Button, createButton } from "../../components/pauseButton";
 
 export default class Level1Scene extends LevelClass {
     private player: Player;
@@ -16,6 +17,7 @@ export default class Level1Scene extends LevelClass {
     private levelHeight: number = 1440; // Height of the level
     private showGrid = false;
     private showColl = false;
+    private pauseButton: Button;
 
     constructor() {
         super({ key: "Level1Scene" });
@@ -26,7 +28,13 @@ export default class Level1Scene extends LevelClass {
         this.cameras.main.startFollow(this.player, true, 0.08, 0.08, 0, 100);
         this.cursors = this.input.keyboard?.createCursorKeys();
 
-        this.background1 = this.add.tileSprite(0, 0, this.levelWidth * 2, this.levelHeight * 2, "level_1_mars");
+        this.background1 = this.add.tileSprite(
+            0,
+            0,
+            this.levelWidth * 2,
+            this.levelHeight * 2,
+            "level_1_mars"
+        );
         this.background1.setOrigin(0);
         this.background1.setScrollFactor(0, 0);
 
@@ -39,6 +47,17 @@ export default class Level1Scene extends LevelClass {
 
         this.platforms = this.physics.add.staticGroup();
 
+        const pause = [
+            {
+                x: 100,
+                y: 100,
+                color: "#0f0",
+                text: "pause",
+            },
+        ];
+
+        this.pauseButton = createButton(this, pause)[0];
+
         const unit = 64;
         const offset = 32;
         const platforms: Platform[] = [
@@ -46,61 +65,61 @@ export default class Level1Scene extends LevelClass {
             // height=1, width=3, frame (2, 1, 3) in sprite sheet
             {
                 x: offset + unit * 3,
-                y: offset + unit * 8,
+                y: offset + unit * 7,
                 texture: "mars-tileset-1",
                 frame: 2,
             },
             {
                 x: offset + unit * 4,
-                y: offset + unit * 8,
+                y: offset + unit * 7,
                 texture: "mars-tileset-1",
                 frame: 1,
             },
             {
                 x: offset + unit * 5,
-                y: offset + unit * 8,
+                y: offset + unit * 7,
                 texture: "mars-tileset-1",
                 frame: 3,
             },
             //plat 2
             {
                 x: offset + unit * 9,
-                y: offset + unit * 8,
+                y: offset + unit * 7,
                 texture: "mars-tileset-1",
                 frame: 2,
             },
             {
                 x: offset + unit * 10,
-                y: offset + unit * 8,
+                y: offset + unit * 7,
                 texture: "mars-tileset-1",
                 frame: 1,
             },
             {
                 x: offset + unit * 11,
-                y: offset + unit * 8,
+                y: offset + unit * 7,
                 texture: "mars-tileset-1",
                 frame: 3,
             },
             //plat 3
             {
                 x: offset + unit * 15,
-                y: offset + unit * 8,
+                y: offset + unit * 7,
                 texture: "mars-tileset-1",
                 frame: 2,
             },
             {
                 x: offset + unit * 16,
-                y: offset + unit * 8,
+                y: offset + unit * 7,
                 texture: "mars-tileset-1",
                 frame: 1,
             },
             {
                 x: offset + unit * 17,
-                y: offset + unit * 8,
+                y: offset + unit * 7,
                 texture: "mars-tileset-1",
                 frame: 3,
             },
-            { x: 640, y: 720, texture: "brown_plat_1", scale: { x: 40, y: 2 } }, // Ground
+            { x: 640, y: 720, texture: "brown_plat_1", scale: { x: 40, y: 4 } }, // Ground
         ];
         createPlatforms(this, platforms, this.platforms, [this.player]);
         if (this.showGrid) {
@@ -145,6 +164,14 @@ export default class Level1Scene extends LevelClass {
             )})`
         );
         this.playerPos?.setPosition(this.posX + offsetX, this.posY + offsetY);
+    }
+
+    enterButtonHoverState(button: Phaser.GameObjects.Text) {
+        button.setStyle({ fill: "#ff0" });
+    }
+
+    enterButtonRestState(button: Phaser.GameObjects.Text) {
+        button.setStyle({ fill: "#0f0" });
     }
 
     update() {

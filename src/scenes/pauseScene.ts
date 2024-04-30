@@ -6,8 +6,14 @@ export default class PauseScene extends Phaser.Scene {
     /* ---------------     MAIN MENU BUTTON    ------------------- */
     mainMenuButton: Phaser.GameObjects.Text;
 
+    previousScene: Phaser.Scene;
+
     constructor() {
         super({ key: "PauseScene" });
+    }
+
+    init(data: { previousScene: Phaser.Scene }) {
+        this.previousScene = data.previousScene;
     }
 
     create() {
@@ -18,7 +24,7 @@ export default class PauseScene extends Phaser.Scene {
             .text(400, 300, "Resume", { color: "#0f0" })
             .setInteractive()
             .on("pointerdown", () => {
-                this.updateResumeClicked();
+                this.updateResumeClicked(this.previousScene);
             })
             .on("pointerover", () => {
                 this.enterButtonHoverState(this.resumeButton);
@@ -26,7 +32,6 @@ export default class PauseScene extends Phaser.Scene {
             .on("pointerout", () => {
                 this.enterButtonRestState(this.resumeButton);
             });
-
         /* ---------------     MAIN MENU BUTTON    ------------------- */
         this.mainMenuButton = this.add
             .text(400, 400, "Main Menu", { color: "#0f0" })
@@ -42,9 +47,10 @@ export default class PauseScene extends Phaser.Scene {
             });
     }
 
-    updateResumeClicked() {
-        this.scene.switch("StartScene");
+    updateResumeClicked(scene: Phaser.Scene) {
         this.scene.stop();
+        this.scene.resume(scene.scene.key);
+        scene.scene.setVisible(true);
     }
 
     updateMainMenuClicked() {
