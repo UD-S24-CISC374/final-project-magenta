@@ -136,16 +136,27 @@ export default class Level1Scene extends LevelClass {
         //     `git commit -m 'Add New Platform'`,
         //     `git push`,
         // ];
-        let terminal_1_scene = this.scene.manager.getScene("Level1Scene_Terminal1");
-
+        let terminal_1_scene = this.scene.manager.getScene(
+            "Level1Scene_Terminal1"
+        );
         this.CorrectTerminalArr = [
-            `${terminal_1_scene.scene.key}_git add blue`,
-            `${terminal_1_scene.scene.key}_git commit -m 'Add New Platform'`,
-            `${terminal_1_scene.scene.key}_git push`,
+            `git add blue`,
+            `git commit -m 'Add New Platform'`,
+            `git push`,
         ];
-        new TerminalBody(this, 300, 300, "terminal", this.CorrectTerminalArr, "1");
+        new TerminalBody(
+            this,
+            300,
+            300,
+            "terminal",
+            this.CorrectTerminalArr,
+            "1"
+        );
         terminal_1_scene.events.on("Terminal1_correct", () => {
             console.log("correct terminal 1");
+        });
+        terminal_1_scene.events.on("Terminal1_incorrect", () => {
+            console.log("incorrect terminal 1");
         });
     }
     preload() {

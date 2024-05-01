@@ -16,8 +16,6 @@ export class ButtonAndListensers {
             correctTerminalArr: string[]
         ) => void
     ) {
-        const SCENE_KEY = scene.scene.key;
-
         buttonNames.map((buttonName, index) => {
             new TerminalButton(
                 scene,
@@ -25,9 +23,9 @@ export class ButtonAndListensers {
                 y,
                 texture,
                 buttonName,
-                `${SCENE_KEY}_${buttonName}`
+                buttonName
             );
-            new Listenter(scene, `${SCENE_KEY}_${buttonName}`);
+            new Listenter(scene, buttonName);
         });
 
         scene.events.on("check_terminal_input", () => {

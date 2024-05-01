@@ -20,8 +20,11 @@ export class TerminalBody extends Phaser.GameObjects.Sprite {
             scene.player,
             this,
             () => {
-                scene.scene.pause(scene.scene.key);+
-                scene.scene.launch(`${scene.scene.key}_Terminal${terminalNumber}`, { level: scene });
+                scene.scene.pause(scene.scene.key);
+                +scene.scene.launch(
+                    `${scene.scene.key}_Terminal${terminalNumber}`,
+                    { level: scene }
+                );
             },
             undefined,
             this
@@ -31,18 +34,14 @@ export class TerminalBody extends Phaser.GameObjects.Sprite {
             `${scene.scene.key}_Terminal${terminalNumber}`
         );
 
-        terminalScene.events.on(
-            `TerminalClose`,
-            () => {
-                scene.events.emit(`Terminal${terminalNumber}_correct`);
-                terminal_Overlap.active = false;
-            }
-        );
+        terminalScene.events.on(`Terminal${terminalNumber}_Close`, () => {
+            console.log("back");
+            terminal_Overlap.active = false;
+        });
 
         //Listen for Terminal Reset
         scene.events.on(`Terminal${terminalNumber}_reset`, () => {
             terminal_Overlap.active = true;
-
         });
 
         scene.physics.add.existing(this);
