@@ -3,12 +3,12 @@ import LevelClass from "../Classes/LevelClass";
 import { ButtonAndListensers } from "../components/buttonAndListeners";
 import { terminalDisplay } from "../components/terminalDisplay";
 
-export default class Level2Scene_Terminal1 extends LevelClass {
+export default class Level2Scene_Terminal2 extends LevelClass {
     private mainLevel: LevelClass;
     private terminalDisplayText: Phaser.GameObjects.Text;
     private TerminalInput: HTMLInputElement;
     constructor() {
-        super({ key: "Level2Scene_Terminal1" });
+        super({ key: "Level2Scene_Terminal2" });
     }
 
     init(data: { level: LevelClass }) {

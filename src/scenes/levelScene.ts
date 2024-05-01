@@ -124,7 +124,7 @@ export default class LevelScene extends Phaser.Scene {
             });
         /* ---------------     Test Scene    ------------------- */
         /*
-        this.level2 = this.add
+        this.test = this.add
             .text(300, 100, "Test-Scene", { color: "#0f0" })
             .setInteractive()
             .on("pointerdown", () => {

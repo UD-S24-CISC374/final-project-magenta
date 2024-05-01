@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import LevelClass from "../../Classes/LevelClass";
 import { ButtonAndListensers } from "../../components/buttonAndListeners";
 
-export default class Terminal1_Lvl2 extends LevelClass {
+export default class Level2Scene_Terminal1 extends LevelClass {
     private mainLevel: LevelClass;
     private terminalDisplay: Phaser.GameObjects.Text;
     constructor() {
