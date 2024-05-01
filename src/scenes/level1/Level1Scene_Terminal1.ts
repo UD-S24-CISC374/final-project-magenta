@@ -65,11 +65,15 @@ export default class Level1Scene_Terminal1 extends LevelClass {
             this.scene.resume(this.mainLevel.scene.key);
             this.scene.stop();
         });
-        this.events.on("incorrect_terminal_input", () => {
+        function handleEnd(this: Level1Scene_Terminal1) {
+            console.log("here");
             this.events.emit(`Terminal1_Close`);
             this.events.emit(`Terminal1_incorrect`);
             this.scene.resume(this.mainLevel.scene.key);
             this.scene.stop();
+        }
+        this.events.on("incorrect_terminal_input", () => {
+            this.time.delayedCall(1500, handleEnd, [this], this);
         });
     }
 
@@ -100,7 +104,7 @@ export default class Level1Scene_Terminal1 extends LevelClass {
                         color: "#880808",
                     }
                 );
-                //scene.events.emit("incorrect_terminal_input");
+                scene.events.emit("incorrect_terminal_input");
             }
             //Did they push without the blue platform
             else if (!input.includes("git add blue")) {
@@ -113,7 +117,7 @@ export default class Level1Scene_Terminal1 extends LevelClass {
                         color: "#880808",
                     }
                 );
-                //scene.events.emit("incorrect_terminal_input");
+                scene.events.emit("incorrect_terminal_input");
             }
             //Did they push without the commit
             else if (!input.includes("git commit -m 'Add New Platform'")) {
@@ -126,7 +130,7 @@ export default class Level1Scene_Terminal1 extends LevelClass {
                         color: "#880808",
                     }
                 );
-                //scene.events.emit("incorrect_terminal_input");
+                scene.events.emit("incorrect_terminal_input");
             }
 
             //Clear the input array for next time

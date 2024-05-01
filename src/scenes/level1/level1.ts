@@ -4,6 +4,7 @@ import { Player } from "../../objects/player";
 import { Platform, createPlatforms } from "../../components/platform";
 import { Button, createButton } from "../../components/pauseButton";
 import { TerminalBody } from "../../components/terminalAndTerminalSceneHelpers";
+import { updateCurrentLevel } from "../currentLevel";
 
 export default class Level1Scene extends LevelClass {
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -17,6 +18,8 @@ export default class Level1Scene extends LevelClass {
     private showGrid = false;
     private showColl = false;
     private pauseButton: Button;
+    private spikes?: Phaser.Physics.Arcade.Group;
+    private gameOver = false;
 
     constructor() {
         super({ key: "Level1Scene" });
@@ -128,6 +131,16 @@ export default class Level1Scene extends LevelClass {
             this.physics.world.createDebugGraphic();
         }
 
+        this.spikes = this.physics.add.group();
+        this.physics.add.collider(this.spikes, this.platforms);
+        this.physics.add.collider(
+            this.player,
+            this.spikes,
+            this.handleHitSpike,
+            undefined,
+            this
+        );
+
         /* ---------------     Create Terminal    ------------------- 
             Must be done after platform and player creation
         */
@@ -156,7 +169,8 @@ export default class Level1Scene extends LevelClass {
             console.log("correct terminal 1");
         });
         terminal_1_scene.events.on("Terminal1_incorrect", () => {
-            console.log("incorrect terminal 1");
+            let spike = this.spikes?.create(250, 300, "spikes_hor");
+            spike.flipY = true;
         });
     }
     preload() {
@@ -177,6 +191,12 @@ export default class Level1Scene extends LevelClass {
         for (let y = 0; y < this.levelHeight; y += gridSize) {
             graphics.lineBetween(0, y, this.levelWidth, y);
         }
+    }
+    private handleHitSpike() {
+        this.physics.pause();
+        this.player.setTint(0xff0000);
+        this.player.anims.play("turn");
+        this.gameOver = true;
     }
 
     private handlePrintPos() {
@@ -207,5 +227,12 @@ export default class Level1Scene extends LevelClass {
     update() {
         this.player.update(this.cursors);
         this.handlePrintPos();
+
+        if (this.gameOver) {
+            this.gameOver = false;
+            updateCurrentLevel(this.scene.key);
+            this.scene.start("RespawnScene");
+            this.scene.stop();
+        }
     }
 }
