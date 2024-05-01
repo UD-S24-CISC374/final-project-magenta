@@ -91,6 +91,7 @@ export default class Terminal1_Lvl1 extends LevelClass {
                         color: "#880808",
                     }
                 );
+                //scene.events.emit("incorrect_terminal_input");
             }
             //Did they push without the blue platform
             else if (!input.includes("git add blue")) {
@@ -103,6 +104,7 @@ export default class Terminal1_Lvl1 extends LevelClass {
                         color: "#880808",
                     }
                 );
+                //scene.events.emit("incorrect_terminal_input");
             }
             //Did they push without the commit
             else if (!input.includes("git commit -m 'Add New Platform'")) {
@@ -115,11 +117,11 @@ export default class Terminal1_Lvl1 extends LevelClass {
                         color: "#880808",
                     }
                 );
+                //scene.events.emit("incorrect_terminal_input");
             }
 
             //Clear the input array for next time
             scene.terminalInputArr = [];
-            //scene.events.emit("incorrect_terminal_input");
         }
 
         if (input.length > correctInput.length + 2) {
