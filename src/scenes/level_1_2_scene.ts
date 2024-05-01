@@ -1,11 +1,8 @@
 import Phaser from "phaser";
 import { updateCurrentLevel } from "./currentLevel";
 import LevelClass from "../Classes/LevelClass";
-import { ButtonAndListensers } from "../components/buttonAndListeners";
 
 export default class Level_1_2_scene extends LevelClass {
-    private platforms?: Phaser.Physics.Arcade.StaticGroup;
-    private player?: Phaser.Physics.Arcade.Sprite;
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
     private stars?: Phaser.Physics.Arcade.Group;
     private spikes?: Phaser.Physics.Arcade.Group;
@@ -16,15 +13,11 @@ export default class Level_1_2_scene extends LevelClass {
     private terminalCorrect: boolean = false;
     private gameOver = false;
     private textSpawned = false;
+    private isTerminalOpen: boolean = false;
 
     constructor() {
         const key = "Level_1_2_scene";
         super({ key: key });
-        this.CorrectTerminalArr = [
-            `${key}_git add blue`,
-            `${key}_git commit -m 'Add New Platform'`,
-            `${key}_git push`,
-        ];
     }
 
     private setTerminalCorrect(correct: boolean) {
@@ -65,11 +58,11 @@ export default class Level_1_2_scene extends LevelClass {
         //platform 1
         this.platforms.create(200, 625, "brown_plat_1");
 
-        this.player = this.physics.add.sprite(70, 600, "dude");
-        this.player.setBounce(0.05);
-        this.player.setCollideWorldBounds(true);
-        this.player.body?.setSize(32, 32);
-        this.player.setScale(2);
+        // this.player = this.physics.add.sprite(70, 600, "dude");
+        // this.player.setBounce(0.05);
+        // this.player.setCollideWorldBounds(true);
+        // this.player.body?.setSize(32, 32);
+        // this.player.setScale(2);
 
         this.anims.create({
             key: "left",
@@ -139,46 +132,40 @@ export default class Level_1_2_scene extends LevelClass {
         this.physics.add.collider(this.terminal, this.platforms);
         this.terminal.create(200, 500, "terminal");
         this.physics.add.collider(this.terminal, this.platforms);
-        this.physics.add.overlap(
+       
+        let terminal_1_Overlap = this.physics.add.overlap(
             this.player,
             this.terminal,
             () => {
-                this.handleTerminal();
+                console.log("back");
+                this.scene.pause("Level_1_2_scene");
+                this.scene.launch("Terminal1_Lvl1", { level: this });
             },
             undefined,
             this
         );
 
         //Create terminal Buttons and Events
-        this.events.on("correct_terminal_input", () => {
-            this.terminalCorrect = true;
-        });
-        this.events.once("terminalCollison", () => {
-            new ButtonAndListensers(
-                this,
-                200,
-                100,
-                "button",
-                [
-                    "git add red",
-                    "git add blue",
-                    "git commit -m 'Add New Platform'",
-                    "git push",
-                ],
-                this.CorrectTerminalArr,
-                this.handleFeedback
-            );
-        });
-    }
 
-    private handleTerminal() {
-        this.events.emit("terminalCollison");
+        let terminal_1 = this.scene.manager.getScene("Terminal1_Lvl1");
+        this.CorrectTerminalArr = [
+            `${terminal_1.scene.key}_git add blue`,
+            `${terminal_1.scene.key}_git commit -m 'Add New Platform'`,
+            `${terminal_1.scene.key}_git push`,
+        ];
+        terminal_1.events.on(
+            `${terminal_1.scene.key}_correct_terminal_input`,
+            () => {
+                this.terminalCorrect = true;
+                terminal_1_Overlap.active = false;
+            }
+        );
     }
 
     private handleHitSpike() {
         this.physics.pause();
-        this.player?.setTint(0xff0000);
-        this.player?.anims.play("turn");
+        this.player.setTint(0xff0000);
+        this.player.anims.play("turn");
         this.gameOver = true;
     }
 
@@ -250,17 +237,17 @@ export default class Level_1_2_scene extends LevelClass {
 
     update() {
         if (this.cursors?.left.isDown) {
-            this.player?.setVelocityX(-200);
-            this.player?.anims.play("left", true);
+            this.player.setVelocityX(-200);
+            this.player.anims.play("left", true);
         } else if (this.cursors?.right.isDown) {
-            this.player?.setVelocityX(200);
-            this.player?.anims.play("right", true);
+            this.player.setVelocityX(200);
+            this.player.anims.play("right", true);
         } else {
-            this.player?.setVelocityX(0);
-            this.player?.anims.play("turn", true);
+            this.player.setVelocityX(0);
+            this.player.anims.play("turn", true);
         }
 
-        if (this.cursors?.up.isDown && this.player?.body?.touching.down) {
+        if (this.cursors?.up.isDown && this.player.body?.touching.down) {
             this.player.setVelocityY(-300);
         }
         if (this.gameOver) {
@@ -273,6 +260,7 @@ export default class Level_1_2_scene extends LevelClass {
             //this.platforms2?.create(500, 200, "blue_plat_1");
             this.handlePlat();
         }
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this.player) {
             if (this.player.x > 800 && !this.textSpawned) {
                 this.handleNPC();

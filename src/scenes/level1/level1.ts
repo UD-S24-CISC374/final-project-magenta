@@ -3,11 +3,10 @@ import LevelClass from "../../Classes/LevelClass";
 import { Player } from "../../objects/player";
 import { Platform, createPlatforms } from "../../components/platform";
 import { Button, createButton } from "../../components/pauseButton";
+import { TerminalBody } from "../../components/terminalAndTerminalSceneHelpers";
 
 export default class Level1Scene extends LevelClass {
-    private player: Player;
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
-    private platforms?: Phaser.Physics.Arcade.StaticGroup;
     private playerPos?: Phaser.GameObjects.Text;
     private background1: Phaser.GameObjects.TileSprite;
     private background2?: Phaser.Physics.Arcade.StaticGroup;
@@ -128,6 +127,37 @@ export default class Level1Scene extends LevelClass {
         if (this.showColl) {
             this.physics.world.createDebugGraphic();
         }
+
+        /* ---------------     Create Terminal    ------------------- 
+            Must be done after platform and player creation
+        */
+        // let correctButtonOrder = [
+        //     `git add blue`,
+        //     `git commit -m 'Add New Platform'`,
+        //     `git push`,
+        // ];
+        let terminal_1_scene = this.scene.manager.getScene(
+            "Level1Scene_Terminal1"
+        );
+        this.CorrectTerminalArr = [
+            `git add blue`,
+            `git commit -m 'Add New Platform'`,
+            `git push`,
+        ];
+        new TerminalBody(
+            this,
+            300,
+            300,
+            "terminal",
+            this.CorrectTerminalArr,
+            "1"
+        );
+        terminal_1_scene.events.on("Terminal1_correct", () => {
+            console.log("correct terminal 1");
+        });
+        terminal_1_scene.events.on("Terminal1_incorrect", () => {
+            console.log("incorrect terminal 1");
+        });
     }
     preload() {
         this.load.spritesheet("cat", "assets/Art/cat_1.png", {

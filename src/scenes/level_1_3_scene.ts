@@ -2,10 +2,9 @@
 import Phaser from "phaser";
 import { updateCurrentLevel } from "./currentLevel";
 import LevelClass from "../Classes/LevelClass";
+import { Player } from "../objects/player";
 
 export default class Level_1_3_scene extends LevelClass {
-    private platforms?: Phaser.Physics.Arcade.StaticGroup;
-    private player?: Phaser.Physics.Arcade.Sprite;
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
     private scoreText?: Phaser.GameObjects.Text;
     private gameOver = false;
@@ -34,11 +33,12 @@ export default class Level_1_3_scene extends LevelClass {
         //setting the size of the groud (1, 2, 3)
         ground.setScale(40, 2).refreshBody();
 
-        this.player = this.physics.add.sprite(70, 600, "dude");
-        this.player.setBounce(0.05);
-        this.player.setCollideWorldBounds(true);
-        this.player.body?.setSize(32, 32);
-        this.player.setScale(2);
+        this.player = new Player(this, 100, 500);
+        // this.player = this.physics.add.sprite(70, 600, "dude");
+        // this.player.setBounce(0.05);
+        // this.player.setCollideWorldBounds(true);
+        // this.player.body?.setSize(32, 32);
+        // this.player.setScale(2);
 
         this.anims.create({
             key: "left",
@@ -135,16 +135,16 @@ export default class Level_1_3_scene extends LevelClass {
 
     update() {
         if (this.cursors?.left.isDown) {
-            this.player?.setVelocityX(-200);
-            this.player?.anims.play("left", true);
+            this.player.setVelocityX(-200);
+            this.player.anims.play("left", true);
         } else if (this.cursors?.right.isDown) {
-            this.player?.setVelocityX(200);
-            this.player?.anims.play("right", true);
+            this.player.setVelocityX(200);
+            this.player.anims.play("right", true);
         } else {
-            this.player?.setVelocityX(0);
-            this.player?.anims.play("turn", true);
+            this.player.setVelocityX(0);
+            this.player.anims.play("turn", true);
         }
-        if (this.cursors?.up.isDown && this.player?.body?.touching.down) {
+        if (this.cursors?.up.isDown && this.player.body?.touching.down) {
             this.player.setVelocityY(-300);
         }
         if (this.gameOver) {
@@ -154,6 +154,7 @@ export default class Level_1_3_scene extends LevelClass {
             this.scene.start("RespawnScene");
             this.scene.stop();
         }
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this.player) {
             if (this.player.x > 450 && !this.textSpawned) {
                 this.handleNPC();
