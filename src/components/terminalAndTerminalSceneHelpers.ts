@@ -21,7 +21,7 @@ export class TerminalBody extends Phaser.GameObjects.Sprite {
             this,
             () => {
                 scene.scene.pause(scene.scene.key);
-                +scene.scene.launch(
+                scene.scene.launch(
                     `${scene.scene.key}_Terminal${terminalNumber}`,
                     { level: scene }
                 );

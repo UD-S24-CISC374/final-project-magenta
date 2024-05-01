@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import LevelClass from "../Classes/LevelClass";
 import { Player } from "../objects/player";
 import { Platform, createPlatforms } from "../components/platform";
+import { TerminalBody } from "../components/terminalAndTerminalSceneHelpers";
 
 export default class TestScene extends LevelClass {
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -16,7 +17,7 @@ export default class TestScene extends LevelClass {
     private showColl = false;
 
     constructor() {
-        super({ key: "TestScene" });
+        super({ key: "Level2Scene" });
     }
 
     create() {
@@ -160,6 +161,36 @@ export default class TestScene extends LevelClass {
         if (this.showColl) {
             this.physics.world.createDebugGraphic();
         }
+        /* ---------------     Create Terminal    ------------------- 
+            Must be done after platform and player creation
+        */
+        // let correctButtonOrder = [
+        //     `git add blue`,
+        //     `git commit -m 'Add New Platform'`,
+        //     `git push`,
+        // ];
+        let terminal_1_scene = this.scene.manager.getScene(
+            "Level2Scene_Terminal1"
+        );
+        this.CorrectTerminalArr = [
+            `git add blue`,
+            `git commit -m 'add new platform'`,
+            `git push`,
+        ];
+        new TerminalBody(
+            this,
+            300,
+            300,
+            "terminal",
+            this.CorrectTerminalArr,
+            "1"
+        );
+        terminal_1_scene.events.on("Terminal1_correct", () => {
+            console.log("correct terminal 1");
+        });
+        terminal_1_scene.events.on("Terminal1_incorrect", () => {
+            console.log("incorrect terminal 1");
+        });
     }
     preload() {
         this.load.spritesheet("cat", "assets/Art/cat_1.png", {
