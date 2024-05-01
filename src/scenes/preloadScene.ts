@@ -32,6 +32,8 @@ export default class PreloadScene extends Phaser.Scene {
             "background-2-level1",
             "assets/Art/background-2-level1.png"
         );
+        this.load.image("ice-planet-bg", "assets/Art/ice-planet-bg.png");
+        this.load.image("ice-ground-1", "assets/Art/ice-ground-1.png");
 
         //Sprite sheets
         this.load.spritesheet("button", "assets/Art/buttons.png", {
@@ -57,6 +59,14 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.spritesheet(
             "mars-tileset-1",
             "assets/Art/mars-tileset-1.png",
+            {
+                frameWidth: 64,
+                frameHeight: 64,
+            }
+        );
+        this.load.spritesheet(
+            "ice-planet-tileset-1",
+            "assets/Art/ice-planet-tileset-1.png",
             {
                 frameWidth: 64,
                 frameHeight: 64,

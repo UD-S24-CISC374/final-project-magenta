@@ -123,6 +123,7 @@ export default class LevelScene extends Phaser.Scene {
                 this.enterButtonRestState(this.level6);
             });
         /* ---------------     Test Scene    ------------------- */
+        /*
         this.level2 = this.add
             .text(300, 100, "Test-Scene", { color: "#0f0" })
             .setInteractive()
@@ -135,6 +136,7 @@ export default class LevelScene extends Phaser.Scene {
             .on("pointerout", () => {
                 this.enterButtonRestState(this.level2);
             });
+            */
     }
 
     //update back clicked and update level clicked need to be implemented proporly,
