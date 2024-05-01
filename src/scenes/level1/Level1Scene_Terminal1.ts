@@ -5,7 +5,7 @@ import { ButtonAndListensers } from "../../components/buttonAndListeners";
 export default class Terminal1_Lvl1 extends LevelClass {
     private mainLevel: LevelClass;
     constructor() {
-        super({ key: "Terminal1_Lvl1" });
+        super({ key: "Level1Scene_Terminal1" });
     }
 
     init(data: { level: LevelClass }) {
@@ -28,10 +28,11 @@ export default class Terminal1_Lvl1 extends LevelClass {
             this.CorrectTerminalArr,
             this.handleFeedback
         );
-
+        
+        //Handle Feedback Events
         this.events.on("correct_terminal_input", () => {
-            console.log("here1");
-            this.events.emit(`${this.scene.key}_correct_terminal_input`);
+            this.events.emit(`TerminalClose`);
+            this.events.emit(`Terminal1_correct`);
             this.scene.resume(this.mainLevel.scene.key);
             this.scene.stop();
         });

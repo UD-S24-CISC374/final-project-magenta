@@ -4,9 +4,7 @@ import { Player } from "../objects/player";
 import { Platform, createPlatforms } from "../components/platform";
 
 export default class TestScene extends LevelClass {
-    private player: Player;
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
-    private platforms?: Phaser.Physics.Arcade.StaticGroup;
     private playerPos?: Phaser.GameObjects.Text;
     private background1?: Phaser.Physics.Arcade.StaticGroup;
     private background2?: Phaser.Physics.Arcade.StaticGroup;

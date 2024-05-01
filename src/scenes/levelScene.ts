@@ -49,7 +49,7 @@ export default class LevelScene extends Phaser.Scene {
             .text(120, 595, "Level 1", { color: "#0f0" })
             .setInteractive()
             .on("pointerdown", () => {
-                this.updateLevelClicked("Level_1_2_scene");
+                this.updateLevelClicked("Level1Scene");
             })
             .on("pointerover", () => {
                 this.enterButtonHoverState(this.level1);
