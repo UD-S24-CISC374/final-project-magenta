@@ -1,13 +1,14 @@
 import Phaser from "phaser";
-import LevelClass from "../../Classes/LevelClass";
-import { ButtonAndListensers } from "../../components/buttonAndListeners";
-import { terminalDisplay } from "../../components/terminalDisplay";
+import LevelClass from "../Classes/LevelClass";
+import { ButtonAndListensers } from "../components/buttonAndListeners";
+import { terminalDisplay } from "../components/terminalDisplay";
 
-export default class Level1Scene_Terminal1 extends LevelClass {
+export default class Level2Scene_Terminal1 extends LevelClass {
     private mainLevel: LevelClass;
     private terminalDisplayText: Phaser.GameObjects.Text;
+    private TerminalInput: HTMLInputElement;
     constructor() {
-        super({ key: "Level1Scene_Terminal1" });
+        super({ key: "Level2Scene_Terminal1" });
     }
 
     init(data: { level: LevelClass }) {
@@ -24,15 +25,47 @@ export default class Level1Scene_Terminal1 extends LevelClass {
             [
                 "git add red",
                 "git add blue",
-                "git commit -m 'Add New Platform'",
+                "git commit -m 'add new platform'",
                 "git push",
             ],
             this.CorrectTerminalArr,
             this.handleFeedback
         );
 
+        //Terminal Display
         new terminalDisplay(this);
+        //Terminal Input Text ~ Credit to group Lime For the idea
+        this.TerminalInput = document.createElement("input");
+        this.TerminalInput.type = "text";
+        this.TerminalInput.style.position = "absolute";
+        this.TerminalInput.style.width = "600px";
+        this.TerminalInput.style.height = "40px";
+        this.TerminalInput.style.fontSize = "20px";
+        this.TerminalInput.style.top = "80%";
+        this.TerminalInput.style.left = "600px";
+        this.TerminalInput.style.backgroundColor = "#000";
+        this.TerminalInput.style.color = "#0f0";
+        this.TerminalInput.placeholder = "~$";
+        this.TerminalInput.style.border = "2px solid green";
+        this.TerminalInput.style.transform = "translate(-50%, -50%)";
+        document.body.appendChild(this.TerminalInput);
 
+        this.input.keyboard?.on("keydown", (event: KeyboardEvent) => {
+            if (event.key === " ") {
+                this.TerminalInput.value += " ";
+            }
+            if (event.key === "Enter") {
+                this.terminalInputArr.push(
+                    this.TerminalInput.value.toLocaleLowerCase()
+                );
+                this.TerminalInput.value = "";
+                this.handleFeedback(
+                    this,
+                    this.terminalInputArr,
+                    this.CorrectTerminalArr
+                );
+            }
+        });
         //Reset button
         let resetButton = this.add
             .text(300, 180, "Reset Terminal", {
@@ -62,12 +95,14 @@ export default class Level1Scene_Terminal1 extends LevelClass {
         this.events.on("correct_terminal_input", () => {
             this.events.emit(`Terminal1_Close`);
             this.events.emit(`Terminal1_correct`);
+            this.TerminalInput.remove();
             this.scene.resume(this.mainLevel.scene.key);
             this.scene.stop();
         });
         this.events.on("incorrect_terminal_input", () => {
             this.events.emit(`Terminal1_Close`);
             this.events.emit(`Terminal1_incorrect`);
+            this.TerminalInput.remove();
             this.scene.resume(this.mainLevel.scene.key);
             this.scene.stop();
         });
@@ -158,6 +193,8 @@ export default class Level1Scene_Terminal1 extends LevelClass {
     }
 
     update() {
-        this.terminalDisplayText.setText(this.terminalInputArr);
+        this.terminalDisplayText.setText(
+            this.terminalInputArr.map((x) => "~$ " + x)
+        );
     }
 }
