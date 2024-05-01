@@ -14,6 +14,7 @@ import Level_1_2_scene from "./scenes/level_1_2_scene";
 import Level_1_3_scene from "./scenes/level_1_3_scene";
 import TestScene from "./scenes/testScene";
 import Level1Scene from "./scenes/level1/level1";
+import Terminal1_Lvl1 from "./scenes/level1/Terminal1_Lvl1";
 
 const DEFAULT_WIDTH = 1280;
 const DEFAULT_HEIGHT = 720;
@@ -43,7 +44,8 @@ export const CONFIG = {
         Level_1_3_scene,
         RespawnScene,
         TestScene,
-        Level1Scene
+        Level1Scene,
+        Terminal1_Lvl1,
     ],
 
     physics: {
