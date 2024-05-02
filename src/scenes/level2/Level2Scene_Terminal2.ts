@@ -77,6 +77,8 @@ export default class Level2Scene_Terminal2 extends LevelClass {
                 this.enterButtonRestState(resetButton);
             });
 
+        this.add.text(180, 650, `Type "git -help for help"`, {});
+
         this.terminalDisplayText = this.add.text(
             80,
             200,
@@ -116,6 +118,23 @@ export default class Level2Scene_Terminal2 extends LevelClass {
         let feebackColor = "#ff0000";
         let feedbackFontSize = "32px";
         scene.FeedbackText?.destroy();
+        console.log(input[input.length - 1] === "git -h");
+        if (
+            input[input.length - 1] === "git -h" ||
+            input[input.length - 1] === "git --help"
+        ) {
+            scene.terminalInputArr.pop();
+            scene.FeedbackText = scene.add.text(
+                feedbackX,
+                feedbackY - 100,
+                `git add <file>: Add file contents to the index\n\ngit commit -m 'message': Record changes to the repository\n\ngit push: Update remote refs along with associated objects`,
+                {
+                    fontSize: "22px",
+                    color: "#ff0000",
+                    wordWrap: { width: feedbackWrap },
+                }
+            );
+        }
         //Is the input exactly correct
         let lastInput = input[input.length - 1];
         if (lastInput.startsWith("git commit")) {
@@ -167,48 +186,40 @@ export default class Level2Scene_Terminal2 extends LevelClass {
         if (input[input.length - 1] === "git push") {
             scene.sound.add("wrong").play();
             //Did they push with the red platform
-            if (input.includes("git add red")) {
-                scene.FeedbackText = scene.add.text(
-                    feedbackX,
-                    feedbackY,
-                    "You pushed with the red platform! Ohno!",
-                    {
-                        fontSize: feedbackFontSize,
-                        color: feebackColor,
-                        wordWrap: { width: feedbackWrap },
-                    }
-                );
-                //scene.events.emit("incorrect_terminal_input");
+            if (input[0].includes("git add")) {
+                if (!input[0].includes("power.js")) {
+                    scene.FeedbackText = scene.add.text(
+                        feedbackX,
+                        feedbackY,
+                        "Make sure you add the file with the power fix",
+                        {
+                            fontSize: feedbackFontSize,
+                            color: feebackColor,
+                            wordWrap: { width: feedbackWrap },
+                        }
+                    );
+                    //Clear the input array for next time
+                    scene.terminalInputArr = [];
+                    return false;
+                    //scene.events.emit("incorrect_terminal_input");
+                }
             }
             //Did they push without the blue platform
-            else if (!input.includes("git add blue")) {
+            if (!input[1].includes("git commit")) {
                 scene.FeedbackText = scene.add.text(
                     feedbackX,
                     feedbackY,
-                    "How are you supposed to get to the other side without the blue platform",
+                    "Make sure you commit your changes",
                     {
                         fontSize: feedbackFontSize,
                         color: feebackColor,
                         wordWrap: { width: feedbackWrap },
                     }
                 );
+                scene.terminalInputArr = [];
+                return false;
                 //scene.events.emit("incorrect_terminal_input");
             }
-            //Did they push without the commit
-            else if (!input.includes("git commit -m 'Add New Platform'")) {
-                scene.FeedbackText = scene.add.text(
-                    feedbackX,
-                    feedbackY,
-                    "You have to commit.",
-                    {
-                        fontSize: feedbackFontSize,
-                        color: feebackColor,
-                        wordWrap: { width: feedbackWrap },
-                    }
-                );
-                //scene.events.emit("incorrect_terminal_input");
-            }
-
             //Clear the input array for next time
             scene.terminalInputArr = [];
         }

@@ -89,6 +89,7 @@ export default class Level1Scene_Terminal1 extends LevelClass {
     ): boolean {
         console.log(input);
         console.log(correctInput);
+        scene.FeedbackText?.destroy();
         let feedbackX = 67;
         let feedbackY = 500;
         let feedbackWrap = 400;
@@ -115,10 +116,10 @@ export default class Level1Scene_Terminal1 extends LevelClass {
                         wordWrap: { width: feedbackWrap },
                     }
                 );
-                scene.events.emit("incorrect_terminal_input");
+                //scene.events.emit("incorrect_terminal_input");
             }
-            //Did they push without the blue platform
-            else if (!input.includes("git add blue")) {
+            //Did they push without the message platform
+            else if (!input.includes("git add message")) {
                 scene.FeedbackText = scene.add.text(
                     feedbackX,
                     feedbackY,
@@ -129,7 +130,7 @@ export default class Level1Scene_Terminal1 extends LevelClass {
                         wordWrap: { width: feedbackWrap },
                     }
                 );
-                scene.events.emit("incorrect_terminal_input");
+                //scene.events.emit("incorrect_terminal_input");
             }
             //Did they push without the commit
             else if (!input.includes("git commit -m 'Add New Platform'")) {
@@ -143,7 +144,7 @@ export default class Level1Scene_Terminal1 extends LevelClass {
                         wordWrap: { width: feedbackWrap },
                     }
                 );
-                scene.events.emit("incorrect_terminal_input");
+                //scene.events.emit("incorrect_terminal_input");
             }
 
             //Clear the input array for next time
@@ -162,7 +163,7 @@ export default class Level1Scene_Terminal1 extends LevelClass {
                     wordWrap: { width: feedbackWrap },
                 }
             );
-            scene.events.emit("incorrect_terminal_input");
+            //scene.events.emit("incorrect_terminal_input");
 
             //Clear the input array for next time
             scene.terminalInputArr = [];
