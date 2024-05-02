@@ -13,6 +13,7 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image("planet-1", "assets/Art/planet-1.png");
         this.load.image("planet-4", "assets/Art/planet-4.png");
         this.load.image("planet-3", "assets/Art/planet-3.png");
+        this.load.image("planet-7", "assets/Art/planet-7.png");
         this.load.image("planet-12", "assets/Art/planet-12.png");
         this.load.image("planet-13", "assets/Art/planet-13.png");
         this.load.image("planet-14", "assets/Art/planet-14.png");
@@ -24,6 +25,10 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image("spikes_vert", "assets/Art/spikes_vert.png");
         this.load.image("level_1_bg", "assets/Art/level_1_bg.png");
         this.load.image("level_1_mars", "assets/Art/mars2.png");
+        this.load.image("keyboard", "assets/Art/Keyboard.png");
+        this.load.image("arrowright", "assets/Art/arrowright.png");
+        this.load.image("arrowUp", "assets/Art/arrowUp.png");
+        this.load.image("dish", "assets/Art/dish.png");
         this.load.image(
             "background-1-level1",
             "assets/Art/background-1-level1.png"

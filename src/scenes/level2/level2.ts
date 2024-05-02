@@ -3,7 +3,7 @@ import LevelClass from "../../Classes/LevelClass";
 import { updateCurrentLevel } from "../currentLevel";
 import { Player } from "../../objects/player";
 import { Platform, createPlatforms } from "../../components/platform";
-import { Button, createButton } from "../../components/pauseButton";
+import { createButton } from "../../components/pauseButton";
 import { TerminalBody } from "../../components/terminalAndTerminalSceneHelpers";
 import Level2Scene_Terminal1 from "./Level2Scene_Terminal1";
 import Level2Scene_Terminal2 from "./Level2Scene_Terminal2";
@@ -18,7 +18,7 @@ export default class Level2Scene extends LevelClass {
     private levelHeight: number = 1440; // Height of the level
     private showGrid = false;
     private showColl = true;
-    private pauseButton: Button;
+    private pauseButton: Phaser.GameObjects.Text;
     private ship: Phaser.GameObjects.Image;
     private shipStopped = false;
     private activeSpikes: Phaser.Physics.Arcade.StaticGroup;
@@ -31,6 +31,7 @@ export default class Level2Scene extends LevelClass {
         super({ key: "Level2Scene" });
     }
     create() {
+        this.registry.set("Level2Opened", true);
         //create ship and make it viasable (created as an image)
         this.ship = this.add.image(0, 0, "spacecraft");
         this.ship.setDepth(10);
