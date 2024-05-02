@@ -118,7 +118,7 @@ export default class Level2Scene_Terminal1 extends LevelClass {
                         wordWrap: { width: feedbackWrap },
                     }
                 );
-                scene.events.emit("incorrect_terminal_input");
+                //scene.events.emit("incorrect_terminal_input");
             }
             //Did they push without the blue platform
             else if (!input.includes("git add code")) {
@@ -132,7 +132,7 @@ export default class Level2Scene_Terminal1 extends LevelClass {
                         wordWrap: { width: feedbackWrap },
                     }
                 );
-                scene.events.emit("incorrect_terminal_input");
+                //scene.events.emit("incorrect_terminal_input");
             }
             //Did they push without the commit
             else if (!input.includes("git commit -m 'Add New Platform'")) {
@@ -146,7 +146,7 @@ export default class Level2Scene_Terminal1 extends LevelClass {
                         wordWrap: { width: feedbackWrap },
                     }
                 );
-                scene.events.emit("incorrect_terminal_input");
+                //scene.events.emit("incorrect_terminal_input");
             }
 
             //Clear the input array for next time
