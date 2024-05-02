@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import LevelClass from "../../Classes/LevelClass";
+import { updateCurrentLevel } from "../currentLevel";
 import { Player } from "../../objects/player";
 import { Platform, createPlatforms } from "../../components/platform";
 import { Button, createButton } from "../../components/pauseButton";
@@ -18,19 +19,21 @@ export default class Level2Scene extends LevelClass {
     private pauseButton: Button;
     private ship: Phaser.GameObjects.Image;
     private shipStopped = false;
+    private activeSpikes: Phaser.Physics.Arcade.Group;
+    private gameOver = false;
+    private staticSpikes: Phaser.Physics.Arcade.StaticGroup;
 
     constructor() {
         super({ key: "Level2Scene" });
     }
     create() {
+        //create ship and make it viasable (created as an image)
         this.ship = this.add.image(0, 0, "spacecraft");
         this.ship.setDepth(10);
 
-        //basic set up for player object, camera and controls
+        //basic set up for player object, camera and controls, camera starts centered on ship
         this.player = new Player(this, 100, 400);
         this.player.setVisible(false);
-
-        //this.cameras.main.startFollow(this.player, true, 0.08, 0.08, 0, 100);
         this.cameras.main.startFollow(this.ship, true, 0.08, 0.08, 0, 100);
         this.cursors = this.input.keyboard?.createCursorKeys();
 
@@ -179,9 +182,282 @@ export default class Level2Scene extends LevelClass {
                 texture: "ice-planet-tileset-1",
                 frame: 3,
             },
-            { x: 640, y: 720, texture: "ice-ground-1", scale: { x: 40, y: 4 } }, // Ground
+            //tunnel wall 1
+            {
+                x: offset + unit * 29,
+                y: offset + unit * 6,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 29,
+                y: offset + unit * 7,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 29,
+                y: offset + unit * 8,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            //tunnel wall 2
+            {
+                x: offset + unit * 33,
+                y: offset + unit * 7,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 33,
+                y: offset + unit * 6,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 33,
+                y: offset + unit * 5,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 33,
+                y: offset + unit * 4,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 33,
+                y: offset + unit * 3,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 33,
+                y: offset + unit * 2,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 33,
+                y: offset + unit * 1,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            //tunnel wall 3
+            {
+                x: offset + unit * 38,
+                y: offset + unit * 7,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 38,
+                y: offset + unit * 6,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 38,
+                y: offset + unit * 5,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 38,
+                y: offset + unit * 4,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 38,
+                y: offset + unit * 3,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 38,
+                y: offset + unit * 2,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 38,
+                y: offset + unit * 1,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            //wall ledge 1
+            {
+                x: offset + unit * 34,
+                y: offset + unit * 7,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            //wall ledge 2
+            {
+                x: offset + unit * 37,
+                y: offset + unit * 5,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            //wall ledge 3
+            {
+                x: offset + unit * 34,
+                y: offset + unit * 3,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            //plat 5
+            {
+                x: offset + unit * 39,
+                y: offset + unit * 1,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 40,
+                y: offset + unit * 1,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 41,
+                y: offset + unit * 1,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 42,
+                y: offset + unit * 1,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 43,
+                y: offset + unit * 1,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 44,
+                y: offset + unit * 1,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 45,
+                y: offset + unit * 1,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            //ceiling above plat 5
+            {
+                x: offset + unit * 39,
+                y: offset + unit * -3,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 40,
+                y: offset + unit * -3,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            //terminal goes here (pos: 2590, 32)
+            {
+                x: offset + unit * 41,
+                y: offset + unit * -3,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 42,
+                y: offset + unit * -3,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 43,
+                y: offset + unit * -3,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 44,
+                y: offset + unit * -3,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 45,
+                y: offset + unit * -3,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            //timmy trap (with dorr)
+            {
+                x: offset + unit * 39,
+                y: offset + unit * -4,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 39,
+                y: offset + unit * -5,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 39,
+                y: offset + unit * -6,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 40,
+                y: offset + unit * -6,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 41,
+                y: offset + unit * -6,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            //door
+            {
+                x: offset + unit * 41,
+                y: offset + unit * -5,
+                texture: "door",
+                frame: 0,
+            },
+            {
+                x: offset + unit * 41,
+                y: offset + unit * -4,
+                texture: "door",
+                frame: 1,
+            },
+            { x: 640, y: 720, texture: "ice-ground-1", scale: { x: 80, y: 4 } }, // Ground
         ];
         createPlatforms(this, platforms, this.platforms, [this.player]);
+
+        //creating the ice spikes
+        this.staticSpikes = this.physics.add.staticGroup();
+
+        let spike1 = this.staticSpikes.create(1930, 440, "1x2-ice-spikes");
+        spike1.setScale(1, 1);
+        let spike2 = this.staticSpikes.create(2098, 440, "1x2-ice-spikes");
+        spike2.setScale(-1, 1);
+        let spike3 = this.staticSpikes.create(2780, 48, "1x2-ice-spikes");
+        spike3.setScale(-1, 1);
+        spike3.setAngle(90);
+        let spike4 = this.staticSpikes.create(2780, -112, "1x2-ice-spikes");
+        spike4.setScale(1, 1);
+        spike4.setAngle(90);
+
+        this.physics.add.collider(this.player, this.staticSpikes);
 
         //if youd like to display a grid or collidable object outlines, switch
         //showGrid and showColl bools to true at top of file
@@ -230,6 +506,9 @@ export default class Level2Scene extends LevelClass {
             frameHeight: 32,
         });
     }
+
+    //what to run after terminal 1 has passed
+    passTerminal1() {}
 
     drawGrid(gridSize: number): void {
         const graphics = this.add.graphics({
@@ -287,6 +566,12 @@ export default class Level2Scene extends LevelClass {
                 0,
                 100
             );
+        }
+        if (this.gameOver) {
+            this.gameOver = false;
+            updateCurrentLevel(this.scene.key);
+            this.scene.start("RespawnScene");
+            this.scene.stop();
         }
     }
 }
