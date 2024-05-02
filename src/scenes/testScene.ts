@@ -17,7 +17,7 @@ export default class TestScene extends LevelClass {
     private showColl = false;
 
     constructor() {
-        super({ key: "Level2Scene" });
+        super({ key: "TestScene" });
     }
 
     create() {
@@ -170,7 +170,7 @@ export default class TestScene extends LevelClass {
         //     `git push`,
         // ];
         let terminal_1_scene = this.scene.manager.getScene(
-            "Level2Scene_Terminal1"
+            "Level2Scene_Terminal2"
         );
         this.CorrectTerminalArr = [
             `git add blue`,

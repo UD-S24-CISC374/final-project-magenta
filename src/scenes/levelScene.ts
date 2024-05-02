@@ -9,6 +9,7 @@ export default class LevelScene extends Phaser.Scene {
     level4: Phaser.GameObjects.Text;
     level5: Phaser.GameObjects.Text;
     level6: Phaser.GameObjects.Text;
+    test: Phaser.GameObjects.Text;
 
     constructor() {
         super({ key: "LevelScene" });
@@ -122,8 +123,21 @@ export default class LevelScene extends Phaser.Scene {
             .on("pointerout", () => {
                 this.enterButtonRestState(this.level6);
             });
+        this.test = this.add
+            .text(200, 200, "Test", { color: "#0f0" })
+            .setInteractive()
+            .on("pointerdown", () => {
+                this.updateLevelClicked("TestScene");
+            })
+            .on("pointerover", () => {
+                this.enterButtonHoverState(this.test);
+            })
+            .on("pointerout", () => {
+                this.enterButtonRestState(this.test);
+            });
         /* ---------------     Test Scene    ------------------- */
-        this.level2 = this.add
+        /*
+        this.test = this.add
             .text(300, 100, "Test-Scene", { color: "#0f0" })
             .setInteractive()
             .on("pointerdown", () => {
@@ -135,6 +149,7 @@ export default class LevelScene extends Phaser.Scene {
             .on("pointerout", () => {
                 this.enterButtonRestState(this.level2);
             });
+            */
     }
 
     //update back clicked and update level clicked need to be implemented proporly,

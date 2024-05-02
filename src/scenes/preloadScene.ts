@@ -32,6 +32,9 @@ export default class PreloadScene extends Phaser.Scene {
             "background-2-level1",
             "assets/Art/background-2-level1.png"
         );
+        this.load.image("ice-planet-bg", "assets/Art/ice-planet-bg.png");
+        this.load.image("ice-ground-1", "assets/Art/ice-ground-1.png");
+        this.load.image("1x2-ice-spikes", "assets/Art/1x2-ice-spikes.png");
 
         //Sprite sheets
         this.load.spritesheet("button", "assets/Art/buttons.png", {
@@ -62,6 +65,14 @@ export default class PreloadScene extends Phaser.Scene {
                 frameHeight: 64,
             }
         );
+        this.load.spritesheet(
+            "ice-planet-tileset-1",
+            "assets/Art/ice-planet-tileset-1.png",
+            {
+                frameWidth: 64,
+                frameHeight: 64,
+            }
+        );
         this.load.spritesheet("spacecraft", "assets/Art/Spacecraft.png", {
             frameWidth: 84,
             frameHeight: 84,
@@ -77,6 +88,10 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.spritesheet("cat_orange", "assets/Art/cat_orange.png", {
             frameWidth: 32,
             frameHeight: 48,
+        });
+        this.load.spritesheet("door", "assets/Art/door.png", {
+            frameWidth: 64,
+            frameHeight: 64,
         });
 
         //Sounds
