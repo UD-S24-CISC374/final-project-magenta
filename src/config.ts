@@ -45,13 +45,13 @@ export const CONFIG = {
         Level_1_scene,
         Level_1_2_scene,
         Level_1_3_scene,
-        RespawnScene,
         TestScene,
         Level1Scene,
         Level1Scene_Terminal1,
-        Level2Scene_Terminal1,
         Level2Scene,
+        Level2Scene_Terminal1,
         Level2Scene_Terminal2,
+        RespawnScene,
     ],
 
     physics: {

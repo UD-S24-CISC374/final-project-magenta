@@ -5,6 +5,7 @@ import { Player } from "../../objects/player";
 import { Platform, createPlatforms } from "../../components/platform";
 import { Button, createButton } from "../../components/pauseButton";
 import { TerminalBody } from "../../components/terminalAndTerminalSceneHelpers";
+import Level2Scene_Terminal1 from "./Level2Scene_Terminal1";
 
 export default class Level2Scene extends LevelClass {
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -22,6 +23,7 @@ export default class Level2Scene extends LevelClass {
     private activeSpikes: Phaser.Physics.Arcade.Group;
     private gameOver = false;
     private staticSpikes: Phaser.Physics.Arcade.StaticGroup;
+    private terminalBody?: TerminalBody;
 
     constructor() {
         super({ key: "Level2Scene" });
@@ -47,6 +49,7 @@ export default class Level2Scene extends LevelClass {
         );
         this.background1.setOrigin(0);
         this.background1.setScrollFactor(0, 0);
+        this.background1.setDepth(-1);
 
         //player pos and text display for testing
         this.playerPos = this.add.text(400, 300, "Player Position: (0, 0)", {
@@ -457,6 +460,14 @@ export default class Level2Scene extends LevelClass {
         spike4.setScale(1, 1);
         spike4.setAngle(90);
 
+        this.physics.add.collider(
+            this.player,
+            this.staticSpikes,
+            this.handleHitSpike,
+            undefined,
+            this
+        );
+
         this.physics.add.collider(this.player, this.staticSpikes);
 
         //if youd like to display a grid or collidable object outlines, switch
@@ -490,7 +501,7 @@ export default class Level2Scene extends LevelClass {
             300,
             "terminal",
             this.CorrectTerminalArr,
-            "2"
+            "1"
         );
         terminal_1_scene.events.on("Terminal1_correct", () => {
             console.log("correct terminal 1");
@@ -505,6 +516,13 @@ export default class Level2Scene extends LevelClass {
             frameWidth: 32,
             frameHeight: 32,
         });
+    }
+
+    private handleHitSpike() {
+        this.physics.pause();
+        this.player.setTint(0xff0000);
+        this.player.anims.play("turn");
+        this.gameOver = true;
     }
 
     //what to run after terminal 1 has passed
@@ -570,8 +588,22 @@ export default class Level2Scene extends LevelClass {
         if (this.gameOver) {
             this.gameOver = false;
             updateCurrentLevel(this.scene.key);
-            this.scene.start("RespawnScene");
-            this.scene.stop();
+            this.cleanup();
+            this.scene.launch("RespawnScene");
+            this.scene.bringToTop("RespawnScene");
+            this.scene.stop("Level2Scene");
         }
+    }
+    private cleanup() {
+        this.player.destroy();
+        this.platforms?.clear(true, true);
+        //this.spikes?.clear(true, true);
+        this.terminalBody?.destroy();
+        this.terminalBody = undefined;
+        //this.events.destroy();
+        let term1 = this.scene.get(
+            "Level2Scene_Terminal1"
+        ) as Level2Scene_Terminal1;
+        term1.turnOffEmitters();
     }
 }
