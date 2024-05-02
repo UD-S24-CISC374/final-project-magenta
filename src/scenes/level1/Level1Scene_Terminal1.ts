@@ -6,9 +6,10 @@ import { terminalDisplay } from "../../components/terminalDisplay";
 export default class Level1Scene_Terminal1 extends LevelClass {
     private mainLevel: LevelClass;
     private terminalDisplayText: Phaser.GameObjects.Text;
-    private buttonList: string[] = []
+
+    private buttonList: string[] = [];
     public turnOffEmitters() {
-        this.buttonList.forEach((x) => this.events.off(x))
+        this.buttonList.forEach((x) => this.events.off(x));
     }
     constructor() {
         super({ key: "Level1Scene_Terminal1" });
@@ -20,12 +21,12 @@ export default class Level1Scene_Terminal1 extends LevelClass {
     }
 
     create() {
-        this. buttonList = [
-                "git add red",
-                "git add blue",
-                "git commit -m 'Add New Platform'",
-                "git push",
-            ]
+        this.buttonList = [
+            "git add red",
+            "git add blue",
+            "git commit -m 'Add New Platform'",
+            "git push",
+        ];
         new ButtonAndListensers(
             this,
             200,
@@ -90,6 +91,11 @@ export default class Level1Scene_Terminal1 extends LevelClass {
         console.log(input);
         console.log(correctInput);
         scene.FeedbackText?.destroy();
+
+        let feedbackX = 75;
+        let feedbackY = 500;
+        let feedbackWrap = 400;
+        let feebackColor = "#ff0000";
         //Is the input exactly correct
         if (JSON.stringify(input) === JSON.stringify(correctInput)) {
             scene.events.emit("correct_terminal_input");
@@ -101,12 +107,13 @@ export default class Level1Scene_Terminal1 extends LevelClass {
             //Did they push with the red platform
             if (input.includes("git add red")) {
                 scene.FeedbackText = scene.add.text(
-                    400,
-                    500,
+                    feedbackX,
+                    feedbackY,
                     "You pushed with the red platform! Ohno!",
                     {
                         fontSize: "32px",
-                        color: "#880808",
+                        color: feebackColor,
+                        wordWrap: { width: feedbackWrap },
                     }
                 );
                 scene.events.emit("incorrect_terminal_input");
@@ -114,12 +121,13 @@ export default class Level1Scene_Terminal1 extends LevelClass {
             //Did they push without the blue platform
             else if (!input.includes("git add blue")) {
                 scene.FeedbackText = scene.add.text(
-                    400,
-                    500,
+                    feedbackX,
+                    feedbackY,
                     "How are you supposed to get to the other side without the blue platform",
                     {
                         fontSize: "32px",
-                        color: "#880808",
+                        color: feebackColor,
+                        wordWrap: { width: feedbackWrap },
                     }
                 );
                 scene.events.emit("incorrect_terminal_input");
@@ -127,12 +135,13 @@ export default class Level1Scene_Terminal1 extends LevelClass {
             //Did they push without the commit
             else if (!input.includes("git commit -m 'Add New Platform'")) {
                 scene.FeedbackText = scene.add.text(
-                    400,
-                    500,
+                    feedbackX,
+                    feedbackY,
                     "You have to commit.",
                     {
                         fontSize: "32px",
-                        color: "#880808",
+                        color: feebackColor,
+                        wordWrap: { width: feedbackWrap },
                     }
                 );
                 scene.events.emit("incorrect_terminal_input");
@@ -144,12 +153,13 @@ export default class Level1Scene_Terminal1 extends LevelClass {
 
         if (input.length > correctInput.length + 2) {
             scene.FeedbackText = scene.add.text(
-                400,
-                500,
+                feedbackX,
+                feedbackY,
                 "You seem to have entered too many commands! Try Again",
                 {
                     fontSize: "32px",
                     color: "#880808",
+                    wordWrap: { width: feedbackWrap },
                 }
             );
             //Clear the input array for next time
