@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import LevelClass from "../../Classes/LevelClass";
 import { Player } from "../../objects/player";
 import { Platform, createPlatforms } from "../../components/platform";
-import { Button, createButton } from "../../components/pauseButton";
+import { createButton } from "../../components/pauseButton";
 import { TerminalBody } from "../../components/terminalAndTerminalSceneHelpers";
 
 export default class Level2Scene extends LevelClass {
@@ -15,7 +15,7 @@ export default class Level2Scene extends LevelClass {
     private levelHeight: number = 1440; // Height of the level
     private showGrid = false;
     private showColl = false;
-    private pauseButton: Button;
+    private pauseButton: Phaser.GameObjects.Text;
     private ship: Phaser.GameObjects.Image;
     private shipStopped = false;
 

@@ -24,9 +24,17 @@ export function createButton(scene: Phaser.Scene, buttons: Button[]) {
         b.setStyle({ fill: color });
     }
 
-    buttons.forEach((button: Button) => {
+    /*
+    buttons.map((button: Button) => {
         const b: Phaser.GameObjects.Text = scene.add
-            .text(button.x, button.y, button.text, { color: "#0f0" })
+            .text(
+                scene.cameras.main.scrollX + 100,
+                scene.cameras.main.scrollY + 700,
+                button.text,
+                {
+                    color: "#0f0",
+                }
+            )
             .setInteractive()
             .on("pointerdown", () => {
                 updateClicked(button.text);
@@ -38,6 +46,41 @@ export function createButton(scene: Phaser.Scene, buttons: Button[]) {
                 enterButtonRestState(b, button.color);
             });
         b.setScale(1);
+        return b;
+        
     });
-    return buttons;
+    */
+    return buttons.map((button: Button) => {
+        const b: Phaser.GameObjects.Text = scene.add
+            .text(
+                scene.cameras.main.scrollX + 100,
+                scene.cameras.main.scrollY + 700,
+                button.text,
+                {
+                    color: "#0f0",
+                }
+            )
+            .setInteractive()
+            .on("pointerdown", () => {
+                updateClicked(button.text);
+            })
+            .on("pointerover", () => {
+                enterButtonHoverState(b);
+            })
+            .on("pointerout", () => {
+                enterButtonRestState(b, button.color);
+            });
+        b.setScale(1);
+        return b;
+    });
+    //return buttons;
+}
+
+export function handleButtonPosition(
+    scene: Phaser.Scene,
+    button: Phaser.GameObjects.Text,
+    offx: number,
+    offy: number
+) {
+    button.setPosition(scene.cameras.main.scrollX + scene.cameras.main.width - offx, scene.cameras.main.scrollY + offy);
 }
