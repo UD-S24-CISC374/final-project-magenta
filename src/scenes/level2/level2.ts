@@ -18,11 +18,13 @@ export default class Level2Scene extends LevelClass {
     private pauseButton: Phaser.GameObjects.Text;
     private ship: Phaser.GameObjects.Image;
     private shipStopped = false;
+    private eventEmitted = false;
 
     constructor() {
         super({ key: "Level2Scene" });
     }
     create() {
+        this.registry.set("Level2Opened", true);
         this.ship = this.add.image(0, 0, "spacecraft");
         this.ship.setDepth(10);
 

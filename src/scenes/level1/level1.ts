@@ -36,7 +36,7 @@ export default class Level1Scene extends LevelClass {
     }
 
     create() {
-        this.player = new Player(this, 0, 538);
+        this.player = new Player(this, 3100, 538);
         this.cameras.main.fadeIn(5000);
         this.cameras.main.startFollow(this.player, true, 0.08, 0.08, 0, 100);
         this.cursors = this.input.keyboard?.createCursorKeys();
@@ -252,9 +252,9 @@ export default class Level1Scene extends LevelClass {
             console.log("incorrect terminal 1");
         });
 
-        this.spaceShip = this.physics.add.image(3200, 500, "spacecraft");
+        this.spaceShip = this.add.image(3200, 495, "spacecraft");
         this.spaceShip.setDepth(10);
-        this.spaceShip.setScale(3);
+        this.spaceShip.setScale(2);
     }
     preload() {
         this.load.spritesheet("cat", "assets/Art/cat_1.png", {
@@ -313,11 +313,8 @@ export default class Level1Scene extends LevelClass {
             this.player.setVisible(false);
             this.cameras.main.startFollow(this.spaceShip, true, 0.08, 0.08, 0, 100);
             this.spaceShip.y -= 1;
-            if (this.spaceShip.y < 0) {
-                this.cameras.main.fadeOut(4000);
-            }
-            if (this.spaceShip.y < -100) {
-                this.scene.scene.events.emit("Level1_complete");
+            this.cameras.main.fadeOut(4000);
+            if (this.spaceShip.y < 300) {
                 this.scene.start("Level2Scene");
             }
         } else {
@@ -380,7 +377,7 @@ export default class Level1Scene extends LevelClass {
                 this.handleNPC();
             }
         }
-        if (this.player.x > this.spaceShip.x) {
+        if (this.player.x > this.spaceShip.x - 20) {
             this.handleCanFlyAway();
         }
     }

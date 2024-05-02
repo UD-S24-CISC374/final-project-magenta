@@ -10,13 +10,6 @@ export default class LevelScene extends Phaser.Scene {
     level5: Phaser.GameObjects.Text;
     level6: Phaser.GameObjects.Text;
     test: Phaser.GameObjects.Text;
-    private level_1_scene: Phaser.Scene;
-
-    level2Opened: boolean = false;
-    level3Opened: boolean = false;
-    level4Opened: boolean = false;
-    level5Opened: boolean = false;
-    level6Opened: boolean = false;
 
     constructor() {
         super({ key: "LevelScene" });
@@ -157,13 +150,6 @@ export default class LevelScene extends Phaser.Scene {
                 this.enterButtonRestState(this.level2);
             });
             */
-        this.level_1_scene = this.scene.manager.getScene(
-            "Level1Scene"
-        );
-
-        this.level_1_scene.events.on("Level1_complete", () => {
-            this.level2Opened = true;
-        });
     }
 
     //update back clicked and update level clicked need to be implemented proporly,
@@ -179,7 +165,7 @@ export default class LevelScene extends Phaser.Scene {
     updateLevelClicked(level: string) {
         if (level === "Level1Scene") {
             this.scene.start(level);
-        } else if (level === "Level2Scene" && this.level2Opened) {
+        } else if (level === "Level2Scene" && this.game.registry.get("Level2Opened") === true) {
             this.scene.start(level);
         }
     }
@@ -192,6 +178,5 @@ export default class LevelScene extends Phaser.Scene {
         button.setStyle({ fill: "#0f0" });
     }
 
-    update() {
-    }
+    update() {}
 }
