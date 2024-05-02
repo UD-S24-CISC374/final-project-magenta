@@ -6,6 +6,7 @@ import { Platform, createPlatforms } from "../../components/platform";
 import { Button, createButton } from "../../components/pauseButton";
 import { TerminalBody } from "../../components/terminalAndTerminalSceneHelpers";
 import Level2Scene_Terminal1 from "./Level2Scene_Terminal1";
+import Level2Scene_Terminal2 from "./Level2Scene_Terminal2";
 
 export default class Level2Scene extends LevelClass {
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -502,8 +503,8 @@ export default class Level2Scene extends LevelClass {
             "Level2Scene_Terminal1"
         );
         this.CorrectTerminalArr = [
-            `git add blue`,
-            `git commit -m 'Add New Platform'`,
+            `git add code.js`,
+            `git commit -m 'created code for lock'`,
             `git push`,
         ];
         new TerminalBody(
@@ -520,6 +521,30 @@ export default class Level2Scene extends LevelClass {
         });
         terminal_1_scene.events.on("Terminal1_incorrect", () => {
             console.log("incorrect terminal 1");
+        });
+
+        //Terminal 2
+        let terminal_2_scene = this.scene.manager.getScene(
+            "Level2Scene_Terminal2"
+        );
+        this.CorrectTerminalArr2 = [
+            `git add power.js`,
+            `git commit -m ''`,
+            `git push`,
+        ];
+        new TerminalBody(
+            this,
+            200,
+            0,
+            "terminal",
+            this.CorrectTerminalArr2,
+            "2"
+        );
+        terminal_2_scene.events.on("Terminal2_correct", () => {
+            console.log("correct terminal 2");
+        });
+        terminal_2_scene.events.on("Terminal2_incorrect", () => {
+            console.log("incorrect terminal 2");
         });
     }
 
@@ -625,5 +650,9 @@ export default class Level2Scene extends LevelClass {
             "Level2Scene_Terminal1"
         ) as Level2Scene_Terminal1;
         term1.turnOffEmitters();
+        let term2 = this.scene.get(
+            "Level2Scene_Terminal2"
+        ) as Level2Scene_Terminal2;
+        term2.terminalInputArr = [];
     }
 }

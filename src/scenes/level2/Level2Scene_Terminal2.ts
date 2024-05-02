@@ -1,7 +1,6 @@
 import Phaser from "phaser";
-import LevelClass from "../Classes/LevelClass";
-import { ButtonAndListensers } from "../components/buttonAndListeners";
-import { terminalDisplay } from "../components/terminalDisplay";
+import LevelClass from "../../Classes/LevelClass";
+import { terminalDisplay } from "../../components/terminalDisplay";
 
 export default class Level2Scene_Terminal2 extends LevelClass {
     private mainLevel: LevelClass;
@@ -13,23 +12,19 @@ export default class Level2Scene_Terminal2 extends LevelClass {
 
     init(data: { level: LevelClass }) {
         this.mainLevel = data.level;
-        this.CorrectTerminalArr = data.level.CorrectTerminalArr;
+        this.CorrectTerminalArr = data.level.CorrectTerminalArr2;
     }
 
     create() {
-        new ButtonAndListensers(
-            this,
+        this.add.text(
             200,
-            100,
-            "button",
-            [
-                "git add red",
-                "git add blue",
-                "git commit -m 'add new platform'",
-                "git push",
-            ],
-            this.CorrectTerminalArr,
-            this.handleFeedback
+            50,
+            `Task: Quick enter the commands to push the fix to your powerups!
+            \n    (hint: the fix for your power is in the power.js file)`,
+            {
+                color: "#fff",
+                fontSize: "24px",
+            }
         );
 
         //Terminal Display
@@ -42,10 +37,10 @@ export default class Level2Scene_Terminal2 extends LevelClass {
         this.TerminalInput.style.height = "40px";
         this.TerminalInput.style.fontSize = "20px";
         this.TerminalInput.style.top = "80%";
-        this.TerminalInput.style.left = "600px";
+        this.TerminalInput.style.left = "50%";
         this.TerminalInput.style.backgroundColor = "#000";
         this.TerminalInput.style.color = "#0f0";
-        this.TerminalInput.placeholder = "~$";
+        this.TerminalInput.placeholder = "~$ Input Into Terminal Here";
         this.TerminalInput.style.border = "2px solid green";
         this.TerminalInput.style.transform = "translate(-50%, -50%)";
         document.body.appendChild(this.TerminalInput);
@@ -56,7 +51,7 @@ export default class Level2Scene_Terminal2 extends LevelClass {
             }
             if (event.key === "Enter") {
                 this.terminalInputArr.push(
-                    this.TerminalInput.value.toLocaleLowerCase()
+                    this.TerminalInput.value.toLocaleLowerCase().trim()
                 );
                 this.TerminalInput.value = "";
                 this.handleFeedback(
@@ -93,15 +88,15 @@ export default class Level2Scene_Terminal2 extends LevelClass {
 
         //Handle Feedback Events
         this.events.on("correct_terminal_input", () => {
-            this.events.emit(`Terminal1_Close`);
-            this.events.emit(`Terminal1_correct`);
+            this.events.emit(`Terminal2_Close`);
+            this.events.emit(`Terminal2_correct`);
             this.TerminalInput.remove();
             this.scene.resume(this.mainLevel.scene.key);
             this.scene.stop();
         });
         this.events.on("incorrect_terminal_input", () => {
-            this.events.emit(`Terminal1_Close`);
-            this.events.emit(`Terminal1_incorrect`);
+            this.events.emit(`Terminal2_Close`);
+            this.events.emit(`Terminal2_incorrect`);
             this.TerminalInput.remove();
             this.scene.resume(this.mainLevel.scene.key);
             this.scene.stop();
@@ -115,24 +110,72 @@ export default class Level2Scene_Terminal2 extends LevelClass {
     ): boolean {
         console.log(input);
         console.log(correctInput);
+        let feedbackX = 67;
+        let feedbackY = 500;
+        let feedbackWrap = 400;
+        let feebackColor = "#ff0000";
+        let feedbackFontSize = "32px";
         scene.FeedbackText?.destroy();
         //Is the input exactly correct
-        if (JSON.stringify(input) === JSON.stringify(correctInput)) {
+        let lastInput = input[input.length - 1];
+        if (lastInput.startsWith("git commit")) {
+            let match = lastInput.match(/git commit -m ['"](.*)['"]/);
+            if (match) {
+                let message = match[1];
+                lastInput = `git commit -m "${message.replace(/['"]/g, "")}"`;
+                input[input.length - 1] = lastInput;
+            } else {
+                scene.sound.add("wrong").play();
+                scene.FeedbackText = scene.add.text(
+                    feedbackX,
+                    feedbackY,
+                    "You have to add a message to the commit",
+                    {
+                        fontSize: feedbackFontSize,
+                        color: feebackColor,
+                        wordWrap: { width: feedbackWrap },
+                    }
+                );
+                // Clear the end of terminalInput
+                scene.terminalInputArr.pop();
+                return false;
+            }
+        }
+
+        function compareInputs(input1: string[], input2: string[]) {
+            if (input1.length !== input2.length) return false;
+            for (let i = 0; i < input1.length; i++) {
+                let sanitizedInput1 = input1[i].replace(
+                    /['"][^'"]*['"]/g,
+                    '""'
+                );
+                let sanitizedInput2 = input2[i].replace(
+                    /['"][^'"]*['"]/g,
+                    '""'
+                );
+                if (sanitizedInput1 !== sanitizedInput2) return false;
+            }
+
+            return true;
+        }
+        if (compareInputs(input, correctInput)) {
             scene.events.emit("correct_terminal_input");
             return true;
         }
 
         //Did they Push
         if (input[input.length - 1] === "git push") {
+            scene.sound.add("wrong").play();
             //Did they push with the red platform
             if (input.includes("git add red")) {
                 scene.FeedbackText = scene.add.text(
-                    400,
-                    500,
+                    feedbackX,
+                    feedbackY,
                     "You pushed with the red platform! Ohno!",
                     {
-                        fontSize: "32px",
-                        color: "#880808",
+                        fontSize: feedbackFontSize,
+                        color: feebackColor,
+                        wordWrap: { width: feedbackWrap },
                     }
                 );
                 //scene.events.emit("incorrect_terminal_input");
@@ -140,12 +183,13 @@ export default class Level2Scene_Terminal2 extends LevelClass {
             //Did they push without the blue platform
             else if (!input.includes("git add blue")) {
                 scene.FeedbackText = scene.add.text(
-                    400,
-                    500,
+                    feedbackX,
+                    feedbackY,
                     "How are you supposed to get to the other side without the blue platform",
                     {
-                        fontSize: "32px",
-                        color: "#880808",
+                        fontSize: feedbackFontSize,
+                        color: feebackColor,
+                        wordWrap: { width: feedbackWrap },
                     }
                 );
                 //scene.events.emit("incorrect_terminal_input");
@@ -153,12 +197,13 @@ export default class Level2Scene_Terminal2 extends LevelClass {
             //Did they push without the commit
             else if (!input.includes("git commit -m 'Add New Platform'")) {
                 scene.FeedbackText = scene.add.text(
-                    400,
-                    500,
+                    feedbackX,
+                    feedbackY,
                     "You have to commit.",
                     {
-                        fontSize: "32px",
-                        color: "#880808",
+                        fontSize: feedbackFontSize,
+                        color: feebackColor,
+                        wordWrap: { width: feedbackWrap },
                     }
                 );
                 //scene.events.emit("incorrect_terminal_input");

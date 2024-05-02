@@ -17,7 +17,7 @@ import Level1Scene from "./scenes/level1/level1";
 import Level1Scene_Terminal1 from "./scenes/level1/Level1Scene_Terminal1";
 import Level2Scene_Terminal1 from "./scenes/level2/Level2Scene_Terminal1";
 import Level2Scene from "./scenes/level2/level2";
-import Level2Scene_Terminal2 from "./scenes/Level2Scene_Terminal2";
+import Level2Scene_Terminal2 from "./scenes/level2/Level2Scene_Terminal2";
 
 const DEFAULT_WIDTH = 1280;
 const DEFAULT_HEIGHT = 720;
