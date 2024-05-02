@@ -1,10 +1,11 @@
 import Phaser from "phaser";
 import LevelClass from "../../Classes/LevelClass";
 import { ButtonAndListensers } from "../../components/buttonAndListeners";
+import { terminalDisplay } from "../../components/terminalDisplay";
 
 export default class Level2Scene_Terminal1 extends LevelClass {
     private mainLevel: LevelClass;
-    private terminalDisplay: Phaser.GameObjects.Text;
+    private terminalDisplayText: Phaser.GameObjects.Text;
     constructor() {
         super({ key: "Level2Scene_Terminal1" });
     }
@@ -29,9 +30,12 @@ export default class Level2Scene_Terminal1 extends LevelClass {
             this.CorrectTerminalArr,
             this.handleFeedback
         );
+
+        new terminalDisplay(this);
+
         //Reset button
         let resetButton = this.add
-            .text(200, 250, "Reset Terminal", {
+            .text(300, 180, "Reset Terminal", {
                 color: "#0f0",
             })
             .setInteractive()
@@ -45,9 +49,14 @@ export default class Level2Scene_Terminal1 extends LevelClass {
                 this.enterButtonRestState(resetButton);
             });
 
-        this.terminalDisplay = this.add.text(200, 300, this.terminalInputArr, {
-            color: "#0f0",
-        });
+        this.terminalDisplayText = this.add.text(
+            80,
+            200,
+            this.terminalInputArr,
+            {
+                color: "#0f0",
+            }
+        );
 
         //Handle Feedback Events
         this.events.on("correct_terminal_input", () => {
@@ -149,6 +158,6 @@ export default class Level2Scene_Terminal1 extends LevelClass {
     }
 
     update() {
-        this.terminalDisplay.setText(this.terminalInputArr);
+        this.terminalDisplayText.setText(this.terminalInputArr);
     }
 }

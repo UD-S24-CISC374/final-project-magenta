@@ -25,9 +25,12 @@ export default class Level2Scene extends LevelClass {
     create() {
         this.ship = this.add.image(0, 0, "spacecraft");
         this.ship.setDepth(10);
+
         //basic set up for player object, camera and controls
         this.player = new Player(this, 100, 400);
         this.player.setVisible(false);
+
+        //this.cameras.main.startFollow(this.player, true, 0.08, 0.08, 0, 100);
         this.cameras.main.startFollow(this.ship, true, 0.08, 0.08, 0, 100);
         this.cursors = this.input.keyboard?.createCursorKeys();
 
@@ -211,7 +214,7 @@ export default class Level2Scene extends LevelClass {
             300,
             "terminal",
             this.CorrectTerminalArr,
-            "1"
+            "2"
         );
         terminal_1_scene.events.on("Terminal1_correct", () => {
             console.log("correct terminal 1");
@@ -270,6 +273,7 @@ export default class Level2Scene extends LevelClass {
     update() {
         this.player.update(this.cursors);
         this.handlePrintPos();
+
         if (this.ship.y <= 550) {
             this.ship.y += 0.35;
         } else {
