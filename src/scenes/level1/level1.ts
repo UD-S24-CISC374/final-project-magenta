@@ -2,8 +2,13 @@ import Phaser from "phaser";
 import LevelClass from "../../Classes/LevelClass";
 import { Player } from "../../objects/player";
 import { Platform, createPlatforms } from "../../components/platform";
-import { createButton, handleButtonPosition } from "../../components/pauseButton";
+import {
+    createButton,
+    handleButtonPosition,
+} from "../../components/pauseButton";
 import { TerminalBody } from "../../components/terminalAndTerminalSceneHelpers";
+import { updateCurrentLevel } from "../currentLevel";
+import Level1Scene_Terminal1 from "./Level1Scene_Terminal1";
 
 export default class Level1Scene extends LevelClass {
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -16,6 +21,8 @@ export default class Level1Scene extends LevelClass {
     private levelHeight: number = 1440; // Height of the level
     private showGrid = false;
     private showColl = false;
+    private gameOver = false;
+    private terminalBody?: TerminalBody;
     private pauseButton: Phaser.GameObjects.Text;
     private tutorialKeys: Phaser.GameObjects.Image;
     private arrowright: Phaser.GameObjects.Image;
@@ -25,7 +32,6 @@ export default class Level1Scene extends LevelClass {
     private arrowUp: Phaser.GameObjects.Image;
     private arrowUpText: Phaser.GameObjects.Text;
     private spikes: Phaser.Physics.Arcade.Group;
-    private gameOver: boolean = true;
     private d1: Phaser.GameObjects.Text;
     private d2: Phaser.GameObjects.Text;
     private d3: Phaser.GameObjects.Text;
@@ -229,6 +235,16 @@ export default class Level1Scene extends LevelClass {
             this.physics.world.createDebugGraphic();
         }
 
+        this.spikes = this.physics.add.group();
+        this.physics.add.collider(this.spikes, this.platforms);
+        this.physics.add.collider(
+            this.player,
+            this.spikes,
+            this.handleHitSpike,
+            undefined,
+            this
+        );
+
         /* ---------------     Create Terminal    ------------------- 
             Must be done after platform and player creation
         */
@@ -245,7 +261,8 @@ export default class Level1Scene extends LevelClass {
             `git commit -m 'Add New Platform'`,
             `git push`,
         ];
-        new TerminalBody(
+
+        this.terminalBody = new TerminalBody(
             this,
             2650,
             538,
@@ -253,6 +270,7 @@ export default class Level1Scene extends LevelClass {
             this.CorrectTerminalArr,
             "1"
         );
+
         terminal_1_scene.events.on("Terminal1_correct", () => {
             console.log("correct terminal 1");
             this.canFlyAway = true;
@@ -323,7 +341,14 @@ export default class Level1Scene extends LevelClass {
     private handleCanFlyAway() {
         if (this.canFlyAway) {
             this.player.setVisible(false);
-            this.cameras.main.startFollow(this.spaceShip, true, 0.08, 0.08, 0, 100);
+            this.cameras.main.startFollow(
+                this.spaceShip,
+                true,
+                0.08,
+                0.08,
+                0,
+                100
+            );
             this.spaceShip.y -= 1;
             this.cameras.main.fadeOut(4000);
             if (this.spaceShip.y < 300) {
@@ -384,6 +409,36 @@ export default class Level1Scene extends LevelClass {
     update() {
         this.player.update(this.cursors);
         this.handlePrintPos();
+
+        if (this.gameOver) {
+            this.gameOver = false;
+            updateCurrentLevel(this.scene.key);
+            this.cleanup();
+            this.scene.launch("RespawnScene");
+            this.scene.bringToTop("RespawnScene");
+            this.scene.stop("Level1Scene");
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (this.player) {
+            if (this.player.x > 1600 && !this.textSpawned) {
+                this.handleNPC();
+            }
+        }
+        if (this.player.x > this.spaceShip.x - 20) {
+            this.handleCanFlyAway();
+        }
+    }
+    private cleanup() {
+        this.player.destroy();
+        this.platforms?.clear(true, true);
+        this.spikes.clear(true, true);
+        this.terminalBody?.destroy();
+        this.terminalBody = undefined;
+        //this.events.destroy();
+        let term1 = this.scene.get(
+            "Level1Scene_Terminal1"
+        ) as Level1Scene_Terminal1;
+        term1.turnOffEmitters();
         this.handleButtonPos();
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this.player) {
