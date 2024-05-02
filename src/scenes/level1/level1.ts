@@ -26,8 +26,11 @@ export default class Level1Scene extends LevelClass {
     private pauseButton: Phaser.GameObjects.Text;
     private tutorialKeys: Phaser.GameObjects.Image;
     private arrowright: Phaser.GameObjects.Image;
+    private arrowRightText: Phaser.GameObjects.Text;
     private arrowleft: Phaser.GameObjects.Image;
+    private arrowLeftText: Phaser.GameObjects.Text;
     private arrowUp: Phaser.GameObjects.Image;
+    private arrowUpText: Phaser.GameObjects.Text;
     private spikes: Phaser.Physics.Arcade.Group;
     private d1: Phaser.GameObjects.Text;
     private d2: Phaser.GameObjects.Text;
@@ -43,7 +46,7 @@ export default class Level1Scene extends LevelClass {
     }
 
     create() {
-        this.player = new Player(this, 100, 538);
+        this.player = new Player(this, 0, 538);
         this.cameras.main.fadeIn(5000);
         this.cameras.main.startFollow(this.player, true, 0.08, 0.08, 0, 100);
         this.cursors = this.input.keyboard?.createCursorKeys();
@@ -62,9 +65,11 @@ export default class Level1Scene extends LevelClass {
             color: "#0f0",
         });
         */
+       /*
         this.playerPos = this.add.text(400, 300, "Player Position: (0, 0)", {
             color: "#0f0",
         });
+        */
 
         this.platforms = this.physics.add.staticGroup();
 
@@ -82,13 +87,16 @@ export default class Level1Scene extends LevelClass {
         this.arrowleft.setScale(0.5);
         this.arrowUp.setScale(0.5);
         this.arrowleft.flipX = true;
+        this.arrowLeftText = this.add.text(-415, 325, "Move Left");
+        this.arrowRightText = this.add.text(-230, 325, "Move Right");
+        this.arrowUpText = this.add.text(-310, 255, "Move Up");
 
         const pause = [
             {
                 x: 100,
                 y: 100,
-                color: "#0f0",
-                text: "pause",
+                color: "#FFA500",
+                text: "Pause",
             },
         ];
 
@@ -256,7 +264,7 @@ export default class Level1Scene extends LevelClass {
 
         this.terminalBody = new TerminalBody(
             this,
-            2900,
+            2650,
             538,
             "terminal",
             this.CorrectTerminalArr,
@@ -271,7 +279,7 @@ export default class Level1Scene extends LevelClass {
             console.log("incorrect terminal 1");
         });
 
-        this.dish = this.add.image(2800, 538, "dish");
+        this.dish = this.add.image(2600, 530, "dish");
         this.dish.setScale(0.5);
 
         this.spaceShip = this.add.image(3200, 495, "spacecraft");
@@ -360,11 +368,13 @@ export default class Level1Scene extends LevelClass {
         const offsetY = -300;
 
         //create/update text (float -> int for readability)
+        /*
         this.playerPos?.setText(
             `Player Position: (${Math.floor(this.posX)}, ${Math.floor(
                 this.posY
             )})`
         );
+        */
         this.playerPos?.setPosition(this.posX + offsetX, this.posY + offsetY);
     }
 
