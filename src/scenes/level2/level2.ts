@@ -26,6 +26,7 @@ export default class Level2Scene extends LevelClass {
     private staticSpikes: Phaser.Physics.Arcade.StaticGroup;
     private fallingSpikes: Phaser.Physics.Arcade.Group;
     private terminalBody?: TerminalBody;
+    private playerHasPower = false;
 
     constructor() {
         super({ key: "Level2Scene" });
@@ -252,6 +253,12 @@ export default class Level2Scene extends LevelClass {
             //tunnel wall 3
             {
                 x: offset + unit * 38,
+                y: offset + unit * 8,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 38,
                 y: offset + unit * 7,
                 texture: "ice-planet-tileset-1",
                 frame: 3,
@@ -444,6 +451,67 @@ export default class Level2Scene extends LevelClass {
                 texture: "door",
                 frame: 1,
             },
+            //final obsticle
+            {
+                x: offset + unit * 56,
+                y: offset + unit * 8,
+                texture: "ice-planet-tileset-1",
+                frame: 1,
+            },
+            {
+                x: offset + unit * 56,
+                y: offset + unit * 7,
+                texture: "ice-planet-tileset-1",
+                frame: 1,
+            },
+            {
+                x: offset + unit * 56,
+                y: offset + unit * 6,
+                texture: "ice-planet-tileset-1",
+                frame: 1,
+            },
+            {
+                x: offset + unit * 56,
+                y: offset + unit * 5,
+                texture: "ice-planet-tileset-1",
+                frame: 1,
+            },
+            {
+                x: offset + unit * 56,
+                y: offset + unit * 4,
+                texture: "ice-planet-tileset-1",
+                frame: 1,
+            },
+            {
+                x: offset + unit * 56,
+                y: offset + unit * 3,
+                texture: "ice-planet-tileset-1",
+                frame: 1,
+            },
+            {
+                x: offset + unit * 56,
+                y: offset + unit * 2,
+                texture: "ice-planet-tileset-1",
+                frame: 1,
+            },
+            {
+                x: offset + unit * 57,
+                y: offset + unit * 2,
+                texture: "ice-planet-tileset-1",
+                frame: 1,
+            },
+            {
+                x: offset + unit * 58,
+                y: offset + unit * 2,
+                texture: "ice-planet-tileset-1",
+                frame: 1,
+            },
+            {
+                x: offset + unit * 59,
+                y: offset + unit * 2,
+                texture: "ice-planet-tileset-1",
+                frame: 1,
+            },
             { x: 640, y: 720, texture: "ice-ground-1", scale: { x: 80, y: 4 } }, // Ground
         ];
         createPlatforms(this, platforms, this.platforms, [this.player]);
@@ -491,6 +559,39 @@ export default class Level2Scene extends LevelClass {
             this.physics.world.createDebugGraphic();
         }
 
+        //npc and their text
+        const npc_1 = this.add.image(2900, 580, "npc_1", 1);
+        npc_1.setScale(2);
+        const npc_2 = this.add.image(2590, -224, "npc_2", 1);
+        npc_2.setScale(2);
+        const npc_3 = this.add.image(4600, 580, "npc_3", 1);
+        npc_3.setScale(2);
+
+        this.add.text(
+            2800,
+            500,
+            "Hey, looks like you will need a little more power to get to your ship!",
+            {
+                color: "#0f0",
+            }
+        );
+        this.add.text(
+            2300,
+            -300,
+            "Please help me! The unlock code for this door\n should be somewhere on that terminal!",
+            {
+                color: "#0f0",
+            }
+        );
+        this.add.text(
+            4200,
+            480,
+            "Great job here on ice-223, the USC thanks you greatly. \nThe mission isnt over yet, I am sending you to a remote,\n dangerous planet next.",
+            {
+                color: "#0f0",
+            }
+        );
+
         /* ---------------     Create Terminal    ------------------- 
             Must be done after platform and player creation
         */
@@ -534,14 +635,15 @@ export default class Level2Scene extends LevelClass {
         ];
         new TerminalBody(
             this,
-            200,
-            0,
+            3000,
+            500,
             "terminal",
             this.CorrectTerminalArr2,
             "2"
         );
         terminal_2_scene.events.on("Terminal2_correct", () => {
             console.log("correct terminal 2");
+            this.passTerminal2();
         });
         terminal_2_scene.events.on("Terminal2_incorrect", () => {
             console.log("incorrect terminal 2");
@@ -571,6 +673,9 @@ export default class Level2Scene extends LevelClass {
         spike5.setScale(1, -1);
         spike5.body.setOffset(0, 30);
         //spike5.setGravity(-300);
+    }
+    passTerminal2() {
+        this.playerHasPower = true;
     }
 
     drawGrid(gridSize: number): void {
@@ -637,6 +742,11 @@ export default class Level2Scene extends LevelClass {
             this.scene.launch("RespawnScene");
             this.scene.bringToTop("RespawnScene");
             this.scene.stop("Level2Scene");
+        }
+        if (this.playerHasPower) {
+            if (this.cursors?.up.isDown && this.player.body?.touching.down) {
+                this.player.setVelocityY(-600);
+            }
         }
     }
     private cleanup() {
