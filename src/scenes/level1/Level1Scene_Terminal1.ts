@@ -6,6 +6,8 @@ import { terminalDisplay } from "../../components/terminalDisplay";
 export default class Level1Scene_Terminal1 extends LevelClass {
     private mainLevel: LevelClass;
     private terminalDisplayText: Phaser.GameObjects.Text;
+    private level1Task: Phaser.GameObjects.Text;
+
     constructor() {
         super({ key: "Level1Scene_Terminal1" });
     }
@@ -32,6 +34,16 @@ export default class Level1Scene_Terminal1 extends LevelClass {
         );
 
         new terminalDisplay(this);
+
+        //Task
+        this.level1Task = this.add.text(
+            600,
+            200,
+            "Task: Click on <Git Add Blue>, <Git Commit>, <Git Push>",
+            {
+                color: "#EE4B2B",
+            }
+        );
 
         //Reset button
         let resetButton = this.add

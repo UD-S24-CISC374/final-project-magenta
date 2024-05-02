@@ -30,6 +30,7 @@ export default class Level1Scene extends LevelClass {
     private textSpawned: boolean = false;
     private spaceShip: Phaser.GameObjects.Image;
     private canFlyAway: boolean = false;
+    private dish: Phaser.GameObjects.Image;
 
     constructor() {
         super({ key: "Level1Scene" });
@@ -251,6 +252,9 @@ export default class Level1Scene extends LevelClass {
         terminal_1_scene.events.on("Terminal1_incorrect", () => {
             console.log("incorrect terminal 1");
         });
+
+        this.dish = this.add.image(2800, 538, "dish");
+        this.dish.setScale(0.5);
 
         this.spaceShip = this.add.image(3200, 495, "spacecraft");
         this.spaceShip.setDepth(10);

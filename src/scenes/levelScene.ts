@@ -20,7 +20,7 @@ export default class LevelScene extends Phaser.Scene {
         const level_scn_bg = this.add.image(640, 360, "background-2-level1");
         level_scn_bg.setScale(2);
         /* ---------------     LEVEL PLANETS    ------------------- */
-        const lvl1 = this.add.image(150, 600, "planet-1");
+        const lvl1 = this.add.image(150, 600, "planet-7");
         const lvl2 = this.add.image(350, 400, "planet-4");
         const lvl3 = this.add.image(550, 550, "planet-3");
         const lvl4 = this.add.image(750, 300, "planet-14");
@@ -123,6 +123,7 @@ export default class LevelScene extends Phaser.Scene {
             .on("pointerout", () => {
                 this.enterButtonRestState(this.level6);
             });
+        /*
         this.test = this.add
             .text(200, 200, "Test", { color: "#0f0" })
             .setInteractive()
@@ -135,6 +136,7 @@ export default class LevelScene extends Phaser.Scene {
             .on("pointerout", () => {
                 this.enterButtonRestState(this.test);
             });
+        */
         /* ---------------     Test Scene    ------------------- */
         /*
         this.test = this.add
