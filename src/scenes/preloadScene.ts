@@ -39,6 +39,8 @@ export default class PreloadScene extends Phaser.Scene {
         );
         this.load.image("ice-planet-bg", "assets/Art/ice-planet-bg.png");
         this.load.image("ice-ground-1", "assets/Art/ice-ground-1.png");
+        this.load.image("1x2-ice-spikes", "assets/Art/1x2-ice-spikes.png");
+        this.load.image("2x1-ice-spikes", "assets/Art/2x1-ice-spikes.png");
 
         //Sprite sheets
         this.load.spritesheet("button", "assets/Art/buttons.png", {
@@ -93,9 +95,14 @@ export default class PreloadScene extends Phaser.Scene {
             frameWidth: 32,
             frameHeight: 48,
         });
+        this.load.spritesheet("door", "assets/Art/door.png", {
+            frameWidth: 64,
+            frameHeight: 64,
+        });
 
         //Sounds
         this.load.audio("bg_music_1", "assets/Sound/gitcat_chill_demo2.mp3");
+        this.load.audio("wrong", "assets/Sound/lose sound 1_0.wav");
     }
 
     create() {

@@ -1,9 +1,12 @@
 import Phaser from "phaser";
 import LevelClass from "../../Classes/LevelClass";
+import { updateCurrentLevel } from "../currentLevel";
 import { Player } from "../../objects/player";
 import { Platform, createPlatforms } from "../../components/platform";
 import { createButton } from "../../components/pauseButton";
 import { TerminalBody } from "../../components/terminalAndTerminalSceneHelpers";
+import Level2Scene_Terminal1 from "./Level2Scene_Terminal1";
+import Level2Scene_Terminal2 from "./Level2Scene_Terminal2";
 
 export default class Level2Scene extends LevelClass {
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -14,25 +17,28 @@ export default class Level2Scene extends LevelClass {
     private levelWidth: number = 2560; // Width of the level
     private levelHeight: number = 1440; // Height of the level
     private showGrid = false;
-    private showColl = false;
+    private showColl = true;
     private pauseButton: Phaser.GameObjects.Text;
     private ship: Phaser.GameObjects.Image;
     private shipStopped = false;
-    private eventEmitted = false;
+    private activeSpikes: Phaser.Physics.Arcade.StaticGroup;
+    private gameOver = false;
+    private staticSpikes: Phaser.Physics.Arcade.StaticGroup;
+    private fallingSpikes: Phaser.Physics.Arcade.Group;
+    private terminalBody?: TerminalBody;
 
     constructor() {
         super({ key: "Level2Scene" });
     }
     create() {
         this.registry.set("Level2Opened", true);
+        //create ship and make it viasable (created as an image)
         this.ship = this.add.image(0, 0, "spacecraft");
         this.ship.setDepth(10);
 
-        //basic set up for player object, camera and controls
+        //basic set up for player object, camera and controls, camera starts centered on ship
         this.player = new Player(this, 100, 400);
         this.player.setVisible(false);
-
-        //this.cameras.main.startFollow(this.player, true, 0.08, 0.08, 0, 100);
         this.cameras.main.startFollow(this.ship, true, 0.08, 0.08, 0, 100);
         this.cursors = this.input.keyboard?.createCursorKeys();
 
@@ -46,6 +52,7 @@ export default class Level2Scene extends LevelClass {
         );
         this.background1.setOrigin(0);
         this.background1.setScrollFactor(0, 0);
+        this.background1.setDepth(-1);
 
         //player pos and text display for testing
         this.playerPos = this.add.text(400, 300, "Player Position: (0, 0)", {
@@ -181,9 +188,300 @@ export default class Level2Scene extends LevelClass {
                 texture: "ice-planet-tileset-1",
                 frame: 3,
             },
-            { x: 640, y: 720, texture: "ice-ground-1", scale: { x: 40, y: 4 } }, // Ground
+            //tunnel wall 1
+            {
+                x: offset + unit * 29,
+                y: offset + unit * 6,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 29,
+                y: offset + unit * 7,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 29,
+                y: offset + unit * 8,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            //tunnel wall 2
+            {
+                x: offset + unit * 33,
+                y: offset + unit * 7,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 33,
+                y: offset + unit * 6,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 33,
+                y: offset + unit * 5,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 33,
+                y: offset + unit * 4,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 33,
+                y: offset + unit * 3,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 33,
+                y: offset + unit * 2,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 33,
+                y: offset + unit * 1,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            //tunnel wall 3
+            {
+                x: offset + unit * 38,
+                y: offset + unit * 7,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 38,
+                y: offset + unit * 6,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 38,
+                y: offset + unit * 5,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 38,
+                y: offset + unit * 4,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 38,
+                y: offset + unit * 3,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 38,
+                y: offset + unit * 2,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 38,
+                y: offset + unit * 1,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            //wall ledge 1
+            {
+                x: offset + unit * 34,
+                y: offset + unit * 7,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            //wall ledge 2
+            {
+                x: offset + unit * 37,
+                y: offset + unit * 5,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            //wall ledge 3
+            {
+                x: offset + unit * 34,
+                y: offset + unit * 3,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            //plat 5
+            {
+                x: offset + unit * 39,
+                y: offset + unit * 1,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 40,
+                y: offset + unit * 1,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 41,
+                y: offset + unit * 1,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 42,
+                y: offset + unit * 1,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 43,
+                y: offset + unit * 1,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 44,
+                y: offset + unit * 1,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 45,
+                y: offset + unit * 1,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            //ceiling above plat 5
+            {
+                x: offset + unit * 39,
+                y: offset + unit * -3,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 40,
+                y: offset + unit * -3,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            //terminal goes here (pos: 2590, 32)
+            {
+                x: offset + unit * 41,
+                y: offset + unit * -3,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 42,
+                y: offset + unit * -3,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 43,
+                y: offset + unit * -3,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 44,
+                y: offset + unit * -3,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 45,
+                y: offset + unit * -3,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            //timmy trap (with dorr)
+            {
+                x: offset + unit * 39,
+                y: offset + unit * -4,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 39,
+                y: offset + unit * -5,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 39,
+                y: offset + unit * -6,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 40,
+                y: offset + unit * -6,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            {
+                x: offset + unit * 41,
+                y: offset + unit * -6,
+                texture: "ice-planet-tileset-1",
+                frame: 3,
+            },
+            //door
+            {
+                x: offset + unit * 41,
+                y: offset + unit * -5,
+                texture: "door",
+                frame: 0,
+            },
+            {
+                x: offset + unit * 41,
+                y: offset + unit * -4,
+                texture: "door",
+                frame: 1,
+            },
+            { x: 640, y: 720, texture: "ice-ground-1", scale: { x: 80, y: 4 } }, // Ground
         ];
         createPlatforms(this, platforms, this.platforms, [this.player]);
+
+        //creating the ice spikes
+        this.staticSpikes = this.physics.add.staticGroup();
+        this.activeSpikes = this.physics.add.staticGroup();
+        this.fallingSpikes = this.physics.add.group();
+
+        let spike1 = this.staticSpikes.create(1930, 440, "1x2-ice-spikes");
+        spike1.setScale(1, 1);
+        let spike2 = this.staticSpikes.create(2098, 440, "1x2-ice-spikes");
+        spike2.setScale(-1, 1);
+        let spike3 = this.staticSpikes.create(2780, 48, "2x1-ice-spikes");
+        spike3.setScale(1, 1);
+        //spike3.setAngle(90);
+        //2780
+        let spike4 = this.activeSpikes.create(2780, -112, "2x1-ice-spikes");
+        spike4.setScale(1, -1);
+        //spike4.setAngle(90);
+
+        this.physics.add.collider(
+            this.player,
+            this.staticSpikes,
+            this.handleHitSpike,
+            undefined,
+            this
+        );
+        this.physics.add.collider(
+            this.player,
+            this.activeSpikes,
+            this.handleHitSpike,
+            undefined,
+            this
+        );
+        this.physics.add.collider(this.player, this.fallingSpikes);
+        this.physics.add.collider(this.fallingSpikes, this.staticSpikes);
 
         //if youd like to display a grid or collidable object outlines, switch
         //showGrid and showColl bools to true at top of file
@@ -206,23 +504,48 @@ export default class Level2Scene extends LevelClass {
             "Level2Scene_Terminal1"
         );
         this.CorrectTerminalArr = [
-            `git add blue`,
-            `git commit -m 'Add New Platform'`,
+            `git add code.js`,
+            `git commit -m 'created code for lock'`,
             `git push`,
         ];
         new TerminalBody(
             this,
-            300,
-            300,
+            2520,
+            0,
             "terminal",
             this.CorrectTerminalArr,
-            "2"
+            "1"
         );
         terminal_1_scene.events.on("Terminal1_correct", () => {
             console.log("correct terminal 1");
+            this.passTerminal1();
         });
         terminal_1_scene.events.on("Terminal1_incorrect", () => {
             console.log("incorrect terminal 1");
+        });
+
+        //Terminal 2
+        let terminal_2_scene = this.scene.manager.getScene(
+            "Level2Scene_Terminal2"
+        );
+        this.CorrectTerminalArr2 = [
+            `git add power.js`,
+            `git commit -m ''`,
+            `git push`,
+        ];
+        new TerminalBody(
+            this,
+            200,
+            0,
+            "terminal",
+            this.CorrectTerminalArr2,
+            "2"
+        );
+        terminal_2_scene.events.on("Terminal2_correct", () => {
+            console.log("correct terminal 2");
+        });
+        terminal_2_scene.events.on("Terminal2_incorrect", () => {
+            console.log("incorrect terminal 2");
         });
     }
 
@@ -231,6 +554,24 @@ export default class Level2Scene extends LevelClass {
             frameWidth: 32,
             frameHeight: 32,
         });
+    }
+
+    private handleHitSpike() {
+        this.physics.pause();
+        this.player.setTint(0xff0000);
+        this.player.anims.play("turn");
+        this.gameOver = true;
+    }
+
+    //what to run after terminal 1 has passed
+    passTerminal1() {
+        this.activeSpikes.setVisible(false);
+        this.activeSpikes.clear();
+
+        let spike5 = this.fallingSpikes.create(2780, -100, "2x1-ice-spikes");
+        spike5.setScale(1, -1);
+        spike5.body.setOffset(0, 30);
+        //spike5.setGravity(-300);
     }
 
     drawGrid(gridSize: number): void {
@@ -290,5 +631,29 @@ export default class Level2Scene extends LevelClass {
                 100
             );
         }
+        if (this.gameOver) {
+            this.gameOver = false;
+            updateCurrentLevel(this.scene.key);
+            this.cleanup();
+            this.scene.launch("RespawnScene");
+            this.scene.bringToTop("RespawnScene");
+            this.scene.stop("Level2Scene");
+        }
+    }
+    private cleanup() {
+        this.player.destroy();
+        this.platforms?.clear(true, true);
+        //this.spikes?.clear(true, true);
+        this.terminalBody?.destroy();
+        this.terminalBody = undefined;
+        //this.events.destroy();
+        let term1 = this.scene.get(
+            "Level2Scene_Terminal1"
+        ) as Level2Scene_Terminal1;
+        term1.turnOffEmitters();
+        let term2 = this.scene.get(
+            "Level2Scene_Terminal2"
+        ) as Level2Scene_Terminal2;
+        term2.terminalInputArr = [];
     }
 }

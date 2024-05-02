@@ -17,6 +17,10 @@ export default class TerminalButton extends Phaser.GameObjects.Sprite {
         this.setInteractive();
         this.on("pointerdown", () => {
             this.scene.events.emit(eventID);
+            this.anims.play("buttonPressed");
+        });
+        this.on("pointerup", () => {
+            this.anims.play("buttonUp");
         });
 
         const fontSize = text.length > 12 ? "20px" : "32px";

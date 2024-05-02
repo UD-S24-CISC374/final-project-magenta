@@ -6,6 +6,10 @@ import { terminalDisplay } from "../../components/terminalDisplay";
 export default class Level2Scene_Terminal1 extends LevelClass {
     private mainLevel: LevelClass;
     private terminalDisplayText: Phaser.GameObjects.Text;
+    private buttonList: string[] = [];
+    public turnOffEmitters() {
+        this.buttonList.forEach((x) => this.events.off(x));
+    }
     constructor() {
         super({ key: "Level2Scene_Terminal1" });
     }
@@ -16,17 +20,18 @@ export default class Level2Scene_Terminal1 extends LevelClass {
     }
 
     create() {
+        this.buttonList = [
+            "git add code.js",
+            "git add lock",
+            "git commit -m 'created code for lock'",
+            "git push",
+        ];
         new ButtonAndListensers(
             this,
             200,
             100,
             "button",
-            [
-                "git add red",
-                "git add blue",
-                "git commit -m 'Add New Platform'",
-                "git push",
-            ],
+            this.buttonList,
             this.CorrectTerminalArr,
             this.handleFeedback
         );
@@ -59,17 +64,22 @@ export default class Level2Scene_Terminal1 extends LevelClass {
         );
 
         //Handle Feedback Events
+        //Handle Feedback Events
         this.events.on("correct_terminal_input", () => {
             this.events.emit(`Terminal1_Close`);
             this.events.emit(`Terminal1_correct`);
             this.scene.resume(this.mainLevel.scene.key);
             this.scene.stop();
         });
-        this.events.on("incorrect_terminal_input", () => {
+        function handleEnd(this: Level2Scene_Terminal1) {
+            console.log("here");
             this.events.emit(`Terminal1_Close`);
             this.events.emit(`Terminal1_incorrect`);
+            this.scene.stop("Level2Scene_Terminal1");
             this.scene.resume(this.mainLevel.scene.key);
-            this.scene.stop();
+        }
+        this.events.on("incorrect_terminal_input", () => {
+            this.time.delayedCall(1500, handleEnd, [this], this);
         });
     }
 
@@ -81,6 +91,12 @@ export default class Level2Scene_Terminal1 extends LevelClass {
         console.log(input);
         console.log(correctInput);
         scene.FeedbackText?.destroy();
+        let feedbackX = 67;
+        let feedbackY = 500;
+        let feedbackWrap = 400;
+        let feebackColor = "#ff0000";
+        let feedbackFontSize = "32px";
+        
         //Is the input exactly correct
         if (JSON.stringify(input) === JSON.stringify(correctInput)) {
             scene.events.emit("correct_terminal_input");
@@ -89,28 +105,31 @@ export default class Level2Scene_Terminal1 extends LevelClass {
 
         //Did they Push
         if (input[input.length - 1] === "git push") {
+            scene.sound.add("wrong").play();
             //Did they push with the red platform
-            if (input.includes("git add red")) {
+            if (input.includes("git add lock")) {
                 scene.FeedbackText = scene.add.text(
-                    400,
-                    500,
-                    "You pushed with the red platform! Ohno!",
+                    feedbackX,
+                    feedbackY,
+                    "Why are you pushing a lock to your friend?",
                     {
-                        fontSize: "32px",
-                        color: "#880808",
+                        fontSize: feedbackFontSize,
+                        color: feebackColor,
+                        wordWrap: { width: feedbackWrap },
                     }
                 );
                 //scene.events.emit("incorrect_terminal_input");
             }
             //Did they push without the blue platform
-            else if (!input.includes("git add blue")) {
+            else if (!input.includes("git add code")) {
                 scene.FeedbackText = scene.add.text(
-                    400,
-                    500,
-                    "How are you supposed to get to the other side without the blue platform",
+                    feedbackX,
+                    feedbackY,
+                    "How is he supposed to get out without the code",
                     {
-                        fontSize: "32px",
-                        color: "#880808",
+                        fontSize: feedbackFontSize,
+                        color: feebackColor,
+                        wordWrap: { width: feedbackWrap },
                     }
                 );
                 //scene.events.emit("incorrect_terminal_input");
@@ -118,12 +137,13 @@ export default class Level2Scene_Terminal1 extends LevelClass {
             //Did they push without the commit
             else if (!input.includes("git commit -m 'Add New Platform'")) {
                 scene.FeedbackText = scene.add.text(
-                    400,
-                    500,
+                    feedbackX,
+                    feedbackY,
                     "You have to commit.",
                     {
-                        fontSize: "32px",
-                        color: "#880808",
+                        fontSize: feedbackFontSize,
+                        color: feebackColor,
+                        wordWrap: { width: feedbackWrap },
                     }
                 );
                 //scene.events.emit("incorrect_terminal_input");
@@ -135,12 +155,13 @@ export default class Level2Scene_Terminal1 extends LevelClass {
 
         if (input.length > correctInput.length + 2) {
             scene.FeedbackText = scene.add.text(
-                400,
-                500,
+                feedbackX,
+                feedbackY,
                 "You seem to have entered too many commands! Try Again",
                 {
-                    fontSize: "32px",
-                    color: "#880808",
+                    fontSize: feedbackFontSize,
+                    color: feebackColor,
+                    wordWrap: { width: feedbackWrap },
                 }
             );
             //Clear the input array for next time
