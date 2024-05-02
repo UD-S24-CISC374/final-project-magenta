@@ -36,5 +36,24 @@ export class ButtonAndListensers {
                 scene.CorrectTerminalArr
             );
         });
+
+        scene.anims.create({
+            key: "buttonPressed",
+            frames: scene.anims.generateFrameNumbers("button", {
+                start: 0,
+                end: 1,
+            }),
+            frameRate: 10,
+            repeat: 0,
+        });
+        scene.anims.create({
+            key: "buttonUp",
+            frames: scene.anims.generateFrameNumbers("button", {
+                start: 1,
+                end: 0,
+            }),
+            frameRate: 10,
+            repeat: 0,
+        });
     }
 }

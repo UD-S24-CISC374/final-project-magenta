@@ -97,6 +97,7 @@ export default class PreloadScene extends Phaser.Scene {
 
         //Sounds
         this.load.audio("bg_music_1", "assets/Sound/gitcat_chill_demo2.mp3");
+        this.load.audio("wrong", "assets/Sound/lose sound 1_0.wav");
     }
 
     create() {
