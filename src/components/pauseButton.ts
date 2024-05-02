@@ -57,7 +57,7 @@ export function createButton(scene: Phaser.Scene, buttons: Button[]) {
                 scene.cameras.main.scrollY + 700,
                 button.text,
                 {
-                    color: "#0f0",
+                    color: button.color,
                 }
             )
             .setInteractive()
