@@ -257,8 +257,8 @@ export default class Level1Scene extends LevelClass {
             "Level1Scene_Terminal1"
         );
         this.CorrectTerminalArr = [
-            `git add blue`,
-            `git commit -m 'Add New Platform'`,
+            `git add messsage`,
+            `git commit -m 'Sending Message to SpaceStation'`,
             `git push`,
         ];
 
