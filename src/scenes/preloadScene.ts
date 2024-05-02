@@ -35,6 +35,7 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image("ice-planet-bg", "assets/Art/ice-planet-bg.png");
         this.load.image("ice-ground-1", "assets/Art/ice-ground-1.png");
         this.load.image("1x2-ice-spikes", "assets/Art/1x2-ice-spikes.png");
+        this.load.image("2x1-ice-spikes", "assets/Art/2x1-ice-spikes.png");
 
         //Sprite sheets
         this.load.spritesheet("button", "assets/Art/buttons.png", {

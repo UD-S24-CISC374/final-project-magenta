@@ -16,13 +16,14 @@ export default class Level2Scene extends LevelClass {
     private levelWidth: number = 2560; // Width of the level
     private levelHeight: number = 1440; // Height of the level
     private showGrid = false;
-    private showColl = false;
+    private showColl = true;
     private pauseButton: Button;
     private ship: Phaser.GameObjects.Image;
     private shipStopped = false;
-    private activeSpikes: Phaser.Physics.Arcade.Group;
+    private activeSpikes: Phaser.Physics.Arcade.StaticGroup;
     private gameOver = false;
     private staticSpikes: Phaser.Physics.Arcade.StaticGroup;
+    private fallingSpikes: Phaser.Physics.Arcade.Group;
     private terminalBody?: TerminalBody;
 
     constructor() {
@@ -448,17 +449,20 @@ export default class Level2Scene extends LevelClass {
 
         //creating the ice spikes
         this.staticSpikes = this.physics.add.staticGroup();
+        this.activeSpikes = this.physics.add.staticGroup();
+        this.fallingSpikes = this.physics.add.group();
 
         let spike1 = this.staticSpikes.create(1930, 440, "1x2-ice-spikes");
         spike1.setScale(1, 1);
         let spike2 = this.staticSpikes.create(2098, 440, "1x2-ice-spikes");
         spike2.setScale(-1, 1);
-        let spike3 = this.staticSpikes.create(2780, 48, "1x2-ice-spikes");
-        spike3.setScale(-1, 1);
-        spike3.setAngle(90);
-        let spike4 = this.staticSpikes.create(2780, -112, "1x2-ice-spikes");
-        spike4.setScale(1, 1);
-        spike4.setAngle(90);
+        let spike3 = this.staticSpikes.create(2780, 48, "2x1-ice-spikes");
+        spike3.setScale(1, 1);
+        //spike3.setAngle(90);
+        //2780
+        let spike4 = this.activeSpikes.create(2780, -112, "2x1-ice-spikes");
+        spike4.setScale(1, -1);
+        //spike4.setAngle(90);
 
         this.physics.add.collider(
             this.player,
@@ -467,8 +471,15 @@ export default class Level2Scene extends LevelClass {
             undefined,
             this
         );
-
-        this.physics.add.collider(this.player, this.staticSpikes);
+        this.physics.add.collider(
+            this.player,
+            this.activeSpikes,
+            this.handleHitSpike,
+            undefined,
+            this
+        );
+        this.physics.add.collider(this.player, this.fallingSpikes);
+        this.physics.add.collider(this.fallingSpikes, this.staticSpikes);
 
         //if youd like to display a grid or collidable object outlines, switch
         //showGrid and showColl bools to true at top of file
@@ -497,14 +508,15 @@ export default class Level2Scene extends LevelClass {
         ];
         new TerminalBody(
             this,
-            300,
-            300,
+            2520,
+            0,
             "terminal",
             this.CorrectTerminalArr,
             "1"
         );
         terminal_1_scene.events.on("Terminal1_correct", () => {
             console.log("correct terminal 1");
+            this.passTerminal1();
         });
         terminal_1_scene.events.on("Terminal1_incorrect", () => {
             console.log("incorrect terminal 1");
@@ -526,7 +538,15 @@ export default class Level2Scene extends LevelClass {
     }
 
     //what to run after terminal 1 has passed
-    passTerminal1() {}
+    passTerminal1() {
+        this.activeSpikes.setVisible(false);
+        this.activeSpikes.clear();
+
+        let spike5 = this.fallingSpikes.create(2780, -100, "2x1-ice-spikes");
+        spike5.setScale(1, -1);
+        spike5.body.setOffset(0, 30);
+        //spike5.setGravity(-300);
+    }
 
     drawGrid(gridSize: number): void {
         const graphics = this.add.graphics({
