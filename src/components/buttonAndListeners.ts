@@ -1,7 +1,8 @@
 //import Phaser from "phaser";
 import TerminalButton from "./terminalButton";
-import { Listenter } from "./terminalListeners"; // Import the missing 'Listenter' class
+import { terminalEmitter } from "./terminalEmitter"; // Import the missing 'Listenter' class
 import LevelClass from "../Classes/LevelClass";
+
 export class ButtonAndListensers {
     constructor(
         scene: LevelClass,
@@ -25,7 +26,7 @@ export class ButtonAndListensers {
                 buttonName,
                 buttonName
             );
-            new Listenter(scene, buttonName);
+            new terminalEmitter(scene, buttonName);
         });
 
         scene.events.on("check_terminal_input", () => {

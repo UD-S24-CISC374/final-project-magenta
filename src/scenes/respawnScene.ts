@@ -44,7 +44,7 @@ export default class RespawnScene extends Phaser.Scene {
     }
 
     updateRespawnClicked() {
-        this.scene.start(currentLevel);
+        this.scene.launch(currentLevel);
         this.scene.stop();
     }
 

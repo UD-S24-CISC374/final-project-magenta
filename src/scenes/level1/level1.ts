@@ -5,6 +5,7 @@ import { Platform, createPlatforms } from "../../components/platform";
 import { Button, createButton } from "../../components/pauseButton";
 import { TerminalBody } from "../../components/terminalAndTerminalSceneHelpers";
 import { updateCurrentLevel } from "../currentLevel";
+import Level1Scene_Terminal1 from "./Level1Scene_Terminal1";
 
 export default class Level1Scene extends LevelClass {
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -20,6 +21,7 @@ export default class Level1Scene extends LevelClass {
     private pauseButton: Button;
     private spikes?: Phaser.Physics.Arcade.Group;
     private gameOver = false;
+    private terminalBody?: TerminalBody;
 
     constructor() {
         super({ key: "Level1Scene" });
@@ -157,7 +159,8 @@ export default class Level1Scene extends LevelClass {
             `git commit -m 'Add New Platform'`,
             `git push`,
         ];
-        new TerminalBody(
+
+        this.terminalBody = new TerminalBody(
             this,
             300,
             300,
@@ -165,6 +168,7 @@ export default class Level1Scene extends LevelClass {
             this.CorrectTerminalArr,
             "1"
         );
+
         terminal_1_scene.events.on("Terminal1_correct", () => {
             console.log("correct terminal 1");
         });
@@ -231,8 +235,22 @@ export default class Level1Scene extends LevelClass {
         if (this.gameOver) {
             this.gameOver = false;
             updateCurrentLevel(this.scene.key);
-            this.scene.start("RespawnScene");
-            this.scene.stop();
+            this.cleanup();
+            this.scene.launch("RespawnScene");
+            this.scene.bringToTop("RespawnScene");
+            this.scene.stop("Level1Scene");
         }
+    }
+    private cleanup() {
+        this.player.destroy();
+        this.platforms?.clear(true, true);
+        this.spikes?.clear(true, true);
+        this.terminalBody?.destroy();
+        this.terminalBody = undefined;
+        //this.events.destroy();
+        let term1 = this.scene.get(
+            "Level1Scene_Terminal1"
+        ) as Level1Scene_Terminal1;
+        term1.turnOffEmitters();
     }
 }
