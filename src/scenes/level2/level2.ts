@@ -3,7 +3,7 @@ import LevelClass from "../../Classes/LevelClass";
 import { updateCurrentLevel } from "../currentLevel";
 import { Player } from "../../objects/player";
 import { Platform, createPlatforms } from "../../components/platform";
-import { createButton } from "../../components/pauseButton";
+import { Button } from "../../components/pauseButton"; //{ Button, createButton } ->was giving error
 import { TerminalBody } from "../../components/terminalAndTerminalSceneHelpers";
 import Level2Scene_Terminal1 from "./Level2Scene_Terminal1";
 import Level2Scene_Terminal2 from "./Level2Scene_Terminal2";
@@ -20,6 +20,7 @@ export default class Level2Scene extends LevelClass {
     private showColl = false;
     private pauseButton: Phaser.GameObjects.Text;
     private ship: Phaser.GameObjects.Image;
+    private spaceShip: Phaser.GameObjects.Image;
     private shipStopped = false;
     private activeSpikes: Phaser.Physics.Arcade.StaticGroup;
     private gameOver = false;
@@ -27,19 +28,32 @@ export default class Level2Scene extends LevelClass {
     private fallingSpikes: Phaser.Physics.Arcade.Group;
     private terminalBody?: TerminalBody;
     private playerHasPower = false;
+    private showPos = true;
+    private d1: Phaser.GameObjects.Text;
+    private d2: Phaser.GameObjects.Text;
+    private d3: Phaser.GameObjects.Text;
+    private isNpcMoving = false;
+    private npc_1: Phaser.GameObjects.Image;
+    private npc_2: Phaser.GameObjects.Image;
+    private canFlyAway = true;
 
     constructor() {
         super({ key: "Level2Scene" });
     }
     create() {
-        this.registry.set("Level2Opened", true);
         //create ship and make it viasable (created as an image)
         this.ship = this.add.image(0, 0, "spacecraft");
         this.ship.setDepth(10);
+        this.ship.setScale(2);
+        this.spaceShip = this.add.image(5100, 540, "spacecraft");
+        this.spaceShip.setDepth(10);
+        this.spaceShip.setScale(2);
 
         //basic set up for player object, camera and controls, camera starts centered on ship
         this.player = new Player(this, 100, 400);
         this.player.setVisible(false);
+        this.player.setActive(false);
+        this.cameras.main.fadeIn(5000);
         this.cameras.main.startFollow(this.ship, true, 0.08, 0.08, 0, 100);
         this.cursors = this.input.keyboard?.createCursorKeys();
 
@@ -55,10 +69,8 @@ export default class Level2Scene extends LevelClass {
         this.background1.setScrollFactor(0, 0);
         this.background1.setDepth(-1);
 
-        //player pos and text display for testing
-        this.playerPos = this.add.text(400, 300, "Player Position: (0, 0)", {
-            color: "#0f0",
-        });
+        //pause button giving an error for some reason, will fix later
+        /*
         const pause = [
             {
                 x: 100,
@@ -67,10 +79,11 @@ export default class Level2Scene extends LevelClass {
                 text: "pause",
             },
         ];
+        */
 
         //initallize platforms and pause button
         this.platforms = this.physics.add.staticGroup();
-        this.pauseButton = createButton(this, pause)[0];
+        //this.pauseButton = createButton(this, pause)[0];
 
         //create platforms
         const unit = 64;
@@ -559,27 +572,47 @@ export default class Level2Scene extends LevelClass {
         if (this.showColl) {
             this.physics.world.createDebugGraphic();
         }
+        if (this.showPos) {
+            this.playerPos = this.add.text(
+                400,
+                300,
+                "Player Position: (0, 0)",
+                {
+                    color: "#0f0",
+                }
+            );
+        }
 
         //npc and their text
-        const npc_1 = this.add.image(2900, 580, "npc_1", 1);
-        npc_1.setScale(2);
-        const npc_2 = this.add.image(2590, -224, "npc_2", 1);
-        npc_2.setScale(2);
+        this.npc_1 = this.add.image(2900, 580, "npc_1", 1);
+        this.npc_1.setScale(2);
+        this.npc_2 = this.add.image(2590, -224, "npc_2", 1);
+        this.npc_2.setScale(2);
         const npc_3 = this.add.image(4600, 580, "npc_3", 1);
         npc_3.setScale(2);
 
-        this.add.text(
-            2800,
-            500,
-            "Hey, looks like you will need a little more power to get to your ship!",
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        this.d1 = this.add.text(
+            2300,
+            -300,
+            "Please help me! The unlock code for this door\n should be somewhere on that terminal!",
             {
                 color: "#0f0",
             }
         );
-        this.add.text(
+        this.d2 = this.add.text(
             2300,
             -300,
-            "Please help me! The unlock code for this door\n should be somewhere on that terminal!",
+            "Thanks! Let me give you a hand with this...",
+            {
+                color: "#0f0",
+            }
+        );
+        this.d2.setVisible(false);
+        this.d3 = this.add.text(
+            2800,
+            460,
+            "Hey, looks like you will need a little more power to get to your ship!\nThis terminal doesnt seem to have a mouse, maybe you should type what\nthe buttons would enter into the terminal.",
             {
                 color: "#0f0",
             }
@@ -667,16 +700,37 @@ export default class Level2Scene extends LevelClass {
 
     //what to run after terminal 1 has passed
     passTerminal1() {
-        this.activeSpikes.setVisible(false);
-        this.activeSpikes.clear();
+        this.d1.setVisible(false);
+        //this.d2.setVisible(false);
 
-        let spike5 = this.fallingSpikes.create(2780, -100, "2x1-ice-spikes");
-        spike5.setScale(1, -1);
-        spike5.body.setOffset(0, 30);
-        //spike5.setGravity(-300);
+        setTimeout(() => {
+            this.d2.setVisible(true);
+            this.isNpcMoving = true;
+        }, 2000);
+        setTimeout(() => {
+            this.activeSpikes.setVisible(false);
+            this.activeSpikes.clear();
+
+            let spike5 = this.fallingSpikes.create(
+                2780,
+                -100,
+                "2x1-ice-spikes"
+            );
+            spike5.setScale(1, -1);
+            spike5.body.setOffset(0, 30);
+        }, 4000);
     }
     passTerminal2() {
         this.playerHasPower = true;
+        this.d3.setVisible(false);
+        this.add.text(
+            2800,
+            460,
+            "Great job! I bet your legs feel a lot stronger! Only a few cats are able to\nacsess the powers hidden in the Git...",
+            {
+                color: "#0f0",
+            }
+        );
     }
 
     drawGrid(gridSize: number): void {
@@ -718,14 +772,37 @@ export default class Level2Scene extends LevelClass {
         button.setStyle({ fill: "#0f0" });
     }
 
+    private handleCanFlyAway() {
+        if (this.canFlyAway) {
+            this.player.setVisible(false);
+            this.cameras.main.startFollow(
+                this.spaceShip,
+                true,
+                0.08,
+                0.08,
+                0,
+                100
+            );
+            this.spaceShip.y -= 1;
+            this.cameras.main.fadeOut(4000);
+            if (this.spaceShip.y < -300) {
+                //currently goes to main as lvl 3 is not in yet
+                this.scene.start("MainScene");
+            }
+        } else {
+            this.add.text(3200, 400, "You need to complete the task first!");
+        }
+    }
+
     update() {
         this.player.update(this.cursors);
         this.handlePrintPos();
 
         if (this.ship.y <= 550) {
-            this.ship.y += 0.35;
+            this.ship.y += 0.5;
         } else {
             this.player.setVisible(true);
+            this.player.setActive(true);
             this.shipStopped = true;
             this.cameras.main.startFollow(
                 this.player,
@@ -748,6 +825,14 @@ export default class Level2Scene extends LevelClass {
             if (this.cursors?.up.isDown && this.player.body?.touching.down) {
                 this.player.setVelocityY(-600);
             }
+        }
+        if (this.isNpcMoving) {
+            if (this.npc_2.x <= 2780) {
+                this.npc_2.x += 0.35;
+            }
+        }
+        if (this.player.x > 5000) {
+            this.handleCanFlyAway();
         }
     }
     private cleanup() {
