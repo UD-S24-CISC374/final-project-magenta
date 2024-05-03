@@ -78,17 +78,17 @@ export default class MainScene extends Phaser.Scene {
         //this.music.play();
 
         //text for alpha sub
-        this.add.text(
-            400,
-            200,
-            "please select 'play from level' -> 'level 1'",
-            {
-                color: "#0f0",
-            }
-        );
-        this.add.text(400, 225, "start is currently not implemented", {
-            color: "#0f0",
-        });
+        // this.add.text(
+        //     400,
+        //     200,
+        //     "please select 'play from level' -> 'level 1'",
+        //     {
+        //         color: "#0f0",
+        //     }
+        // );
+        // this.add.text(400, 225, "start is currently not implemented", {
+        //     color: "#0f0",
+        // });
         /* ---------------     START BUTTON    ------------------- */
         this.startButton = this.add
             .text(400, 300, "Start")
@@ -153,7 +153,8 @@ export default class MainScene extends Phaser.Scene {
     }
     /* ---------------     START BUTTON    ------------------- */
     updateStartClicked() {
-        this.scene.start("StartScene");
+        this.scene.start("Level1Scene");
+        //this.scene.start("StartScene");
     }
 
     enterButtonHoverState(value: Phaser.GameObjects.Text) {

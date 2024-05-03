@@ -527,7 +527,12 @@ export default class Level3Scene extends LevelClass {
                 texture: "level3stone",
                 scale: { x: 0.25, y: 0.25 },
             },
-            { x: 640, y: 720, texture: "level3stone", scale: { x: 80, y: 0.7 } }, // Ground
+            {
+                x: 640,
+                y: 720,
+                texture: "level3stone",
+                scale: { x: 80, y: 0.7 },
+            }, // Ground
         ];
         createPlatforms(this, platforms, this.platforms, [this.player]);
 
@@ -796,8 +801,8 @@ export default class Level3Scene extends LevelClass {
     }
 
     update() {
-        this.player.update(this.cursors);
-        this.handlePrintPos();
+        // this.player.update(this.cursors);
+        // this.handlePrintPos();
 
         if (this.ship.y <= 550) {
             this.ship.y += 0.5;

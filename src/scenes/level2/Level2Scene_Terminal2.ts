@@ -77,7 +77,7 @@ export default class Level2Scene_Terminal2 extends LevelClass {
                 this.enterButtonRestState(resetButton);
             });
 
-        this.add.text(180, 650, `Type "git -help for help"`, {});
+        //this.add.text(180, 650, `Type "git -help for help"`, {});
 
         this.terminalDisplayText = this.add.text(
             80,

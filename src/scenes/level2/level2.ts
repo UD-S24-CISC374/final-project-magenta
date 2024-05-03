@@ -706,7 +706,7 @@ export default class Level2Scene extends LevelClass {
         setTimeout(() => {
             this.d2.setVisible(true);
             this.isNpcMoving = true;
-        }, 2000);
+        }, 1500);
         setTimeout(() => {
             this.activeSpikes.setVisible(false);
             this.activeSpikes.clear();
@@ -718,7 +718,7 @@ export default class Level2Scene extends LevelClass {
             );
             spike5.setScale(1, -1);
             spike5.body.setOffset(0, 30);
-        }, 4000);
+        }, 2200);
     }
     passTerminal2() {
         this.playerHasPower = true;
@@ -799,7 +799,7 @@ export default class Level2Scene extends LevelClass {
         this.handlePrintPos();
 
         if (this.ship.y <= 550) {
-            this.ship.y += 0.5;
+            this.ship.y += 1;
         } else {
             this.player.setVisible(true);
             this.player.setActive(true);
@@ -828,7 +828,7 @@ export default class Level2Scene extends LevelClass {
         }
         if (this.isNpcMoving) {
             if (this.npc_2.x <= 2780) {
-                this.npc_2.x += 0.35;
+                this.npc_2.x += 0.75;
             }
         }
         if (this.player.x > 5000) {

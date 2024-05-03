@@ -44,7 +44,7 @@ export default class Level1Scene_Terminal1 extends LevelClass {
         this.level1Task = this.add.text(
             600,
             200,
-            "Task: Click on <Git Add Blue>, <Git Commit>, <Git Push>",
+            `Task: Send a message to the space station\nYou will need to add, commit, and push and changes\nyou make along the way including this message`,
             {
                 color: "#EE4B2B",
             }
