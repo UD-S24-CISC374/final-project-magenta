@@ -64,7 +64,7 @@ export default class Level2Scene extends LevelClass {
                 x: 100,
                 y: 100,
                 color: "#0f0",
-                text: "pause",
+                text: "Pause",
             },
         ];
 

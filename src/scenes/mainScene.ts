@@ -91,23 +91,23 @@ export default class MainScene extends Phaser.Scene {
         });
         /* ---------------     START BUTTON    ------------------- */
         this.startButton = this.add
-            .text(400, 300, "Start", { color: "#0f0" })
+            .text(400, 300, "Start")
             .setInteractive()
             .on("pointerdown", () => {
-                this.updateStartClicked();
+            this.updateStartClicked();
             })
             .on("pointerover", () => {
-                this.enterButtonHoverState(this.startButton);
-                this.enterCatHoverState(this.catStart);
+            this.enterButtonHoverState(this.startButton);
+            this.enterCatHoverState(this.catStart);
             })
             .on("pointerout", () => {
-                this.enterButtonRestState(this.startButton);
-                this.exitCatHoverState(this.catStart);
+            this.enterButtonRestState(this.startButton);
+            this.exitCatHoverState(this.catStart);
             });
 
         /* ---------------     OPTIONS BUTTON    ------------------- */
         this.optionsButton = this.add
-            .text(400, 400, "Options", { color: "#0f0" })
+            .text(400, 400, "Options")
             .setInteractive()
             .on("pointerdown", () => {
                 this.updateOptionsClicked();
@@ -123,7 +123,7 @@ export default class MainScene extends Phaser.Scene {
 
         /* ---------------     PLAY BUTTON    ------------------- */
         this.playButton = this.add
-            .text(400, 500, "Play From Level", { color: "#0f0" })
+            .text(400, 500, "Play From Level")
             .setInteractive()
             .on("pointerdown", () => {
                 this.updatePlayClicked();
@@ -161,7 +161,7 @@ export default class MainScene extends Phaser.Scene {
     }
 
     enterButtonRestState(value: Phaser.GameObjects.Text) {
-        value.setStyle({ fill: "#0f0" });
+        value.setStyle({ fill: "#fff" });
     }
 
     /* ---------------     OPTIONS BUTTON    ------------------- */

@@ -11,6 +11,12 @@ export default class LevelScene extends Phaser.Scene {
     level6: Phaser.GameObjects.Text;
     test: Phaser.GameObjects.Text;
 
+    level2Lock: Phaser.GameObjects.Image;
+    level3Lock: Phaser.GameObjects.Image;
+    level4Lock: Phaser.GameObjects.Image;
+    level5Lock: Phaser.GameObjects.Image;
+    level6Lock: Phaser.GameObjects.Image;
+
     constructor() {
         super({ key: "LevelScene" });
     }
@@ -20,18 +26,94 @@ export default class LevelScene extends Phaser.Scene {
         const level_scn_bg = this.add.image(640, 360, "background-2-level1");
         level_scn_bg.setScale(2);
         /* ---------------     LEVEL PLANETS    ------------------- */
-        const lvl1 = this.add.image(150, 600, "planet-7");
-        const lvl2 = this.add.image(350, 400, "planet-4");
-        const lvl3 = this.add.image(550, 550, "planet-3");
-        const lvl4 = this.add.image(750, 300, "planet-14");
-        const lvl5 = this.add.image(1000, 375, "planet-12");
-        const lvl6 = this.add.image(1150, 100, "planet-13");
+        const lvl1 = this.add.image(150, 600, "planet-7")
+            .setInteractive()
+            .on("pointerover", () => {
+            lvl1.setScale(0.12);
+            })
+            .on("pointerout", () => {
+            lvl1.setScale(0.1);
+            })
+            .on("pointerdown", () => {
+            this.updateLevelClicked("Level1Scene");
+            });
+
+        const lvl2 = this.add.image(350, 400, "planet-4")
+            .setInteractive()
+            .on("pointerover", () => {
+            if (this.game.registry.get("Level2Opened")) {
+                lvl2.setScale(0.12);
+            }
+            })
+            .on("pointerout", () => {
+            lvl2.setScale(0.1);
+            })
+            .on("pointerdown", () => {
+            this.updateLevelClicked("Level2Scene");
+            });
+
+        const lvl3 = this.add.image(550, 550, "planet-3")
+            .setInteractive()
+            .on("pointerover", () => {
+            if (this.game.registry.get("Level3Opened")) {
+                lvl3.setScale(0.12);
+            }
+            })
+            .on("pointerout", () => {
+            lvl3.setScale(0.1);
+            })
+            .on("pointerdown", () => {
+            this.updateLevelClicked("Level3Scene");
+            });
+
+        const lvl4 = this.add.image(750, 300, "planet-14")
+            .setInteractive()
+            .on("pointerover", () => {
+            if (this.game.registry.get("Level4Opened")) {
+                lvl4.setScale(0.12);
+            }
+            })
+            .on("pointerout", () => {
+            lvl4.setScale(0.1);
+            })
+            .on("pointerdown", () => {
+            this.updateLevelClicked("Level4Scene");
+            });
+
+        const lvl5 = this.add.image(1000, 375, "planet-12")
+            .setInteractive()
+            .on("pointerover", () => {
+            if (this.game.registry.get("Level5Opened")) {
+                lvl5.setScale(0.12);
+            }
+            })
+            .on("pointerout", () => {
+            lvl5.setScale(0.1);
+            })
+            .on("pointerdown", () => {
+            this.updateLevelClicked("Level5Scene");
+            });
+
+        const lvl6 = this.add.image(1150, 100, "planet-13")
+            .setInteractive()
+            .on("pointerover", () => {
+            if (this.game.registry.get("Level6Opened")) {
+                lvl6.setScale(0.12);
+            }
+            })
+            .on("pointerout", () => {
+            lvl6.setScale(0.1);
+            })
+            .on("pointerdown", () => {
+            this.updateLevelClicked("Level6Scene");
+            });
         lvl1.setScale(0.1);
         lvl2.setScale(0.1);
         lvl3.setScale(0.1);
         lvl4.setScale(0.1);
         lvl5.setScale(0.1);
         lvl6.setScale(0.1);
+
         /* ---------------     BACK BUTTON    ------------------- */
         this.backButton = this.add
             .text(100, 100, "Back", { color: "#0f0" })
@@ -47,82 +129,55 @@ export default class LevelScene extends Phaser.Scene {
             });
         /* ---------------     LEVEL 1    ------------------- */
         this.level1 = this.add
-            .text(120, 595, "Level 1", { color: "#0f0" })
-            .setInteractive()
-            .on("pointerdown", () => {
-                this.updateLevelClicked("Level1Scene");
-            })
-            .on("pointerover", () => {
-                this.enterButtonHoverState(this.level1);
-            })
-            .on("pointerout", () => {
-                this.enterButtonRestState(this.level1);
-            });
-        /* ---------------     LEVEL 2    ------------------- */
+            .text(150, 600, "1", { color: "#FFFF80", fontSize: "bold" })
+            .setFontSize(24)
+            .setOrigin(0.5);
         this.level2 = this.add
-            .text(320, 395, "Level 2", { color: "#0f0" })
-            .setInteractive()
-            .on("pointerdown", () => {
-                this.updateLevelClicked("Level2Scene");
-            })
-            .on("pointerover", () => {
-                this.enterButtonHoverState(this.level2);
-            })
-            .on("pointerout", () => {
-                this.enterButtonRestState(this.level2);
-            });
-        /* ---------------     LEVEL 3    ------------------- */
+            .text(lvl2.x, lvl2.y, "2", { color: "#0000FF", fontSize: "bold" })
+            .setFontSize(24)
+            .setOrigin(0.5);
         this.level3 = this.add
-            .text(520, 545, "Level 3", { color: "#0f0" })
-            .setInteractive()
-            .on("pointerdown", () => {
-                this.updateLevelClicked("Level3Scene");
-            })
-            .on("pointerover", () => {
-                this.enterButtonHoverState(this.level3);
-            })
-            .on("pointerout", () => {
-                this.enterButtonRestState(this.level3);
-            });
-        /* ---------------     LEVEL 4    ------------------- */
+            .text(lvl3.x, lvl3.y, "3", { color: "#8B8000", fontSize: "bold" })
+            .setFontSize(24)
+            .setOrigin(0.5);
         this.level4 = this.add
-            .text(720, 295, "Level 4", { color: "#0f0" })
-            .setInteractive()
-            .on("pointerdown", () => {
-                this.updateLevelClicked("Level4Scene");
-            })
-            .on("pointerover", () => {
-                this.enterButtonHoverState(this.level4);
-            })
-            .on("pointerout", () => {
-                this.enterButtonRestState(this.level4);
-            });
-        /* ---------------     LEVEL 5    ------------------- */
+            .text(lvl4.x, lvl4.y, "4", { color: "#301934", fontSize: "bold" })
+            .setFontSize(24)
+            .setOrigin(0.5);
         this.level5 = this.add
-            .text(970, 370, "Level 5", { color: "#0f0" })
-            .setInteractive()
-            .on("pointerdown", () => {
-                this.updateLevelClicked("Level5Scene");
-            })
-            .on("pointerover", () => {
-                this.enterButtonHoverState(this.level5);
-            })
-            .on("pointerout", () => {
-                this.enterButtonRestState(this.level5);
-            });
-        /* ---------------     LEVEL 6    ------------------- */
+            .text(lvl5.x, lvl5.y, "5", { color: "#90ee90", fontSize: "bold" })
+            .setFontSize(24)
+            .setOrigin(0.5);
         this.level6 = this.add
-            .text(1120, 95, "Level 6", { color: "#0f0" })
-            .setInteractive()
-            .on("pointerdown", () => {
-                this.updateLevelClicked("Level6Scene");
-            })
-            .on("pointerover", () => {
-                this.enterButtonHoverState(this.level6);
-            })
-            .on("pointerout", () => {
-                this.enterButtonRestState(this.level6);
-            });
+            .text(lvl6.x, lvl6.y, "6", { color: "#DC143C", fontSize: "bold" })
+            .setFontSize(24)
+            .setOrigin(0.5);
+
+        /* ---------------     LEVEL LOCKS    ------------------- */
+        this.level2Lock = this.add.image(350, 400, "lock");
+        this.level2Lock.setDepth(1);
+        this.level2Lock.setScale(2);
+        this.level2Lock.setVisible(!this.game.registry.get("Level2Opened"));
+
+        this.level3Lock = this.add.image(550, 550, "lock");
+        this.level3Lock.setDepth(1);
+        this.level3Lock.setScale(2);
+        this.level3Lock.setVisible(!this.game.registry.get("Level3Opened"));
+
+        this.level4Lock = this.add.image(750, 300, "lock");
+        this.level4Lock.setDepth(1);
+        this.level4Lock.setScale(2);
+        this.level4Lock.setVisible(!this.game.registry.get("Level4Opened"));
+
+        this.level5Lock = this.add.image(1000, 375, "lock");
+        this.level5Lock.setDepth(1);
+        this.level5Lock.setScale(2);
+        this.level5Lock.setVisible(!this.game.registry.get("Level5Opened"));
+
+        this.level6Lock = this.add.image(1150, 100, "lock");
+        this.level6Lock.setDepth(1);
+        this.level6Lock.setScale(2);
+        this.level6Lock.setVisible(!this.game.registry.get("Level6Opened"));
         /*
         this.test = this.add
             .text(200, 200, "Test", { color: "#0f0" })

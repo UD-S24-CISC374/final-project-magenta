@@ -13,7 +13,8 @@ export default class RespawnScene extends Phaser.Scene {
 
     create() {
         /* ---------------     BACKGROUND COLOUR    ------------------- */
-        this.cameras.main.setBackgroundColor("#4B6E6E");
+        const level_scn_bg = this.add.image(640, 360, "respawn");
+        level_scn_bg.setScale(2);
         /* ---------------     RESUME BUTTON    ------------------- */
         this.resumeButton = this.add
             .text(400, 300, "Respawn", { color: "#0f0" })
