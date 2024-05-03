@@ -28,7 +28,7 @@ export default class Level2Scene extends LevelClass {
     private fallingSpikes: Phaser.Physics.Arcade.Group;
     private terminalBody?: TerminalBody;
     private playerHasPower = false;
-    private showPos = true;
+    private showPos = false;
     private d1: Phaser.GameObjects.Text;
     private d2: Phaser.GameObjects.Text;
     private d3: Phaser.GameObjects.Text;
@@ -787,7 +787,7 @@ export default class Level2Scene extends LevelClass {
             this.cameras.main.fadeOut(4000);
             if (this.spaceShip.y < -300) {
                 //currently goes to main as lvl 3 is not in yet
-                this.scene.start("MainScene");
+                this.scene.start("Level3Scene");
             }
         } else {
             this.add.text(3200, 400, "You need to complete the task first!");
