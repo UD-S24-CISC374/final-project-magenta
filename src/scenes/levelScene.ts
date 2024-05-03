@@ -220,9 +220,14 @@ export default class LevelScene extends Phaser.Scene {
     }
 
     updateLevelClicked(level: string) {
+        //this.scene.start(level);
+
         if (level === "Level1Scene") {
             this.scene.start(level);
-        } else if (level === "Level2Scene" && this.game.registry.get("Level2Opened") === true) {
+        } else if (
+            level === "Level2Scene" &&
+            this.game.registry.get("Level2Opened") === true
+        ) {
             this.scene.start(level);
         }
     }
