@@ -18,7 +18,7 @@ export default class Level2Scene extends LevelClass {
     private levelHeight: number = 1440; // Height of the level
     private showGrid = false;
     private showColl = false;
-    private pauseButton: Phaser.GameObjects.Text;
+    private pauseButton: Button;
     private ship: Phaser.GameObjects.Image;
     private spaceShip: Phaser.GameObjects.Image;
     private shipStopped = false;
