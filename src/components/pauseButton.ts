@@ -9,7 +9,7 @@ export interface Button {
 
 export function createButton(scene: Phaser.Scene, buttons: Button[]) {
     function updateClicked(t: string) {
-        if (t === "pause") {
+        if (t === "Pause") {
             scene.scene.pause();
             scene.scene.setVisible(false);
             scene.scene.launch("PauseScene", { previousScene: scene });

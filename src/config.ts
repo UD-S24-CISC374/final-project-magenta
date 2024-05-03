@@ -18,6 +18,9 @@ import Level1Scene_Terminal1 from "./scenes/level1/Level1Scene_Terminal1";
 import Level2Scene_Terminal1 from "./scenes/level2/Level2Scene_Terminal1";
 import Level2Scene from "./scenes/level2/level2";
 import Level2Scene_Terminal2 from "./scenes/level2/Level2Scene_Terminal2";
+import Level3Scene from "./scenes/level3/level3";
+import Level3Scene_Terminal1 from "./scenes/level3/Level3Scene_Terminal1";
+import Level3Scene_Terminal2 from "./scenes/level3/Level3Scene_Terminal2";
 
 const DEFAULT_WIDTH = 1280;
 const DEFAULT_HEIGHT = 720;
@@ -51,6 +54,9 @@ export const CONFIG = {
         Level2Scene,
         Level2Scene_Terminal1,
         Level2Scene_Terminal2,
+        Level3Scene,
+        Level3Scene_Terminal1,
+        Level3Scene_Terminal2,
         RespawnScene,
     ],
 

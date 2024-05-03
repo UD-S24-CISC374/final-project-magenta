@@ -73,28 +73,81 @@ export default class Level1Scene extends LevelClass {
 
         this.platforms = this.physics.add.staticGroup();
 
-        this.tutorialKeys = this.add.image(-350, 350, "keyboard");
+        this.tutorialKeys = this.add.image(-350, 250, "keyboard");
         this.tutorialKeys.setCrop(
             this.tutorialKeys.width / 1.62,
             this.tutorialKeys.height / 2,
             this.tutorialKeys.width / 2,
             this.tutorialKeys.height / 2
         );
-        this.arrowright = this.add.image(-200, 375, "arrowright");
-        this.arrowleft = this.add.image(-350, 375, "arrowright");
-        this.arrowUp = this.add.image(-275, 315, "arrowUp");
+        this.arrowright = this.add.image(-200, 275, "arrowright");
+        this.arrowleft = this.add.image(-350, 275, "arrowright");
+        this.arrowUp = this.add.image(-275, 215, "arrowUp");
         this.arrowright.setScale(0.5);
         this.arrowleft.setScale(0.5);
         this.arrowUp.setScale(0.5);
         this.arrowleft.flipX = true;
-        this.arrowLeftText = this.add.text(-415, 325, "Move Left");
-        this.arrowRightText = this.add.text(-230, 325, "Move Right");
-        this.arrowUpText = this.add.text(-310, 255, "Move Up");
+        this.arrowLeftText = this.add.text(-415, 225, "Move Left", {
+            fontStyle: "bold",
+            shadow: {
+            offsetX: 2,
+            offsetY: 2,
+            color: "#000",
+            blur: 2,
+            stroke: true,
+            fill: true,
+            },
+        });
+        this.time.addEvent({
+            delay: 1500,
+            loop: true,
+            callback: () => {
+            if (this.arrowLeftText.style.color === "#FFF") {
+            this.arrowLeftText.setStyle({ color: "#CCC" });
+            } else {
+            this.arrowLeftText.setStyle({ color: "#FFF" });
+            }
+
+            if (this.arrowRightText.style.color === "#FFF") {
+            this.arrowRightText.setStyle({ color: "#CCC" });
+            } else {
+            this.arrowRightText.setStyle({ color: "#FFF" });
+            }
+
+            if (this.arrowUpText.style.color === "#FFF") {
+            this.arrowUpText.setStyle({ color: "#CCC" });
+            } else {
+            this.arrowUpText.setStyle({ color: "#FFF" });
+            }
+            },
+        });
+        this.arrowRightText = this.add.text(-230, 225, "Move Right", {
+            fontStyle: "bold",
+            shadow: {
+            offsetX: 2,
+            offsetY: 2,
+            color: "#000",
+            blur: 2,
+            stroke: true,
+            fill: true,
+            },
+        });
+        this.arrowUpText = this.add.text(-310, 155, "Jump Up", {
+            fontStyle: "bold",
+            shadow: {
+            offsetX: 2,
+            offsetY: 2,
+            color: "#000",
+            blur: 2,
+            stroke: true,
+            fill: true,
+            },
+        });
 
         const pause = [
             {
-                x: 100,
-                y: 100,
+                x: 300,
+                y: 300,
                 color: "#FFA500",
                 text: "Pause",
             },
@@ -174,19 +227,19 @@ export default class Level1Scene extends LevelClass {
             //plat 2
             {
                 x: offset + unit * 11,
-                y: offset + unit * 6.5,
+                y: offset + unit * 4.5,
                 texture: "mars-tileset-1",
                 frame: 2,
             },
             {
                 x: offset + unit * 12,
-                y: offset + unit * 6.5,
+                y: offset + unit * 4.5,
                 texture: "mars-tileset-1",
                 frame: 1,
             },
             {
                 x: offset + unit * 13,
-                y: offset + unit * 6.5,
+                y: offset + unit * 4.5,
                 texture: "mars-tileset-1",
                 frame: 3,
             },
@@ -213,10 +266,9 @@ export default class Level1Scene extends LevelClass {
         ];
 
         this.spikes = this.physics.add.group();
-        const start = platforms[0].x;
-        const end = platforms[8].x;
-        for (let x = start; x <= end; x += 64) {
-            this.spikes.create(x, platforms[0].y + 110, "spikes_hor");
+        for (let i = 2; i <= 5; i += 3) {
+            this.spikes.create(platforms[i].x + 125, platforms[0].y + 110, "spikes_hor");
+            this.spikes.scaleX(0.2);
         }
         this.physics.add.collider(this.spikes, this.platforms);
         this.physics.add.collider(
@@ -341,6 +393,7 @@ export default class Level1Scene extends LevelClass {
     private handleCanFlyAway() {
         if (this.canFlyAway) {
             this.player.setVisible(false);
+            this.cameras.main.fadeOut(4000);
             this.cameras.main.startFollow(
                 this.spaceShip,
                 true,
@@ -350,7 +403,6 @@ export default class Level1Scene extends LevelClass {
                 100
             );
             this.spaceShip.y -= 1;
-            this.cameras.main.fadeOut(4000);
             if (this.spaceShip.y < 300) {
                 this.scene.start("Level2Scene");
             }
@@ -380,7 +432,7 @@ export default class Level1Scene extends LevelClass {
 
     private handleButtonPos() {
         const pauseOffsetX =
-            this.cameras.main.width - 0.9 * this.cameras.main.width;
+            this.cameras.main.width - (0.9 * this.cameras.main.width);
         const pauseOffsetY = 50;
 
         handleButtonPosition(

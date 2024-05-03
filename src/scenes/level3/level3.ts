@@ -5,10 +5,10 @@ import { Player } from "../../objects/player";
 import { Platform, createPlatforms } from "../../components/platform";
 import { Button } from "../../components/pauseButton"; //{ Button, createButton } ->was giving error
 import { TerminalBody } from "../../components/terminalAndTerminalSceneHelpers";
-import Level2Scene_Terminal1 from "./Level2Scene_Terminal1";
-import Level2Scene_Terminal2 from "./Level2Scene_Terminal2";
+import Level3Scene_Terminal1 from "./Level3Scene_Terminal1";
+import Level3Scene_Terminal2 from "./Level3Scene_Terminal2";
 
-export default class Level2Scene extends LevelClass {
+export default class Level3Scene extends LevelClass {
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
     private playerPos?: Phaser.GameObjects.Text;
     private background1: Phaser.GameObjects.TileSprite;
@@ -28,7 +28,7 @@ export default class Level2Scene extends LevelClass {
     private fallingSpikes: Phaser.Physics.Arcade.Group;
     private terminalBody?: TerminalBody;
     private playerHasPower = false;
-    private showPos = false;
+    private showPos = true;
     private d1: Phaser.GameObjects.Text;
     private d2: Phaser.GameObjects.Text;
     private d3: Phaser.GameObjects.Text;
@@ -38,9 +38,10 @@ export default class Level2Scene extends LevelClass {
     private canFlyAway = true;
 
     constructor() {
-        super({ key: "Level2Scene" });
+        super({ key: "Level3Scene" });
     }
     create() {
+        this.game.registry.set("Level3Opened", true);
         //create ship and make it viasable (created as an image)
         this.ship = this.add.image(0, 0, "spacecraft");
         this.ship.setDepth(10);
@@ -63,7 +64,7 @@ export default class Level2Scene extends LevelClass {
             0,
             this.levelWidth * 2,
             this.levelHeight * 2,
-            "ice-planet-bg"
+            "level3_bg"
         );
         this.background1.setOrigin(0);
         this.background1.setScrollFactor(0, 0);
@@ -94,363 +95,363 @@ export default class Level2Scene extends LevelClass {
             {
                 x: offset + unit * 3,
                 y: offset + unit * 7,
-                texture: "ice-planet-tileset-1",
-                frame: 2,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 4,
                 y: offset + unit * 7,
-                texture: "ice-planet-tileset-1",
-                frame: 1,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 5,
                 y: offset + unit * 7,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             //plat 2
             {
                 x: offset + unit * 9,
                 y: offset + unit * 6,
-                texture: "ice-planet-tileset-1",
-                frame: 2,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 10,
                 y: offset + unit * 6,
-                texture: "ice-planet-tileset-1",
-                frame: 1,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 11,
                 y: offset + unit * 6,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             //plat 3
             {
                 x: offset + unit * 15,
                 y: offset + unit * 5,
-                texture: "ice-planet-tileset-1",
-                frame: 2,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 16,
                 y: offset + unit * 5,
-                texture: "ice-planet-tileset-1",
-                frame: 1,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 17,
                 y: offset + unit * 5,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             //plat 4
             {
                 x: offset + unit * 21,
                 y: offset + unit * 5,
-                texture: "ice-planet-tileset-1",
-                frame: 2,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 22,
                 y: offset + unit * 5,
-                texture: "ice-planet-tileset-1",
-                frame: 1,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 23,
                 y: offset + unit * 5,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 24,
                 y: offset + unit * 5,
-                texture: "ice-planet-tileset-1",
-                frame: 2,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 25,
                 y: offset + unit * 5,
-                texture: "ice-planet-tileset-1",
-                frame: 1,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 26,
                 y: offset + unit * 5,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 27,
                 y: offset + unit * 5,
-                texture: "ice-planet-tileset-1",
-                frame: 2,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 28,
                 y: offset + unit * 5,
-                texture: "ice-planet-tileset-1",
-                frame: 1,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 29,
                 y: offset + unit * 5,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             //tunnel wall 1
             {
                 x: offset + unit * 29,
                 y: offset + unit * 6,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 29,
                 y: offset + unit * 7,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 29,
                 y: offset + unit * 8,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             //tunnel wall 2
             {
                 x: offset + unit * 33,
                 y: offset + unit * 7,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 33,
                 y: offset + unit * 6,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 33,
                 y: offset + unit * 5,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 33,
                 y: offset + unit * 4,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 33,
                 y: offset + unit * 3,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 33,
                 y: offset + unit * 2,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 33,
                 y: offset + unit * 1,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             //tunnel wall 3
             {
                 x: offset + unit * 38,
                 y: offset + unit * 8,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 38,
                 y: offset + unit * 7,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 38,
                 y: offset + unit * 6,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 38,
                 y: offset + unit * 5,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 38,
                 y: offset + unit * 4,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 38,
                 y: offset + unit * 3,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 38,
                 y: offset + unit * 2,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 38,
                 y: offset + unit * 1,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             //wall ledge 1
             {
                 x: offset + unit * 34,
                 y: offset + unit * 7,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             //wall ledge 2
             {
                 x: offset + unit * 37,
                 y: offset + unit * 5,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             //wall ledge 3
             {
                 x: offset + unit * 34,
                 y: offset + unit * 3,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             //plat 5
             {
                 x: offset + unit * 39,
                 y: offset + unit * 1,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 40,
                 y: offset + unit * 1,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 41,
                 y: offset + unit * 1,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 42,
                 y: offset + unit * 1,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 43,
                 y: offset + unit * 1,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 44,
                 y: offset + unit * 1,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 45,
                 y: offset + unit * 1,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             //ceiling above plat 5
             {
                 x: offset + unit * 39,
                 y: offset + unit * -3,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 40,
                 y: offset + unit * -3,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             //terminal goes here (pos: 2590, 32)
             {
                 x: offset + unit * 41,
                 y: offset + unit * -3,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 42,
                 y: offset + unit * -3,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 43,
                 y: offset + unit * -3,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 44,
                 y: offset + unit * -3,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 45,
                 y: offset + unit * -3,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             //timmy trap (with dorr)
             {
                 x: offset + unit * 39,
                 y: offset + unit * -4,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 39,
                 y: offset + unit * -5,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 39,
                 y: offset + unit * -6,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 40,
                 y: offset + unit * -6,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 41,
                 y: offset + unit * -6,
-                texture: "ice-planet-tileset-1",
-                frame: 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             //door
             {
@@ -469,64 +470,64 @@ export default class Level2Scene extends LevelClass {
             {
                 x: offset + unit * 56,
                 y: offset + unit * 8,
-                texture: "ice-planet-tileset-1",
-                frame: 1,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 56,
                 y: offset + unit * 7,
-                texture: "ice-planet-tileset-1",
-                frame: 1,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 56,
                 y: offset + unit * 6,
-                texture: "ice-planet-tileset-1",
-                frame: 1,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 56,
                 y: offset + unit * 5,
-                texture: "ice-planet-tileset-1",
-                frame: 1,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 56,
                 y: offset + unit * 4,
-                texture: "ice-planet-tileset-1",
-                frame: 1,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 56,
                 y: offset + unit * 3,
-                texture: "ice-planet-tileset-1",
-                frame: 1,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 56,
                 y: offset + unit * 2,
-                texture: "ice-planet-tileset-1",
-                frame: 1,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 57,
                 y: offset + unit * 2,
-                texture: "ice-planet-tileset-1",
-                frame: 1,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 58,
                 y: offset + unit * 2,
-                texture: "ice-planet-tileset-1",
-                frame: 1,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 59,
                 y: offset + unit * 2,
-                texture: "ice-planet-tileset-1",
-                frame: 1,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
             },
-            { x: 640, y: 720, texture: "ice-ground-1", scale: { x: 80, y: 4 } }, // Ground
+            { x: 640, y: 720, texture: "level3stone", scale: { x: 80, y: 0.7 } }, // Ground
         ];
         createPlatforms(this, platforms, this.platforms, [this.player]);
 
@@ -635,7 +636,7 @@ export default class Level2Scene extends LevelClass {
         //     `git push`,
         // ];
         let terminal_1_scene = this.scene.manager.getScene(
-            "Level2Scene_Terminal1"
+            "Level3Scene_Terminal1"
         );
         this.CorrectTerminalArr = [
             `git add code.js`,
@@ -660,7 +661,7 @@ export default class Level2Scene extends LevelClass {
 
         //Terminal 2
         let terminal_2_scene = this.scene.manager.getScene(
-            "Level2Scene_Terminal2"
+            "Level3Scene_Terminal2"
         );
         this.CorrectTerminalArr2 = [
             `git add power.js`,
@@ -786,8 +787,8 @@ export default class Level2Scene extends LevelClass {
             this.spaceShip.y -= 1;
             this.cameras.main.fadeOut(4000);
             if (this.spaceShip.y < -300) {
-                //currently goes to main as lvl 3 is not in yet
-                this.scene.start("Level3Scene");
+                //currently goes to main as lvl 4 is not in yet
+                this.scene.start("mainScene");
             }
         } else {
             this.add.text(3200, 400, "You need to complete the task first!");
@@ -819,7 +820,7 @@ export default class Level2Scene extends LevelClass {
             this.cleanup();
             this.scene.launch("RespawnScene");
             this.scene.bringToTop("RespawnScene");
-            this.scene.stop("Level2Scene");
+            this.scene.stop("Level3Scene");
         }
         if (this.playerHasPower) {
             if (this.cursors?.up.isDown && this.player.body?.touching.down) {
@@ -843,12 +844,12 @@ export default class Level2Scene extends LevelClass {
         this.terminalBody = undefined;
         //this.events.destroy();
         let term1 = this.scene.get(
-            "Level2Scene_Terminal1"
-        ) as Level2Scene_Terminal1;
+            "Level3Scene_Terminal1"
+        ) as Level3Scene_Terminal1;
         term1.turnOffEmitters();
         let term2 = this.scene.get(
-            "Level2Scene_Terminal2"
-        ) as Level2Scene_Terminal2;
+            "Level3Scene_Terminal2"
+        ) as Level3Scene_Terminal2;
         term2.terminalInputArr = [];
     }
 }

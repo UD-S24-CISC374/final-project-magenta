@@ -29,6 +29,10 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image("arrowright", "assets/Art/arrowright.png");
         this.load.image("arrowUp", "assets/Art/arrowUp.png");
         this.load.image("dish", "assets/Art/dish.png");
+        this.load.image("lock", "assets/Art/locked.png");
+        this.load.image("respawn", "assets/Art/space_bg.png");
+        this.load.image("level3_bg", "assets/Art/Sunrise.png");
+        this.load.image("level3stone", "assets/Art/egypt_stone.png");
         this.load.image(
             "background-1-level1",
             "assets/Art/background-1-level1.png"
