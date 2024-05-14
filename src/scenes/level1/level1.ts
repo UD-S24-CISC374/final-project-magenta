@@ -319,7 +319,7 @@ export default class Level1Scene extends LevelClass {
             "Level1Scene_Terminal1"
         );
         this.CorrectTerminalArr = [
-            `git add messsage`,
+            `git add encryptedMessage.txt`,
             `git commit -m 'Sending Message to SpaceStation'`,
             `git push`,
         ];
@@ -373,8 +373,8 @@ export default class Level1Scene extends LevelClass {
             displayNPCText(this, this.npcX, this.npcY, [
                 "Hello! My name is Space Felix.",
                 "You're from the Intergalactic Space Station aren't you?",
-                "My ship is over to the right but I was tasked with sending some information back to the station.",
-                "I can't leave until I've completed my task. Can you help me? The terminal is over to the right.",
+                "My ship is over to the right but I was tasked with sending a critical rebel message back to the station.",
+                "Can you help me? Make sure you stage the encrypted messgage and not the original. The terminal is over to the right.",
             ]);
         }
         this.hasNPCinteraction = true;
@@ -474,11 +474,9 @@ export default class Level1Scene extends LevelClass {
         }
     }
     private cleanup() {
-        
         this.player.setX(0);
         this.player.setY(538);
         this.physics.resume();
         this.player.clearTint();
     }
-
 }
