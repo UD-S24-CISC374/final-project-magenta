@@ -8,7 +8,6 @@ import {
 } from "../../components/pauseButton";
 import { TerminalBody } from "../../components/terminalAndTerminalSceneHelpers";
 import { updateCurrentLevel } from "../currentLevel";
-import Level1Scene_Terminal1 from "./Level1Scene_Terminal1";
 import { displayNPCText } from "../../components/NPCText";
 
 export default class Level1Scene extends LevelClass {
@@ -35,7 +34,7 @@ export default class Level1Scene extends LevelClass {
     private arrowLeftText: Phaser.GameObjects.Text;
     private arrowUp: Phaser.GameObjects.Image;
     private arrowUpText: Phaser.GameObjects.Text;
-    private spikes: Phaser.Physics.Arcade.Group;
+    private spikes: Phaser.Physics.Arcade.StaticGroup;
     private d1: Phaser.GameObjects.Text;
     private d2: Phaser.GameObjects.Text;
     private d3: Phaser.GameObjects.Text;
@@ -269,7 +268,7 @@ export default class Level1Scene extends LevelClass {
             { x: 640, y: 720, texture: "brown_plat_1", scale: { x: 40, y: 4 } }, // Ground
         ];
 
-        this.spikes = this.physics.add.group();
+        this.spikes = this.physics.add.staticGroup();
         for (let i = 2; i <= 5; i += 3) {
             this.spikes.create(
                 platforms[i].x + 125,
@@ -294,16 +293,6 @@ export default class Level1Scene extends LevelClass {
         if (this.showColl) {
             this.physics.world.createDebugGraphic();
         }
-
-        this.spikes = this.physics.add.group();
-        this.physics.add.collider(this.spikes, this.platforms);
-        this.physics.add.collider(
-            this.player,
-            this.spikes,
-            this.handleHitSpike,
-            undefined,
-            this
-        );
 
         /* ---------------     Create Terminal    ------------------- 
             Must be done after platform and player creation
@@ -456,7 +445,7 @@ export default class Level1Scene extends LevelClass {
             this.cleanup();
             this.scene.launch("RespawnScene");
             this.scene.bringToTop("RespawnScene");
-            this.scene.stop("Level1Scene");
+            this.scene.pause("Level1Scene");
         }
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this.player) {
@@ -471,15 +460,19 @@ export default class Level1Scene extends LevelClass {
         }
     }
     private cleanup() {
-        this.platforms?.clear(true, true);
-        this.spikes.clear(true, true);
-        this.terminalBody?.destroy();
-        this.terminalBody = undefined;
-        //this.events.destroy();
-        let term1 = this.scene.get(
-            "Level1Scene_Terminal1"
-        ) as Level1Scene_Terminal1;
-        term1.turnOffEmitters();
-        this.handleButtonPos();
+        // this.platforms?.clear(true, true);
+        // this.spikes.clear(true, true);
+        // this.terminalBody?.destroy();
+        // this.terminalBody = undefined;
+        // //this.events.destroy();
+        // let term1 = this.scene.get(
+        //     "Level1Scene_Terminal1"
+        // ) as Level1Scene_Terminal1;
+        // term1.turnOffEmitters();
+        // this.handleButtonPos();
+        this.player.setX(0);
+        this.player.setY(538);
+        this.physics.resume();
+        this.player.clearTint();
     }
 }

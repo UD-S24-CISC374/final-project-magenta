@@ -12,6 +12,8 @@ export default class Level2Scene extends LevelClass {
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
     private playerPos?: Phaser.GameObjects.Text;
     private background1: Phaser.GameObjects.TileSprite;
+    private checkPointX: number = 100;
+    private checkPointY: number = 500;
     private posX = 0;
     private posY = 0;
     private levelWidth: number = 2560; // Width of the level
@@ -824,7 +826,7 @@ export default class Level2Scene extends LevelClass {
             this.cleanup();
             this.scene.launch("RespawnScene");
             this.scene.bringToTop("RespawnScene");
-            this.scene.stop("Level2Scene");
+            this.scene.pause("Level2Scene");
         }
         if (this.playerHasPower) {
             if (this.cursors?.up.isDown && this.player.body?.touching.down) {
@@ -841,19 +843,22 @@ export default class Level2Scene extends LevelClass {
         }
     }
     private cleanup() {
-        this.player.destroy();
-        this.platforms?.clear(true, true);
-        //this.spikes?.clear(true, true);
-        this.terminalBody?.destroy();
-        this.terminalBody = undefined;
-        //this.events.destroy();
-        let term1 = this.scene.get(
-            "Level2Scene_Terminal1"
-        ) as Level2Scene_Terminal1;
-        term1.turnOffEmitters();
-        let term2 = this.scene.get(
-            "Level2Scene_Terminal2"
-        ) as Level2Scene_Terminal2;
-        term2.terminalInputArr = [];
+        this.player.setX(this.checkPointX);
+        this.player.setY(this.checkPointY);
+        this.physics.resume();
+        this.player.clearTint();
+        // this.platforms?.clear(true, true);
+        // //this.spikes?.clear(true, true);
+        // this.terminalBody?.destroy();
+        // this.terminalBody = undefined;
+        // //this.events.destroy();
+        // let term1 = this.scene.get(
+        //     "Level2Scene_Terminal1"
+        // ) as Level2Scene_Terminal1;
+        // term1.turnOffEmitters();
+        // let term2 = this.scene.get(
+        //     "Level2Scene_Terminal2"
+        // ) as Level2Scene_Terminal2;
+        // term2.terminalInputArr = [];
     }
 }
