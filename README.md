@@ -14,7 +14,7 @@ Magenta
 
 # Blurb
 
-In the game there will be checkpoints placed within the platformer levels (similar to mario) that act as respawn/progress checkpoints. To unlock these checkpoints, the player must enter a terminal. Inside this terminal there will be three options; a minigame, a problem/learning objective and hints/tips. These hints and tips will be obtained by discovering them in various levels, interacting with NPCs or completing the Among Us style minigames.
+Git-Cat is a platformer-style game designed to instruct players in basic Git principles, set against the backdrop of a space-faring cat's adventure. As players journey through the game, they encounter various non-player characters (NPCs) who contribute to the storyline while also imparting Git-related knowledge. Terminal checkpoints situated throughout the levels present challenges integrated into the narrative, prompting players to utilize Git commands to progress. Commands initially will be entered via buttons pressed but as the player progresses they will need to type the commands. Armed with insights from NPCs and feedback received at these checkpoints, players effectively tackle each challenge they face.
 
 # Basic Instructions
 
