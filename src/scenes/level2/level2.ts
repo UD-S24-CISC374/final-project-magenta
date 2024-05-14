@@ -18,8 +18,8 @@ export default class Level2Scene extends LevelClass {
     private posY = 0;
     private levelWidth: number = 2560; // Width of the level
     private levelHeight: number = 1440; // Height of the level
-    private showGrid = false;
-    private showColl = false;
+    private showGrid = true;
+    private showColl = true;
     private pauseButton: Button;
     private ship: Phaser.GameObjects.Image;
     private spaceShip: Phaser.GameObjects.Image;
@@ -43,6 +43,26 @@ export default class Level2Scene extends LevelClass {
         super({ key: "Level2Scene" });
     }
     create() {
+        this.restartFunction = () => {
+            this.checkPointX = 100;
+            this.checkPointY = 500;
+            this.shipStopped = false;
+            this.player.destroy();
+            console.log("restart function");
+            this.platforms?.clear(true, true);
+            //this.spikes?.clear(true, true);
+            this.terminalBody?.destroy();
+            this.terminalBody = undefined;
+            //this.events.destroy();
+            let term1 = this.scene.get(
+                "Level2Scene_Terminal1"
+            ) as Level2Scene_Terminal1;
+            term1.turnOffEmitters();
+            let term2 = this.scene.get(
+                "Level2Scene_Terminal2"
+            ) as Level2Scene_Terminal2;
+            term2.terminalInputArr = [];
+        };
         //create ship and make it viasable (created as an image)
         this.ship = this.add.image(0, 0, "spacecraft");
         this.ship.setDepth(10);
@@ -655,6 +675,8 @@ export default class Level2Scene extends LevelClass {
         );
         terminal_1_scene.events.on("Terminal1_correct", () => {
             console.log("correct terminal 1");
+            this.checkPointX = 2910;
+            this.checkPointY = 32;
             this.passTerminal1();
         });
         terminal_1_scene.events.on("Terminal1_incorrect", () => {
@@ -799,6 +821,7 @@ export default class Level2Scene extends LevelClass {
     }
 
     update() {
+        console.log(this.player.x, this.player.y);
         this.player.update(this.cursors);
         this.handlePrintPos();
 
@@ -847,18 +870,5 @@ export default class Level2Scene extends LevelClass {
         this.player.setY(this.checkPointY);
         this.physics.resume();
         this.player.clearTint();
-        // this.platforms?.clear(true, true);
-        // //this.spikes?.clear(true, true);
-        // this.terminalBody?.destroy();
-        // this.terminalBody = undefined;
-        // //this.events.destroy();
-        // let term1 = this.scene.get(
-        //     "Level2Scene_Terminal1"
-        // ) as Level2Scene_Terminal1;
-        // term1.turnOffEmitters();
-        // let term2 = this.scene.get(
-        //     "Level2Scene_Terminal2"
-        // ) as Level2Scene_Terminal2;
-        // term2.terminalInputArr = [];
     }
 }

@@ -94,15 +94,15 @@ export default class MainScene extends Phaser.Scene {
             .text(400, 300, "Start")
             .setInteractive()
             .on("pointerdown", () => {
-            this.updateStartClicked();
+                this.updateStartClicked();
             })
             .on("pointerover", () => {
-            this.enterButtonHoverState(this.startButton);
-            this.enterCatHoverState(this.catStart);
+                this.enterButtonHoverState(this.startButton);
+                this.enterCatHoverState(this.catStart);
             })
             .on("pointerout", () => {
-            this.enterButtonRestState(this.startButton);
-            this.exitCatHoverState(this.catStart);
+                this.enterButtonRestState(this.startButton);
+                this.exitCatHoverState(this.catStart);
             });
 
         /* ---------------     OPTIONS BUTTON    ------------------- */

@@ -9,6 +9,7 @@ import {
 import { TerminalBody } from "../../components/terminalAndTerminalSceneHelpers";
 import { updateCurrentLevel } from "../currentLevel";
 import { displayNPCText } from "../../components/NPCText";
+import Level1Scene_Terminal1 from "./Level1Scene_Terminal1";
 
 export default class Level1Scene extends LevelClass {
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -49,6 +50,18 @@ export default class Level1Scene extends LevelClass {
     }
 
     create() {
+        this.restartFunction = () => {
+            this.platforms?.clear(true, true);
+            this.spikes.clear(true, true);
+            this.terminalBody?.destroy();
+            this.terminalBody = undefined;
+            //this.events.destroy();
+            let term1 = this.scene.get(
+                "Level1Scene_Terminal1"
+            ) as Level1Scene_Terminal1;
+            term1.turnOffEmitters();
+            this.handleButtonPos();
+        };
         this.player = new Player(this, 0, 538);
         this.cameras.main.fadeIn(5000);
         this.cameras.main.startFollow(this.player, true, 0.08, 0.08, 0, 100);
@@ -369,6 +382,7 @@ export default class Level1Scene extends LevelClass {
 
     private handleCanFlyAway() {
         if (this.canFlyAway) {
+            this.game.registry.set("Level2Opened", true);
             this.player.setVisible(false);
             this.cameras.main.fadeOut(4000);
             this.cameras.main.startFollow(
@@ -460,19 +474,11 @@ export default class Level1Scene extends LevelClass {
         }
     }
     private cleanup() {
-        // this.platforms?.clear(true, true);
-        // this.spikes.clear(true, true);
-        // this.terminalBody?.destroy();
-        // this.terminalBody = undefined;
-        // //this.events.destroy();
-        // let term1 = this.scene.get(
-        //     "Level1Scene_Terminal1"
-        // ) as Level1Scene_Terminal1;
-        // term1.turnOffEmitters();
-        // this.handleButtonPos();
+        
         this.player.setX(0);
         this.player.setY(538);
         this.physics.resume();
         this.player.clearTint();
     }
+
 }
