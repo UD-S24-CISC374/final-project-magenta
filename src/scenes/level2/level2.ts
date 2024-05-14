@@ -720,6 +720,7 @@ export default class Level2Scene extends LevelClass {
             spike5.body.setOffset(0, 30);
         }, 2200);
     }
+
     passTerminal2() {
         this.playerHasPower = true;
         this.d3.setVisible(false);

@@ -1,6 +1,8 @@
 import Phaser from "phaser";
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
+    private canMove: boolean = true;
+
     //private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y, "cat", 1);
@@ -13,6 +15,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.initAnimations();
         //this.initPhysics();
+    }
+    public updatePlayerFreeze(): void {
+        this.canMove = !this.canMove;
     }
 
     private initAnimations(): void {
@@ -54,6 +59,11 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     update(cursors?: Phaser.Types.Input.Keyboard.CursorKeys) {
         const body = this.body as Phaser.Physics.Arcade.Body;
 
+        if (!this.canMove) {
+            body.setVelocityX(0);
+            body.setVelocityY(0);
+            return;
+        }
         if (cursors?.left.isDown) {
             body.setVelocityX(-160);
             this.anims.play("left", true);

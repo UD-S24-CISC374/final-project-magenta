@@ -9,14 +9,18 @@ import {
 import { TerminalBody } from "../../components/terminalAndTerminalSceneHelpers";
 import { updateCurrentLevel } from "../currentLevel";
 import Level1Scene_Terminal1 from "./Level1Scene_Terminal1";
+import { displayNPCText } from "../../components/NPCText";
 
 export default class Level1Scene extends LevelClass {
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
+    private hasNPCinteraction = false;
     private playerPos?: Phaser.GameObjects.Text;
     private background1: Phaser.GameObjects.TileSprite;
     private background2?: Phaser.Physics.Arcade.StaticGroup;
     private posX = 0;
     private posY = 0;
+    private npcX = 1930;
+    private npcY = 538;
     private levelWidth: number = 2560; // Width of the level
     private levelHeight: number = 1440; // Height of the level
     private showGrid = false;
@@ -65,7 +69,7 @@ export default class Level1Scene extends LevelClass {
             color: "#0f0",
         });
         */
-       /*
+        /*
         this.playerPos = this.add.text(400, 300, "Player Position: (0, 0)", {
             color: "#0f0",
         });
@@ -90,57 +94,57 @@ export default class Level1Scene extends LevelClass {
         this.arrowLeftText = this.add.text(-415, 225, "Move Left", {
             fontStyle: "bold",
             shadow: {
-            offsetX: 2,
-            offsetY: 2,
-            color: "#000",
-            blur: 2,
-            stroke: true,
-            fill: true,
+                offsetX: 2,
+                offsetY: 2,
+                color: "#000",
+                blur: 2,
+                stroke: true,
+                fill: true,
             },
         });
         this.time.addEvent({
             delay: 1500,
             loop: true,
             callback: () => {
-            if (this.arrowLeftText.style.color === "#FFF") {
-            this.arrowLeftText.setStyle({ color: "#CCC" });
-            } else {
-            this.arrowLeftText.setStyle({ color: "#FFF" });
-            }
+                if (this.arrowLeftText.style.color === "#FFF") {
+                    this.arrowLeftText.setStyle({ color: "#CCC" });
+                } else {
+                    this.arrowLeftText.setStyle({ color: "#FFF" });
+                }
 
-            if (this.arrowRightText.style.color === "#FFF") {
-            this.arrowRightText.setStyle({ color: "#CCC" });
-            } else {
-            this.arrowRightText.setStyle({ color: "#FFF" });
-            }
+                if (this.arrowRightText.style.color === "#FFF") {
+                    this.arrowRightText.setStyle({ color: "#CCC" });
+                } else {
+                    this.arrowRightText.setStyle({ color: "#FFF" });
+                }
 
-            if (this.arrowUpText.style.color === "#FFF") {
-            this.arrowUpText.setStyle({ color: "#CCC" });
-            } else {
-            this.arrowUpText.setStyle({ color: "#FFF" });
-            }
+                if (this.arrowUpText.style.color === "#FFF") {
+                    this.arrowUpText.setStyle({ color: "#CCC" });
+                } else {
+                    this.arrowUpText.setStyle({ color: "#FFF" });
+                }
             },
         });
         this.arrowRightText = this.add.text(-230, 225, "Move Right", {
             fontStyle: "bold",
             shadow: {
-            offsetX: 2,
-            offsetY: 2,
-            color: "#000",
-            blur: 2,
-            stroke: true,
-            fill: true,
+                offsetX: 2,
+                offsetY: 2,
+                color: "#000",
+                blur: 2,
+                stroke: true,
+                fill: true,
             },
         });
         this.arrowUpText = this.add.text(-310, 155, "Jump Up", {
             fontStyle: "bold",
             shadow: {
-            offsetX: 2,
-            offsetY: 2,
-            color: "#000",
-            blur: 2,
-            stroke: true,
-            fill: true,
+                offsetX: 2,
+                offsetY: 2,
+                color: "#000",
+                blur: 2,
+                stroke: true,
+                fill: true,
             },
         });
 
@@ -155,7 +159,7 @@ export default class Level1Scene extends LevelClass {
 
         this.pauseButton = createButton(this, pause)[0];
 
-        const npc_1 = this.add.image(1930, 538, "npc_1", 1);
+        const npc_1 = this.add.image(this.npcX, this.npcY, "npc_1", 1);
         npc_1.setScale(2);
 
         this.d1 = this.add
@@ -267,7 +271,11 @@ export default class Level1Scene extends LevelClass {
 
         this.spikes = this.physics.add.group();
         for (let i = 2; i <= 5; i += 3) {
-            this.spikes.create(platforms[i].x + 125, platforms[0].y + 110, "spikes_hor");
+            this.spikes.create(
+                platforms[i].x + 125,
+                platforms[0].y + 110,
+                "spikes_hor"
+            );
             this.spikes.scaleX(0.2);
         }
         this.physics.add.collider(this.spikes, this.platforms);
@@ -359,35 +367,15 @@ export default class Level1Scene extends LevelClass {
     }
 
     private handleNPC() {
-        let canSpawn = true;
-        while (canSpawn) {
-            setTimeout(() => {
-                this.d1.setVisible(true);
-                setTimeout(() => {
-                    this.d1.setVisible(false);
-                    setTimeout(() => {
-                        this.d2.setVisible(true);
-                        setTimeout(() => {
-                            this.d2.setVisible(false);
-                            setTimeout(() => {
-                                this.d3.setVisible(true);
-                                setTimeout(() => {
-                                    this.d3.setVisible(false);
-                                    setTimeout(() => {
-                                        this.d4.setVisible(true);
-                                        setTimeout(() => {
-                                            this.d4.setVisible(false);
-                                        }, 4000);
-                                    }, 0);
-                                }, 4000);
-                            }, 0);
-                        }, 4000);
-                    }, 0);
-                }, 4000);
-            }, 0);
-            this.textSpawned = true;
-            canSpawn = false;
+        if (!this.hasNPCinteraction) {
+            displayNPCText(this, this.npcX, this.npcY, [
+                "Hello! My name is Space Felix.",
+                "You're from the Intergalactic Space Station aren't you?",
+                "My ship is over to the right but I was tasked with sending some information back to the station.",
+                "I can't leave until I've completed my task. Can you help me? The terminal is over to the right.",
+            ]);
         }
+        this.hasNPCinteraction = true;
     }
 
     private handleCanFlyAway() {
@@ -432,7 +420,7 @@ export default class Level1Scene extends LevelClass {
 
     private handleButtonPos() {
         const pauseOffsetX =
-            this.cameras.main.width - (0.9 * this.cameras.main.width);
+            this.cameras.main.width - 0.9 * this.cameras.main.width;
         const pauseOffsetY = 50;
 
         handleButtonPosition(
@@ -472,7 +460,9 @@ export default class Level1Scene extends LevelClass {
         }
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (this.player) {
-            if (this.player.x > 1600 && !this.textSpawned) {
+            if (this.player.x > 1600 && !this.hasNPCinteraction) {
+                this.player.updatePlayerFreeze();
+                this.player.anims.play("turn", true);
                 this.handleNPC();
             }
         }
@@ -481,7 +471,6 @@ export default class Level1Scene extends LevelClass {
         }
     }
     private cleanup() {
-        this.player.destroy();
         this.platforms?.clear(true, true);
         this.spikes.clear(true, true);
         this.terminalBody?.destroy();
@@ -492,14 +481,5 @@ export default class Level1Scene extends LevelClass {
         ) as Level1Scene_Terminal1;
         term1.turnOffEmitters();
         this.handleButtonPos();
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (this.player) {
-            if (this.player.x > 1600 && !this.textSpawned) {
-                this.handleNPC();
-            }
-        }
-        if (this.player.x > this.spaceShip.x - 20) {
-            this.handleCanFlyAway();
-        }
     }
 }
