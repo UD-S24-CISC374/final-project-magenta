@@ -50,7 +50,8 @@ export default class Level2Scene extends LevelClass {
         this.spaceShip.setScale(2);
 
         //basic set up for player object, camera and controls, camera starts centered on ship
-        this.player = new Player(this, 100, 400);
+        this.player = new Player(this, 100, 500);
+        this.player.updatePlayerFreeze();
         this.player.setVisible(false);
         this.player.setActive(false);
         this.cameras.main.fadeIn(5000);
@@ -802,17 +803,20 @@ export default class Level2Scene extends LevelClass {
         if (this.ship.y <= 550) {
             this.ship.y += 1;
         } else {
-            this.player.setVisible(true);
-            this.player.setActive(true);
-            this.shipStopped = true;
-            this.cameras.main.startFollow(
-                this.player,
-                true,
-                0.08,
-                0.08,
-                0,
-                100
-            );
+            if (!this.shipStopped) {
+                this.player.updatePlayerFreeze();
+                this.player.setVisible(true);
+                this.player.setActive(true);
+                this.shipStopped = true;
+                this.cameras.main.startFollow(
+                    this.player,
+                    true,
+                    0.08,
+                    0.08,
+                    0,
+                    100
+                );
+            }
         }
         if (this.gameOver) {
             this.gameOver = false;
