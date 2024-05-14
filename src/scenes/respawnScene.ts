@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { currentLevel } from "./currentLevel";
+import LevelClass from "../Classes/LevelClass";
 
 export default class RespawnScene extends Phaser.Scene {
     /* ---------------     RESUME BUTTON    ------------------- */
@@ -45,11 +46,16 @@ export default class RespawnScene extends Phaser.Scene {
     }
 
     updateRespawnClicked() {
-        this.scene.launch(currentLevel);
+        this.scene.run(currentLevel);
         this.scene.stop();
     }
 
     updateMainMenuClicked() {
+        let currLvl = this.scene.get(currentLevel) as LevelClass;
+        if (currLvl.restartFunction) {
+            currLvl.restartFunction();
+        }
+        this.scene.stop(currentLevel);
         this.scene.start("MainScene");
     }
 

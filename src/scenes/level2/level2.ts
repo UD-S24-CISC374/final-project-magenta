@@ -12,12 +12,14 @@ export default class Level2Scene extends LevelClass {
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
     private playerPos?: Phaser.GameObjects.Text;
     private background1: Phaser.GameObjects.TileSprite;
+    private checkPointX: number = 100;
+    private checkPointY: number = 500;
     private posX = 0;
     private posY = 0;
     private levelWidth: number = 2560; // Width of the level
     private levelHeight: number = 1440; // Height of the level
-    private showGrid = false;
-    private showColl = false;
+    private showGrid = true;
+    private showColl = true;
     private pauseButton: Button;
     private ship: Phaser.GameObjects.Image;
     private spaceShip: Phaser.GameObjects.Image;
@@ -41,6 +43,26 @@ export default class Level2Scene extends LevelClass {
         super({ key: "Level2Scene" });
     }
     create() {
+        this.restartFunction = () => {
+            this.checkPointX = 100;
+            this.checkPointY = 500;
+            this.shipStopped = false;
+            this.player.destroy();
+            console.log("restart function");
+            this.platforms?.clear(true, true);
+            //this.spikes?.clear(true, true);
+            this.terminalBody?.destroy();
+            this.terminalBody = undefined;
+            //this.events.destroy();
+            let term1 = this.scene.get(
+                "Level2Scene_Terminal1"
+            ) as Level2Scene_Terminal1;
+            term1.turnOffEmitters();
+            let term2 = this.scene.get(
+                "Level2Scene_Terminal2"
+            ) as Level2Scene_Terminal2;
+            term2.terminalInputArr = [];
+        };
         //create ship and make it viasable (created as an image)
         this.ship = this.add.image(0, 0, "spacecraft");
         this.ship.setDepth(10);
@@ -50,7 +72,8 @@ export default class Level2Scene extends LevelClass {
         this.spaceShip.setScale(2);
 
         //basic set up for player object, camera and controls, camera starts centered on ship
-        this.player = new Player(this, 100, 400);
+        this.player = new Player(this, 100, 500);
+        this.player.updatePlayerFreeze();
         this.player.setVisible(false);
         this.player.setActive(false);
         this.cameras.main.fadeIn(5000);
@@ -652,6 +675,8 @@ export default class Level2Scene extends LevelClass {
         );
         terminal_1_scene.events.on("Terminal1_correct", () => {
             console.log("correct terminal 1");
+            this.checkPointX = 2910;
+            this.checkPointY = 32;
             this.passTerminal1();
         });
         terminal_1_scene.events.on("Terminal1_incorrect", () => {
@@ -796,23 +821,27 @@ export default class Level2Scene extends LevelClass {
     }
 
     update() {
+        console.log(this.player.x, this.player.y);
         this.player.update(this.cursors);
         this.handlePrintPos();
 
         if (this.ship.y <= 550) {
             this.ship.y += 1;
         } else {
-            this.player.setVisible(true);
-            this.player.setActive(true);
-            this.shipStopped = true;
-            this.cameras.main.startFollow(
-                this.player,
-                true,
-                0.08,
-                0.08,
-                0,
-                100
-            );
+            if (!this.shipStopped) {
+                this.player.updatePlayerFreeze();
+                this.player.setVisible(true);
+                this.player.setActive(true);
+                this.shipStopped = true;
+                this.cameras.main.startFollow(
+                    this.player,
+                    true,
+                    0.08,
+                    0.08,
+                    0,
+                    100
+                );
+            }
         }
         if (this.gameOver) {
             this.gameOver = false;
@@ -820,7 +849,7 @@ export default class Level2Scene extends LevelClass {
             this.cleanup();
             this.scene.launch("RespawnScene");
             this.scene.bringToTop("RespawnScene");
-            this.scene.stop("Level2Scene");
+            this.scene.pause("Level2Scene");
         }
         if (this.playerHasPower) {
             if (this.cursors?.up.isDown && this.player.body?.touching.down) {
@@ -837,19 +866,9 @@ export default class Level2Scene extends LevelClass {
         }
     }
     private cleanup() {
-        this.player.destroy();
-        this.platforms?.clear(true, true);
-        //this.spikes?.clear(true, true);
-        this.terminalBody?.destroy();
-        this.terminalBody = undefined;
-        //this.events.destroy();
-        let term1 = this.scene.get(
-            "Level2Scene_Terminal1"
-        ) as Level2Scene_Terminal1;
-        term1.turnOffEmitters();
-        let term2 = this.scene.get(
-            "Level2Scene_Terminal2"
-        ) as Level2Scene_Terminal2;
-        term2.terminalInputArr = [];
+        this.player.setX(this.checkPointX);
+        this.player.setY(this.checkPointY);
+        this.physics.resume();
+        this.player.clearTint();
     }
 }

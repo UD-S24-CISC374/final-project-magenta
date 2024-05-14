@@ -23,9 +23,9 @@ export default class Level1Scene_Terminal1 extends LevelClass {
 
     create() {
         this.buttonList = [
-            `git add messsage`,
+            `git add encryptedMessage.txt`,
             `git commit -m 'Sending Message to SpaceStation'`,
-            "git add coordinates",
+            "git add message",
             "git push",
         ];
         new ButtonAndListensers(
@@ -117,11 +117,11 @@ export default class Level1Scene_Terminal1 extends LevelClass {
         if (input[input.length - 1] === "git push") {
             scene.sound.add("wrong").play();
             //Did they push with the red platform
-            if (input.includes("git add coordinates")) {
+            if (input.includes("git add message")) {
                 scene.FeedbackText = scene.add.text(
                     feedbackX,
                     feedbackY,
-                    "You pushed with the coordinates! Ohno!",
+                    "You pushed with the unencrypted message! Ohno!",
                     {
                         fontSize: feedbackFontSize,
                         color: feebackColor,
@@ -131,11 +131,11 @@ export default class Level1Scene_Terminal1 extends LevelClass {
                 //scene.events.emit("incorrect_terminal_input");
             }
             //Did they push without the message platform
-            else if (!input.includes("git add message")) {
+            else if (!input.includes("git add encryptedMessage.txt")) {
                 scene.FeedbackText = scene.add.text(
                     feedbackX,
                     feedbackY,
-                    "How is your friend going to know the message",
+                    "How will the rebels know what to do without the message?",
                     {
                         fontSize: feedbackFontSize,
                         color: feebackColor,
@@ -145,7 +145,11 @@ export default class Level1Scene_Terminal1 extends LevelClass {
                 //scene.events.emit("incorrect_terminal_input");
             }
             //Did they push without the commit
-            else if (!input.includes(`git commit -m 'Sending Message to SpaceStation`)) {
+            else if (
+                !input.includes(
+                    `git commit -m 'Sending Message to SpaceStation`
+                )
+            ) {
                 scene.FeedbackText = scene.add.text(
                     feedbackX,
                     feedbackY,
