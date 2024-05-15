@@ -28,9 +28,7 @@ To play the game go to [Game Link]https://ud-s24-cisc374.github.io/final-project
 
 # Gameplay Video
 
-![Video of someone playing Git Cat (Level 1)](https://drive.google.com/file/d/1xcDnPwbd_kUMfx0L3hYq_4NmWKS0I4hU/view?usp=sharing)
-
-Link: (https://drive.google.com/file/d/1xcDnPwbd_kUMfx0L3hYq_4NmWKS0I4hU/view?usp=sharing)
+Link: (https://youtu.be/PNdYWBWqkdc)
 
 # Educational Game Design Document
 
