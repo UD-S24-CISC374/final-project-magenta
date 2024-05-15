@@ -8,9 +8,9 @@ Magenta
 
 # Developers
 
-* Joshua Martinez zenitram@udel.edu
-* Zachary Reggio zreggio@udel.edu
-* Ava West westa@udel.edu
+-   Joshua Martinez zenitram@udel.edu
+-   Zachary Reggio zreggio@udel.edu
+-   Ava West westa@udel.edu
 
 # Blurb
 
@@ -19,7 +19,8 @@ Git-Cat is a platformer-style game designed to instruct players in basic Git pri
 # Basic Instructions
 
 To play the game go to [Game Link]https://ud-s24-cisc374.github.io/final-project-magenta/ or the github environment deployemnt linked in the repository.
-- If neither of those options work you will have to clone the reposity somewhere with node.js installed and run `npm install` and then `npm run start`.
+
+-   If neither of those options work you will have to clone the reposity somewhere with node.js installed and run `npm install` and then `npm run start`.
 
 # Screenshot
 
@@ -27,7 +28,7 @@ TEXT GOES HERE
 
 # Gameplay Video
 
-TEXT GOES HERE
+(https://youtu.be/PNdYWBWqkdc)
 
 # Educational Game Design Document
 
@@ -35,4 +36,4 @@ Link to our [egdd](https://github.com/UD-S24-CISC374/final-project-magenta/blob/
 
 # Credits
 
-* [Incorrect Terminal sound](https://opengameart.org/content/bad-sound-1) - Author remaxim on open game art
+-   [Incorrect Terminal sound](https://opengameart.org/content/bad-sound-1) - Author remaxim on open game art
