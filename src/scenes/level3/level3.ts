@@ -5,8 +5,8 @@ import { Player } from "../../objects/player";
 import { Platform, createPlatforms } from "../../components/platform";
 import { Button } from "../../components/pauseButton"; //{ Button, createButton } ->was giving error
 import { TerminalBody } from "../../components/terminalAndTerminalSceneHelpers";
+import { displayNPCText } from "../../components/NPCText";
 import Level3Scene_Terminal1 from "./Level3Scene_Terminal1";
-import Level3Scene_Terminal2 from "./Level3Scene_Terminal2";
 
 export default class Level3Scene extends LevelClass {
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -16,8 +16,8 @@ export default class Level3Scene extends LevelClass {
     private posY = 0;
     private levelWidth: number = 2560; // Width of the level
     private levelHeight: number = 1440; // Height of the level
-    private showGrid = false;
-    private showColl = false;
+    private showGrid = true;
+    private showColl = true;
     private pauseButton: Button;
     private ship: Phaser.GameObjects.Image;
     private spaceShip: Phaser.GameObjects.Image;
@@ -34,8 +34,17 @@ export default class Level3Scene extends LevelClass {
     private d3: Phaser.GameObjects.Text;
     private isNpcMoving = false;
     private npc_1: Phaser.GameObjects.Image;
-    private npc_2: Phaser.GameObjects.Image;
-    private canFlyAway = true;
+    private npc_3: Phaser.GameObjects.Image;
+    private canFlyAway = false;
+    private hasNPCinteraction = false;
+    private hasLastNPCinteraction = false;
+    private npcX = -290;
+    private npcY = 650;
+    private dish1: Phaser.GameObjects.Image;
+    private traps: Phaser.Physics.Arcade.StaticGroup;
+    private bomb: Phaser.GameObjects.Image;
+    private explosion: Phaser.GameObjects.Sprite;
+    private terminal1Complete: boolean = false;
 
     constructor() {
         super({ key: "Level3Scene" });
@@ -70,6 +79,11 @@ export default class Level3Scene extends LevelClass {
         this.background1.setScrollFactor(0, 0);
         this.background1.setDepth(-1);
 
+        this.dish1 = this.add.image(-300, 630, "dish");
+        this.dish1.setScale(0.5);
+        this.dish1.setCrop(0, 0, this.dish1.width / 2, this.dish1.height);
+        this.dish1.setRotation(Math.PI / 2);
+
         //pause button giving an error for some reason, will fix later
         /*
         const pause = [
@@ -90,467 +104,263 @@ export default class Level3Scene extends LevelClass {
         const unit = 64;
         const offset = 32;
         const platforms: Platform[] = [
-            //plat 1
-            // height=1, width=3, frame (2, 1, 3) in sprite sheet
+            // Platform 1
             {
-                x: offset + unit * 3,
-                y: offset + unit * 7,
+                x: offset + unit * 13,
+                y: offset + unit * 8,
                 texture: "level3stone",
                 scale: { x: 0.25, y: 0.25 },
             },
             {
-                x: offset + unit * 4,
-                y: offset + unit * 7,
+                x: offset + unit * 14,
+                y: offset + unit * 8,
                 texture: "level3stone",
                 scale: { x: 0.25, y: 0.25 },
             },
-            {
-                x: offset + unit * 5,
-                y: offset + unit * 7,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            //plat 2
-            {
-                x: offset + unit * 9,
-                y: offset + unit * 6,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 10,
-                y: offset + unit * 6,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 11,
-                y: offset + unit * 6,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            //plat 3
             {
                 x: offset + unit * 15,
-                y: offset + unit * 5,
+                y: offset + unit * 8,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
+            },
+
+            // Platform 2
+            {
+                x: offset + unit * 18,
+                y: offset + unit * 6,
                 texture: "level3stone",
                 scale: { x: 0.25, y: 0.25 },
             },
             {
-                x: offset + unit * 16,
-                y: offset + unit * 5,
+                x: offset + unit * 19,
+                y: offset + unit * 6,
                 texture: "level3stone",
                 scale: { x: 0.25, y: 0.25 },
             },
             {
-                x: offset + unit * 17,
-                y: offset + unit * 5,
+                x: offset + unit * 20,
+                y: offset + unit * 6,
                 texture: "level3stone",
                 scale: { x: 0.25, y: 0.25 },
             },
-            //plat 4
             {
                 x: offset + unit * 21,
-                y: offset + unit * 5,
+                y: offset + unit * 6,
                 texture: "level3stone",
                 scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 22,
-                y: offset + unit * 5,
+                y: offset + unit * 6,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
+            },
+
+            // Platform 3 vertical
+            {
+                x: offset + unit * 22,
+                y: offset + unit * 7,
                 texture: "level3stone",
                 scale: { x: 0.25, y: 0.25 },
             },
             {
-                x: offset + unit * 23,
-                y: offset + unit * 5,
+                x: offset + unit * 22,
+                y: offset + unit * 8,
                 texture: "level3stone",
                 scale: { x: 0.25, y: 0.25 },
             },
             {
-                x: offset + unit * 24,
-                y: offset + unit * 5,
+                x: offset + unit * 22,
+                y: offset + unit * 9,
                 texture: "level3stone",
                 scale: { x: 0.25, y: 0.25 },
             },
-            {
-                x: offset + unit * 25,
-                y: offset + unit * 5,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
+
+            //Platform 4
             {
                 x: offset + unit * 26,
-                y: offset + unit * 5,
+                y: offset + unit * 7,
                 texture: "level3stone",
                 scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 27,
-                y: offset + unit * 5,
+                y: offset + unit * 7,
                 texture: "level3stone",
                 scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 28,
-                y: offset + unit * 5,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 29,
-                y: offset + unit * 5,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            //tunnel wall 1
-            {
-                x: offset + unit * 29,
-                y: offset + unit * 6,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 29,
                 y: offset + unit * 7,
                 texture: "level3stone",
                 scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 29,
-                y: offset + unit * 8,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            //tunnel wall 2
-            {
-                x: offset + unit * 33,
                 y: offset + unit * 7,
                 texture: "level3stone",
                 scale: { x: 0.25, y: 0.25 },
             },
+
+            //Platform 5
             {
-                x: offset + unit * 33,
-                y: offset + unit * 6,
+                x: offset + unit * 29,
+                y: offset + unit * 4.5,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
+            },
+            {
+                x: offset + unit * 30,
+                y: offset + unit * 4.5,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
+            },
+            {
+                x: offset + unit * 31,
+                y: offset + unit * 4.5,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
+            },
+            {
+                x: offset + unit * 32,
+                y: offset + unit * 4.5,
                 texture: "level3stone",
                 scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 33,
-                y: offset + unit * 5,
+                y: offset + unit * 4.5,
                 texture: "level3stone",
                 scale: { x: 0.25, y: 0.25 },
             },
+
+            // Platform 6
             {
-                x: offset + unit * 33,
-                y: offset + unit * 4,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 33,
+                x: offset + unit * 25,
                 y: offset + unit * 3,
                 texture: "level3stone",
                 scale: { x: 0.25, y: 0.25 },
             },
             {
+                x: offset + unit * 24,
+                y: offset + unit * 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
+            },
+            {
+                x: offset + unit * 23,
+                y: offset + unit * 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
+            },
+            {
+                x: offset + unit * 22,
+                y: offset + unit * 3,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
+            },
+
+            //Platform 7
+            {
+                x: offset + unit * 16,
+                y: offset + unit * 2,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
+            },
+            {
+                x: offset + unit * 15,
+                y: offset + unit * 2,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
+            },
+            {
+                x: offset + unit * 14,
+                y: offset + unit * 2,
+                texture: "level3stone",
+                scale: { x: 0.25, y: 0.25 },
+            },
+
+            //Platform 8
+            {
                 x: offset + unit * 33,
-                y: offset + unit * 2,
+                y: offset + unit * 3.5,
                 texture: "level3stone",
                 scale: { x: 0.25, y: 0.25 },
             },
             {
                 x: offset + unit * 33,
-                y: offset + unit * 1,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            //tunnel wall 3
-            {
-                x: offset + unit * 38,
-                y: offset + unit * 8,
+                y: offset + unit * 2.5,
                 texture: "level3stone",
                 scale: { x: 0.25, y: 0.25 },
             },
             {
-                x: offset + unit * 38,
-                y: offset + unit * 7,
+                x: offset + unit * 33,
+                y: offset + unit * 1.5,
                 texture: "level3stone",
                 scale: { x: 0.25, y: 0.25 },
             },
-            {
-                x: offset + unit * 38,
-                y: offset + unit * 6,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 38,
-                y: offset + unit * 5,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 38,
-                y: offset + unit * 4,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 38,
-                y: offset + unit * 3,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 38,
-                y: offset + unit * 2,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 38,
-                y: offset + unit * 1,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            //wall ledge 1
-            {
-                x: offset + unit * 34,
-                y: offset + unit * 7,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            //wall ledge 2
-            {
-                x: offset + unit * 37,
-                y: offset + unit * 5,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            //wall ledge 3
-            {
-                x: offset + unit * 34,
-                y: offset + unit * 3,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            //plat 5
-            {
-                x: offset + unit * 39,
-                y: offset + unit * 1,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 40,
-                y: offset + unit * 1,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 41,
-                y: offset + unit * 1,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 42,
-                y: offset + unit * 1,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 43,
-                y: offset + unit * 1,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 44,
-                y: offset + unit * 1,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 45,
-                y: offset + unit * 1,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            //ceiling above plat 5
-            {
-                x: offset + unit * 39,
-                y: offset + unit * -3,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 40,
-                y: offset + unit * -3,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            //terminal goes here (pos: 2590, 32)
-            {
-                x: offset + unit * 41,
-                y: offset + unit * -3,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 42,
-                y: offset + unit * -3,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 43,
-                y: offset + unit * -3,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 44,
-                y: offset + unit * -3,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 45,
-                y: offset + unit * -3,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            //timmy trap (with dorr)
-            {
-                x: offset + unit * 39,
-                y: offset + unit * -4,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 39,
-                y: offset + unit * -5,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 39,
-                y: offset + unit * -6,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 40,
-                y: offset + unit * -6,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 41,
-                y: offset + unit * -6,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            //door
-            {
-                x: offset + unit * 41,
-                y: offset + unit * -5,
-                texture: "door",
-                frame: 0,
-            },
-            {
-                x: offset + unit * 41,
-                y: offset + unit * -4,
-                texture: "door",
-                frame: 1,
-            },
-            //final obsticle
-            {
-                x: offset + unit * 56,
-                y: offset + unit * 8,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 56,
-                y: offset + unit * 7,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 56,
-                y: offset + unit * 6,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 56,
-                y: offset + unit * 5,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 56,
-                y: offset + unit * 4,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 56,
-                y: offset + unit * 3,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 56,
-                y: offset + unit * 2,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 57,
-                y: offset + unit * 2,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 58,
-                y: offset + unit * 2,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
-            {
-                x: offset + unit * 59,
-                y: offset + unit * 2,
-                texture: "level3stone",
-                scale: { x: 0.25, y: 0.25 },
-            },
+
             {
                 x: 640,
                 y: 720,
-                texture: "level3stone",
-                scale: { x: 80, y: 0.7 },
+                texture: "Level3Ground",
+                scale: { x: 40, y: 0.09 },
             }, // Ground
         ];
         createPlatforms(this, platforms, this.platforms, [this.player]);
+
+        this.traps = this.physics.add.staticGroup();
+        let trap1 = this.traps.create(430, 625, "trap");
+        trap1.setScale(0.05);
+        trap1.body.width = 32;
+        trap1.body.height = 12;
+        trap1.setOffset(140,50);
+        let trap2 = this.traps.create(850, 505, "trap");
+        trap2.setScale(0.05);
+        trap2.body.width = 32;
+        trap2.body.height = 12;
+        trap2.setOffset(140, 50);
+        let trap3 = this.traps.create(2010, 280, "trap");
+        trap3.setScale(0.05);
+        trap3.body.width = 32;
+        trap3.body.height = 12;
+        trap3.setOffset(140, 50);
+        
+
+        this.physics.add.collider(this.player, trap1, this.handleTrapCollision, undefined, this);
 
         //creating the ice spikes
         this.staticSpikes = this.physics.add.staticGroup();
         this.activeSpikes = this.physics.add.staticGroup();
         this.fallingSpikes = this.physics.add.group();
 
-        let spike1 = this.staticSpikes.create(1930, 440, "1x2-ice-spikes");
-        spike1.setScale(1, 1);
-        let spike2 = this.staticSpikes.create(2098, 440, "1x2-ice-spikes");
-        spike2.setScale(-1, 1);
-        let spike3 = this.staticSpikes.create(2780, 48, "2x1-ice-spikes");
-        spike3.setScale(1, 1);
-        //spike3.setAngle(90);
-        //2780
-        let spike4 = this.activeSpikes.create(2780, -112, "2x1-ice-spikes");
-        spike4.setScale(1, -1);
+        let spike1 = this.staticSpikes.create(1890, 416, "Lvl3Spike");
+        spike1.setScale(0.3);
+        spike1.setRotation(Math.PI / -2);
+        spike1.body.width = 68;
+        spike1.body.height = 68;
+        spike1.setOffset(60, 60);
+        let spike2 = this.staticSpikes.create(1375, 225, "Lvl3Spike");
+        spike2.setScale(0.3);
+        spike2.setRotation(Math.PI / -2);
+        spike2.body.width = 66;
+        spike2.body.height = 66;
+        spike2.setOffset(60, 65);
+        let spike3 = this.activeSpikes.create(1510, 600, "Lvl3Spike");
+        spike3.setScale(0.3);
+        spike3.body.width = 68;
+        spike3.body.height = 68;
+        spike3.setOffset(60, 60);
+        let spike4 = this.activeSpikes.create(1570, 600, "Lvl3Spike");
+        spike4.setScale(0.3);
+        spike4.body.width = 68;
+        spike4.body.height = 68;
+        spike4.setOffset(60, 60);
+        let spike5 = this.activeSpikes.create(1630, 600, "Lvl3Spike");
+        spike5.setScale(0.3);
+        spike5.body.width = 68;
+        spike5.body.height = 68;
+        spike5.setOffset(60, 60);
         //spike4.setAngle(90);
 
         this.physics.add.collider(
@@ -590,47 +400,25 @@ export default class Level3Scene extends LevelClass {
         }
 
         //npc and their text
-        this.npc_1 = this.add.image(2900, 580, "npc_1", 1);
+        this.npc_1 = this.add.image(-370, 598, "npc_1", 1);
         this.npc_1.setScale(2);
-        this.npc_2 = this.add.image(2590, -224, "npc_2", 1);
-        this.npc_2.setScale(2);
-        const npc_3 = this.add.image(4600, 580, "npc_3", 1);
-        npc_3.setScale(2);
+        this.npc_3 = this.add.image(-250, 598, "npc_3", 1);
+        this.npc_3.setScale(2);
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         this.d1 = this.add.text(
-            2300,
-            -300,
-            "Please help me! The unlock code for this door\n should be somewhere on that terminal!",
+            400,
+            -50,
+            "Great Job! Head back to the cats to tell them you found the terminal!",
             {
-                color: "#0f0",
+            color: "#fff",
+            fontSize: "24px",
+            fontStyle: "bold",
+            stroke: "#ff0",
+            strokeThickness: 4,
             }
         );
-        this.d2 = this.add.text(
-            2300,
-            -300,
-            "Thanks! Let me give you a hand with this...",
-            {
-                color: "#0f0",
-            }
-        );
-        this.d2.setVisible(false);
-        this.d3 = this.add.text(
-            2800,
-            460,
-            "Hey, looks like you will need a little more power to get to your ship!\nThis terminal doesnt seem to have a mouse, maybe you should type what\nthe buttons would enter into the terminal.",
-            {
-                color: "#0f0",
-            }
-        );
-        this.add.text(
-            4200,
-            480,
-            "Great job here on ice-223, the USC thanks you greatly. \nThe mission isnt over yet, I am sending you to a remote,\n dangerous planet next.",
-            {
-                color: "#0f0",
-            }
-        );
+        this.d1.setVisible(false);
 
         /* ---------------     Create Terminal    ------------------- 
             Must be done after platform and player creation
@@ -644,49 +432,24 @@ export default class Level3Scene extends LevelClass {
             "Level3Scene_Terminal1"
         );
         this.CorrectTerminalArr = [
-            `git add code.js`,
-            `git commit -m 'created code for lock'`,
-            `git push`,
+            `git reset --hard HEAD~1`,
+            `git push origin dangerPlanet --force`
         ];
         new TerminalBody(
             this,
-            2520,
-            0,
+            930,
+            96,
             "terminal",
             this.CorrectTerminalArr,
             "1"
         );
         terminal_1_scene.events.on("Terminal1_correct", () => {
             console.log("correct terminal 1");
-            this.passTerminal1();
+            this.d1.setVisible(true);
+            this.terminal1Complete = true;
         });
         terminal_1_scene.events.on("Terminal1_incorrect", () => {
             console.log("incorrect terminal 1");
-        });
-
-        //Terminal 2
-        let terminal_2_scene = this.scene.manager.getScene(
-            "Level3Scene_Terminal2"
-        );
-        this.CorrectTerminalArr2 = [
-            `git add power.js`,
-            `git commit -m ''`,
-            `git push`,
-        ];
-        new TerminalBody(
-            this,
-            3000,
-            500,
-            "terminal",
-            this.CorrectTerminalArr2,
-            "2"
-        );
-        terminal_2_scene.events.on("Terminal2_correct", () => {
-            console.log("correct terminal 2");
-            this.passTerminal2();
-        });
-        terminal_2_scene.events.on("Terminal2_incorrect", () => {
-            console.log("incorrect terminal 2");
         });
     }
 
@@ -704,39 +467,42 @@ export default class Level3Scene extends LevelClass {
         this.gameOver = true;
     }
 
+    private handleTrapCollision() {
+        this.player.setVisible(false);
+        this.explosion = this.add.sprite(this.player.x, this.player.y, "explosion", 0);
+        this.explosion.setScale(2.5);
+        this.explosion.setDepth(10);
+        this.explosion.anims.create({
+            key: "explode",
+            frames: this.anims.generateFrameNumbers("explosion", {
+                start: 0,
+                end: 23,
+            }),
+            frameRate: 10,
+            repeat: 0,
+        });
+        this.explosion.anims.play("explode", true);
+        setTimeout(() => {
+            this.gameOver = true;
+        }, 800);
+    }
+
     //what to run after terminal 1 has passed
     passTerminal1() {
-        this.d1.setVisible(false);
-        //this.d2.setVisible(false);
-
-        setTimeout(() => {
-            this.d2.setVisible(true);
-            this.isNpcMoving = true;
-        }, 2000);
-        setTimeout(() => {
-            this.activeSpikes.setVisible(false);
-            this.activeSpikes.clear();
-
-            let spike5 = this.fallingSpikes.create(
-                2780,
-                -100,
-                "2x1-ice-spikes"
-            );
-            spike5.setScale(1, -1);
-            spike5.body.setOffset(0, 30);
-        }, 4000);
-    }
-    passTerminal2() {
-        this.playerHasPower = true;
-        this.d3.setVisible(false);
-        this.add.text(
-            2800,
-            460,
-            "Great job! I bet your legs feel a lot stronger! Only a few cats are able to\nacsess the powers hidden in the Git...",
-            {
-                color: "#0f0",
-            }
-        );
+        if (!this.hasLastNPCinteraction) {
+            displayNPCText(this, this.npcX, this.npcY - 50, [
+                "Great job! Thanks for finding the terminal and doing that for us.",
+                "Now we've got to fix this satellite...",
+                "The government is not going to be happy about this. These are their satellites.",
+                "We never would have come here had we known they were here. We think they're behind these traps.",
+                "Some sort of testing...",
+                "Maybe you can investigate for us? I think the captain is on a white planet."
+            ]);
+            setTimeout(() => {
+                this.canFlyAway = true;
+            }, 30000);
+            this.hasLastNPCinteraction = true;
+        }
     }
 
     drawGrid(gridSize: number): void {
@@ -770,6 +536,19 @@ export default class Level3Scene extends LevelClass {
         this.playerPos?.setPosition(this.posX + offsetX, this.posY + offsetY);
     }
 
+    private handleNPC() {
+        if (!this.hasNPCinteraction) {
+            displayNPCText(this, this.npcX, this.npcY - 50, [
+                "Ugh. This satellite is complete destroyed. It got blown up by one of the traps.",
+                "We're trying to run a geological survey of the planet but we can't find the terminal.",
+                "Can you help us? It's somewhere on the planet. I think our last commit got corrupted.",
+                "We need to commit our old changes and push them to the Space Station's repository for review.",
+                "Come back once you've found it...and be careful! There's traps everywhere.",
+            ]);
+        }
+        this.hasNPCinteraction = true;
+    }
+
     enterButtonHoverState(button: Phaser.GameObjects.Text) {
         button.setStyle({ fill: "#ff0" });
     }
@@ -796,16 +575,16 @@ export default class Level3Scene extends LevelClass {
                 this.scene.start("mainScene");
             }
         } else {
-            this.add.text(3200, 400, "You need to complete the task first!");
+            this.add.text(400, 300, "You need to complete the task first!");
         }
     }
 
     update() {
-        // this.player.update(this.cursors);
-        // this.handlePrintPos();
+        this.player.update(this.cursors);
+        this.handlePrintPos();
 
         if (this.ship.y <= 550) {
-            this.ship.y += 0.5;
+            this.ship.y += 1.0;
         } else {
             this.player.setVisible(true);
             this.player.setActive(true);
@@ -833,12 +612,27 @@ export default class Level3Scene extends LevelClass {
             }
         }
         if (this.isNpcMoving) {
-            if (this.npc_2.x <= 2780) {
-                this.npc_2.x += 0.35;
+            if (this.npc_3.x <= 2780) {
+                this.npc_3.x += 0.35;
             }
         }
-        if (this.player.x > 5000) {
+        if (this.terminal1Complete && this.canFlyAway) {
             this.handleCanFlyAway();
+        }
+        if (this.player.x < 0 && this.terminal1Complete && !this.hasLastNPCinteraction) {
+            this.player.updatePlayerFreeze();
+            this.player.anims.play("turn", true);
+            this.passTerminal1();
+        }
+        if (this.shipStopped) {
+            if (!this.hasNPCinteraction) {
+                this.player.updatePlayerFreeze();
+                this.player.anims.play("turn", true);
+                this.handleNPC();
+            }
+        }
+        if (this.player.x < -500) {
+            this.player.x = -500;
         }
     }
     private cleanup() {
@@ -852,9 +646,5 @@ export default class Level3Scene extends LevelClass {
             "Level3Scene_Terminal1"
         ) as Level3Scene_Terminal1;
         term1.turnOffEmitters();
-        let term2 = this.scene.get(
-            "Level3Scene_Terminal2"
-        ) as Level3Scene_Terminal2;
-        term2.terminalInputArr = [];
     }
 }

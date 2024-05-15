@@ -17,11 +17,14 @@ export default class LevelScene extends Phaser.Scene {
     level5Lock: Phaser.GameObjects.Image;
     level6Lock: Phaser.GameObjects.Image;
 
+    unlockAll: Phaser.GameObjects.Text;
+
     constructor() {
         super({ key: "LevelScene" });
     }
 
     create() {
+        this.game.registry.set("Level3Opened", true);
         /* ---------------     BACKGROUND    ------------------- */
         const level_scn_bg = this.add.image(640, 360, "background-2-level1");
         level_scn_bg.setScale(2);
@@ -113,6 +116,20 @@ export default class LevelScene extends Phaser.Scene {
         lvl4.setScale(0.1);
         lvl5.setScale(0.1);
         lvl6.setScale(0.1);
+
+        /* ---------------     UNLOCK ALL    ------------------- */
+        this.unlockAll = this.add
+            .text(1050, 650, "Unlock All Levels", { color: "#0f0" })
+            .setInteractive()
+            .on("pointerdown", () => {
+                this.updateUnlockClicked();
+            })
+            .on("pointerover", () => {
+                this.enterButtonHoverState(this.unlockAll);
+            })
+            .on("pointerout", () => {
+                this.enterButtonRestState(this.unlockAll);
+            });
 
         /* ---------------     BACK BUTTON    ------------------- */
         this.backButton = this.add
@@ -217,6 +234,16 @@ export default class LevelScene extends Phaser.Scene {
 
     updateBackClicked() {
         this.scene.start("MainScene");
+    }
+
+    updateUnlockClicked() {
+        this.game.registry.set("Level1Opened", true);
+        this.game.registry.set("Level2Opened", true);
+        this.game.registry.set("Level3Opened", true);
+        this.game.registry.set("Level4Opened", true);
+        this.game.registry.set("Level5Opened", true);
+        this.game.registry.set("Level6Opened", true);
+        this.scene.start("LevelScene");
     }
 
     updateLevelClicked(level: string) {

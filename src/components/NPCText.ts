@@ -11,13 +11,13 @@ export function displayNPCText(
     const HEIGHT_OFFSET = 100;
     let textObj = Scene.add.text(x, y - HEIGHT_OFFSET, text[0], {
         fontFamily: "Arial",
-        color: "#FFF",
+        color: "#EE4B2B",
         wordWrap: { width: 300 },
     });
     for (let i = 1; i < text.length; i++) {
         setTimeout(() => {
             textObj.setText(text[i]);
-        }, i * 4000);
+        }, i * 5000);
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let missionAddedText: Phaser.GameObjects.Text;
@@ -35,7 +35,7 @@ export function displayNPCText(
         addLog(Scene.scene.key, text);
         Scene.player.updatePlayerFreeze();
         console.log(logBook);
-    }, text.length * 4100);
+    }, text.length * 6100);
 
     setTimeout(() => {
         missionAddedText.destroy();
