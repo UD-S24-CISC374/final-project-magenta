@@ -35,11 +35,11 @@ export function displayNPCText(
         addLog(Scene.scene.key, text);
         Scene.player.updatePlayerFreeze();
         console.log(logBook);
-    }, text.length * 6100);
+    }, text.length * 5100);
 
     setTimeout(() => {
         missionAddedText.destroy();
-    }, text.length * 4100 + 2000);
+    }, text.length * 5100 + 2000);
     textObj.setOrigin(0.5, 0.5);
     // textObj.setScrollFactor(0);
 

@@ -24,7 +24,6 @@ export default class LevelScene extends Phaser.Scene {
     }
 
     create() {
-        this.game.registry.set("Level3Opened", true);
         /* ---------------     BACKGROUND    ------------------- */
         const level_scn_bg = this.add.image(640, 360, "background-2-level1");
         level_scn_bg.setScale(2);

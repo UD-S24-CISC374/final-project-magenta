@@ -16,8 +16,8 @@ export default class Level3Scene extends LevelClass {
     private posY = 0;
     private levelWidth: number = 2560; // Width of the level
     private levelHeight: number = 1440; // Height of the level
-    private showGrid = true;
-    private showColl = true;
+    private showGrid = false;
+    private showColl = false;
     private pauseButton: Button;
     private ship: Phaser.GameObjects.Image;
     private spaceShip: Phaser.GameObjects.Image;
@@ -28,7 +28,7 @@ export default class Level3Scene extends LevelClass {
     private fallingSpikes: Phaser.Physics.Arcade.Group;
     private terminalBody?: TerminalBody;
     private playerHasPower = false;
-    private showPos = true;
+    private showPos = false;
     private d1: Phaser.GameObjects.Text;
     private d2: Phaser.GameObjects.Text;
     private d3: Phaser.GameObjects.Text;
@@ -414,7 +414,7 @@ export default class Level3Scene extends LevelClass {
             color: "#fff",
             fontSize: "24px",
             fontStyle: "bold",
-            stroke: "#ff0",
+            stroke: "#008000",
             strokeThickness: 4,
             }
         );
@@ -539,7 +539,7 @@ export default class Level3Scene extends LevelClass {
     private handleNPC() {
         if (!this.hasNPCinteraction) {
             displayNPCText(this, this.npcX, this.npcY - 50, [
-                "Ugh. This satellite is complete destroyed. It got blown up by one of the traps.",
+                "Ugh. This satellite is completely destroyed. It got blown up by one of the traps.",
                 "We're trying to run a geological survey of the planet but we can't find the terminal.",
                 "Can you help us? It's somewhere on the planet. I think our last commit got corrupted.",
                 "We need to commit our old changes and push them to the Space Station's repository for review.",
