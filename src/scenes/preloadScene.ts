@@ -33,6 +33,10 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image("respawn", "assets/Art/space_bg.png");
         this.load.image("level3_bg", "assets/Art/Sunrise.png");
         this.load.image("level3stone", "assets/Art/egypt_stone.png");
+        this.load.image("Level3Ground", "assets/Art/DirtLvl3.png");
+        this.load.image("trap", "assets/Art/trapLvl3.png");
+        this.load.image("bomb", "assets/Art/bomb.png");
+        this.load.image("Lvl3Spike", "assets/Art/spikeLvl3.png");
         this.load.image(
             "background-1-level1",
             "assets/Art/background-1-level1.png"
@@ -99,6 +103,10 @@ export default class PreloadScene extends Phaser.Scene {
             frameWidth: 32,
             frameHeight: 48,
         });
+        this.load.spritesheet("explosion", "assets/Art/explosion.png", {
+            frameWidth: 64,
+            frameHeight: 64,
+        });
         this.load.spritesheet("door", "assets/Art/door.png", {
             frameWidth: 64,
             frameHeight: 64,
@@ -107,6 +115,7 @@ export default class PreloadScene extends Phaser.Scene {
         //Sounds
         this.load.audio("bg_music_1", "assets/Sound/gitcat_chill_demo2.mp3");
         this.load.audio("wrong", "assets/Sound/lose sound 1_0.wav");
+        this.load.audio("trapClick", "assets/Sound/trapClick.mp3");
     }
 
     create() {

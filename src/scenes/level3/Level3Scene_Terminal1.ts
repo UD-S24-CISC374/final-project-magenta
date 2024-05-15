@@ -7,6 +7,7 @@ export default class Level3Scene_Terminal1 extends LevelClass {
     private mainLevel: LevelClass;
     private terminalDisplayText: Phaser.GameObjects.Text;
     private buttonList: string[] = [];
+    private level3Task: Phaser.GameObjects.Text;
     public turnOffEmitters() {
         this.buttonList.forEach((x) => this.events.off(x));
     }
@@ -21,10 +22,10 @@ export default class Level3Scene_Terminal1 extends LevelClass {
 
     create() {
         this.buttonList = [
-            "git add code.js",
-            "git add lock",
-            "git commit -m 'created code for lock'",
-            "git push",
+            "git push origin dangerPlanet --force",
+            "git reset --hard HEAD~1",
+            "git reset --soft HEAD~1",
+            "git reset --mixed HEAD~1",
         ];
         new ButtonAndListensers(
             this,
@@ -38,9 +39,19 @@ export default class Level3Scene_Terminal1 extends LevelClass {
 
         new terminalDisplay(this);
 
+        //Task
+        this.level3Task = this.add.text(
+            500,
+            300,
+            `Task: An explosion corrupted the survey files in the last commit.\nYou need to reset the last commit and force push the pre-corrupted changes\n to the main repository at the Space Station.`,
+            {
+                color: "#EE4B2B",
+            }
+        );
+
         //Reset button
         let resetButton = this.add
-            .text(300, 180, "Reset Terminal", {
+            .text(100, 200, "Reset Terminal", {
                 color: "#0f0",
             })
             .setInteractive()
@@ -56,7 +67,7 @@ export default class Level3Scene_Terminal1 extends LevelClass {
 
         this.terminalDisplayText = this.add.text(
             80,
-            200,
+            250,
             this.terminalInputArr,
             {
                 color: "#0f0",
@@ -91,11 +102,11 @@ export default class Level3Scene_Terminal1 extends LevelClass {
         console.log(input);
         console.log(correctInput);
         scene.FeedbackText?.destroy();
-        let feedbackX = 67;
-        let feedbackY = 500;
-        let feedbackWrap = 400;
+        let feedbackX = 500;
+        let feedbackY = 650;
+        let feedbackWrap = 700;
         let feebackColor = "#ff0000";
-        let feedbackFontSize = "32px";
+        let feedbackFontSize = "24px";
 
         //Is the input exactly correct
         if (JSON.stringify(input) === JSON.stringify(correctInput)) {
@@ -104,28 +115,16 @@ export default class Level3Scene_Terminal1 extends LevelClass {
         }
 
         //Did they Push
-        if (input[input.length - 1] === "git push") {
+        if (
+            input[input.length - 1] === "git push origin dangerPlanet --force"
+        ) {
             scene.sound.add("wrong").play();
-            //Did they push with the red platform
-            if (input.includes("git add lock")) {
-                scene.FeedbackText = scene.add.text(
-                    feedbackX,
-                    feedbackY,
-                    "Why are you pushing a lock to your friend?",
-                    {
-                        fontSize: feedbackFontSize,
-                        color: feebackColor,
-                        wordWrap: { width: feedbackWrap },
-                    }
-                );
-                //scene.events.emit("incorrect_terminal_input");
-            }
             //Did they push without the blue platform
-            else if (!input.includes("git add code")) {
+            if (input.includes("git reset --mixed HEAD~1")) {
                 scene.FeedbackText = scene.add.text(
                     feedbackX,
                     feedbackY,
-                    "How is he supposed to get out without the code",
+                    "The --mixed flag goes back to the previous commit and unstages the corrupted changes but it still keeps them in your working repo! Try Again!",
                     {
                         fontSize: feedbackFontSize,
                         color: feebackColor,
@@ -133,13 +132,11 @@ export default class Level3Scene_Terminal1 extends LevelClass {
                     }
                 );
                 //scene.events.emit("incorrect_terminal_input");
-            }
-            //Did they push without the commit
-            else if (!input.includes("git commit -m 'Add New Platform'")) {
+            } else if (input.includes("git reset --soft HEAD~1")) {
                 scene.FeedbackText = scene.add.text(
                     feedbackX,
                     feedbackY,
-                    "You have to commit.",
+                    "The --soft flag goes back to the previous commit but still keeps the corrupted files commited! Try Again!",
                     {
                         fontSize: feedbackFontSize,
                         color: feebackColor,
@@ -153,7 +150,7 @@ export default class Level3Scene_Terminal1 extends LevelClass {
             scene.terminalInputArr = [];
         }
 
-        if (input.length > correctInput.length + 2) {
+        if (input.length > correctInput.length) {
             scene.FeedbackText = scene.add.text(
                 feedbackX,
                 feedbackY,
