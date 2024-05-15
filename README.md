@@ -23,7 +23,7 @@ To play the game go to [Game Link]https://ud-s24-cisc374.github.io/final-project
 
 # Screenshot
 
-TEXT GOES HERE
+![Screenshot of the game Git Cat in action. The player is interacting with the terminal in-game.](https://github.com/UD-S24-CISC374/final-project-magenta/blob/main/docs/large.png)
 
 # Gameplay Video
 
