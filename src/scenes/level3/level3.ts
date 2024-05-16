@@ -327,7 +327,7 @@ export default class Level3Scene extends LevelClass {
         trap3.setOffset(140, 50);
         
 
-        this.physics.add.collider(this.player, trap1, this.handleTrapCollision, undefined, this);
+        this.physics.add.collider(this.player, this.traps, this.handleTrapCollision, undefined, this);
 
         //creating the ice spikes
         this.staticSpikes = this.physics.add.staticGroup();
@@ -571,8 +571,7 @@ export default class Level3Scene extends LevelClass {
             this.spaceShip.y -= 1;
             this.cameras.main.fadeOut(4000);
             if (this.spaceShip.y < -300) {
-                //currently goes to main as lvl 4 is not in yet
-                this.scene.start("mainScene");
+                this.scene.start("Level4Scene");
             }
         } else {
             this.add.text(400, 300, "You need to complete the task first!");

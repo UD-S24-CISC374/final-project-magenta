@@ -94,6 +94,40 @@ export default class Level4Scene extends LevelClass {
         this.background1.setScrollFactor(0, 0);
         this.background1.setDepth(-1);
 
+        const { width, height } = this.scale;
+        const particles = this.add.particles(0, 0, "snowflake");
+
+        const emitter = particles.setConfig({
+            x: 0,
+            y: 0,
+            // emitZone
+            emitZone: {
+                source: new Phaser.Geom.Rectangle(
+                    -width * 3,
+                    0,
+                    width * 7,
+                    100
+                ),
+                type: "random",
+                quantity: 70,
+            },
+            speedY: { min: 50, max: 70 },
+            speedX: { min: -20, max: 20 },
+            accelerationY: { random: [10, 15] },
+            // lifespan
+            lifespan: { min: 8000, max: 10000 },
+            scale: { random: [0.25, 0.75] },
+            alpha: { random: [0.1, 0.8] },
+            gravityY: 10,
+            frequency: 5,
+            blendMode: "ADD",
+            // follow the player at an offiset
+            follow: this.player,
+            followOffset: { x: -width * 0.5, y: -height - 100 },
+        });
+
+        emitter.setFrequency(5);
+
         this.bunker = this.add.image(500, 540, "white-planet-bunker");
         this.bunker.setDepth(1);
 
@@ -419,7 +453,7 @@ export default class Level4Scene extends LevelClass {
             this.cameras.main.fadeOut(4000);
             if (this.spaceShip.y < -300) {
                 //currently goes to main as lvl 3 is not in yet
-                this.scene.start("Level4Scene");
+                this.scene.start("Level5Scene");
             }
         } else {
             this.add.text(3200, 400, "You need to complete the task first!");

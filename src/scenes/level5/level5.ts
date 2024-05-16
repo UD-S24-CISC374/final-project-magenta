@@ -523,7 +523,7 @@ export default class Level5Scene extends LevelClass {
             this.handleCanFlyAway();
         }
         //turn on into cutscene
-        /*
+
         if (this.shipStopped) {
             if (!this.hasNPCinteraction) {
                 this.player.updatePlayerFreeze();
@@ -531,7 +531,7 @@ export default class Level5Scene extends LevelClass {
                 this.handleNPC();
             }
         }
-        */
+
         /*
         if (this.firstTerminalPassed) {
             if (!this.hasNPCinteraction2) {
