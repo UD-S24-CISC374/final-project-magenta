@@ -314,7 +314,7 @@ export default class Level3Scene extends LevelClass {
         trap1.setScale(0.05);
         trap1.body.width = 32;
         trap1.body.height = 12;
-        trap1.setOffset(140,50);
+        trap1.setOffset(140, 50);
         let trap2 = this.traps.create(850, 505, "trap");
         trap2.setScale(0.05);
         trap2.body.width = 32;
@@ -325,9 +325,14 @@ export default class Level3Scene extends LevelClass {
         trap3.body.width = 32;
         trap3.body.height = 12;
         trap3.setOffset(140, 50);
-        
 
-        this.physics.add.collider(this.player, this.traps, this.handleTrapCollision, undefined, this);
+        this.physics.add.collider(
+            this.player,
+            this.traps,
+            this.handleTrapCollision,
+            undefined,
+            this
+        );
 
         //creating the ice spikes
         this.staticSpikes = this.physics.add.staticGroup();
@@ -411,11 +416,11 @@ export default class Level3Scene extends LevelClass {
             -50,
             "Great Job! Head back to the cats to tell them you found the terminal!",
             {
-            color: "#fff",
-            fontSize: "24px",
-            fontStyle: "bold",
-            stroke: "#008000",
-            strokeThickness: 4,
+                color: "#fff",
+                fontSize: "24px",
+                fontStyle: "bold",
+                stroke: "#008000",
+                strokeThickness: 4,
             }
         );
         this.d1.setVisible(false);
@@ -433,7 +438,7 @@ export default class Level3Scene extends LevelClass {
         );
         this.CorrectTerminalArr = [
             `git reset --hard HEAD~1`,
-            `git push origin dangerPlanet --force`
+            `git push origin dangerPlanet --force`,
         ];
         new TerminalBody(
             this,
@@ -451,6 +456,12 @@ export default class Level3Scene extends LevelClass {
         terminal_1_scene.events.on("Terminal1_incorrect", () => {
             console.log("incorrect terminal 1");
         });
+
+        //decorations
+        this.add.image(350, 535, "cacti").setScale(1.5);
+        this.add.image(-475, 535, "cacti").setScale(1.5);
+        this.add.image(1080, 535, "cacti").setScale(1.5);
+        this.add.image(2050, 535, "cacti").setScale(1.5);
     }
 
     preload() {
@@ -469,7 +480,12 @@ export default class Level3Scene extends LevelClass {
 
     private handleTrapCollision() {
         this.player.setVisible(false);
-        this.explosion = this.add.sprite(this.player.x, this.player.y, "explosion", 0);
+        this.explosion = this.add.sprite(
+            this.player.x,
+            this.player.y,
+            "explosion",
+            0
+        );
         this.explosion.setScale(2.5);
         this.explosion.setDepth(10);
         this.explosion.anims.create({
@@ -496,7 +512,7 @@ export default class Level3Scene extends LevelClass {
                 "The government is not going to be happy about this. These are their satellites.",
                 "We never would have come here had we known they were here. We think they're behind these traps.",
                 "Some sort of testing...",
-                "Maybe you can investigate for us? I think the captain is on a white planet."
+                "Maybe you can investigate for us? I think the captain is on a white planet.",
             ]);
             setTimeout(() => {
                 this.canFlyAway = true;
@@ -618,7 +634,11 @@ export default class Level3Scene extends LevelClass {
         if (this.terminal1Complete && this.canFlyAway) {
             this.handleCanFlyAway();
         }
-        if (this.player.x < 0 && this.terminal1Complete && !this.hasLastNPCinteraction) {
+        if (
+            this.player.x < 0 &&
+            this.terminal1Complete &&
+            !this.hasLastNPCinteraction
+        ) {
             this.player.updatePlayerFreeze();
             this.player.anims.play("turn", true);
             this.passTerminal1();

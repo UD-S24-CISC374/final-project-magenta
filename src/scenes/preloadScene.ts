@@ -65,6 +65,10 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image("level5-2x1", "assets/Art/level5-2x1.png");
         this.load.image("level5-3x1", "assets/Art/level5-3x1.png");
         this.load.image("snowflake", "assets/Art/snowflake.png");
+        this.load.image("tree", "assets/Art/tree.png");
+        this.load.image("rock", "assets/Art/rock.png");
+        this.load.image("vines", "assets/Art/vines.png");
+        this.load.image("cacti", "assets/Art/cacti.png");
 
         //Sprite sheets
         this.load.spritesheet("button", "assets/Art/buttons.png", {
