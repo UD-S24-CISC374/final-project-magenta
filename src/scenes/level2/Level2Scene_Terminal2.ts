@@ -1,11 +1,13 @@
 import Phaser from "phaser";
 import LevelClass from "../../Classes/LevelClass";
 import { terminalDisplay } from "../../components/terminalDisplay";
+import { createHints } from "../../components/createHints";
 
 export default class Level2Scene_Terminal2 extends LevelClass {
     private mainLevel: LevelClass;
     private terminalDisplayText: Phaser.GameObjects.Text;
     private TerminalInput: HTMLInputElement;
+    private hints: Phaser.GameObjects.Group;
     constructor() {
         super({ key: "Level2Scene_Terminal2" });
     }
@@ -77,7 +79,7 @@ export default class Level2Scene_Terminal2 extends LevelClass {
                 this.enterButtonRestState(resetButton);
             });
 
-        //this.add.text(180, 650, `Type "git -help for help"`, {});
+        this.add.text(70, 650, `Type "git --help" or "git -h" for help`, {});
 
         this.terminalDisplayText = this.add.text(
             80,
@@ -87,7 +89,24 @@ export default class Level2Scene_Terminal2 extends LevelClass {
                 color: "#0f0",
             }
         );
-
+        //Hints
+        this.hints = this.add.group();
+        let showHints = this.add
+            .text(80, 180, "Show Hints", {})
+            .setInteractive()
+            .on("pointerdown", () => {
+                createHints(this, this.hints, [
+                    "Hint 3: You need to add, commit, and push the changes to get your powers",
+                    "Hint 2: Maybe start by adding the file power.js",
+                    "Hint 1: This task is just like the other ones you've done",
+                ]);
+            });
+        showHints.on("pointerover", () => {
+            showHints.setStyle({ fill: "#ff0" });
+        });
+        showHints.on("pointerout", () => {
+            showHints.setStyle({ fill: "#0f0" });
+        });
         //Handle Feedback Events
         this.events.on("correct_terminal_input", () => {
             this.events.emit(`Terminal2_Close`);
