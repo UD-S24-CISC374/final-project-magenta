@@ -2,12 +2,14 @@ import Phaser from "phaser";
 import LevelClass from "../../Classes/LevelClass";
 import { ButtonAndListensers } from "../../components/buttonAndListeners";
 import { terminalDisplay } from "../../components/terminalDisplay";
+import { createHints } from "../../components/createHints";
 
 export default class Level3Scene_Terminal1 extends LevelClass {
     private mainLevel: LevelClass;
     private terminalDisplayText: Phaser.GameObjects.Text;
     private buttonList: string[] = [];
     private level3Task: Phaser.GameObjects.Text;
+    private hints: Phaser.GameObjects.Group;
     public turnOffEmitters() {
         this.buttonList.forEach((x) => this.events.off(x));
     }
@@ -42,7 +44,7 @@ export default class Level3Scene_Terminal1 extends LevelClass {
         //Task
         this.level3Task = this.add.text(
             500,
-            300,
+            400,
             `Task: An explosion corrupted the survey files in the last commit.\nYou need to reset the last commit and force push the pre-corrupted changes\n to the main repository at the Space Station.`,
             {
                 color: "#EE4B2B",
@@ -51,7 +53,7 @@ export default class Level3Scene_Terminal1 extends LevelClass {
 
         //Reset button
         let resetButton = this.add
-            .text(100, 200, "Reset Terminal", {
+            .text(300, 180, "Reset Terminal", {
                 color: "#0f0",
             })
             .setInteractive()
@@ -73,6 +75,22 @@ export default class Level3Scene_Terminal1 extends LevelClass {
                 color: "#0f0",
             }
         );
+        this.hints = this.add.group();
+        let showHints = this.add
+            .text(80, 180, "Show Hints", {})
+            .setInteractive()
+            .on("pointerdown", () => {
+                createHints(this, this.hints, [
+                    "Hint 2: After the reset you have to push to the danger planet",
+                    "Hint 1: A soft git reset doesn't undo changes to staged or working tree files, whereas a hard git reset does exactly that.",
+                ]);
+            });
+        showHints.on("pointerover", () => {
+            showHints.setStyle({ fill: "#ff0" });
+        });
+        showHints.on("pointerout", () => {
+            showHints.setStyle({ fill: "#0f0" });
+        });
 
         //Handle Feedback Events
         //Handle Feedback Events

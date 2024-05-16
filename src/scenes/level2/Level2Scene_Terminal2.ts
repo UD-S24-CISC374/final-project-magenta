@@ -96,6 +96,7 @@ export default class Level2Scene_Terminal2 extends LevelClass {
             .setInteractive()
             .on("pointerdown", () => {
                 createHints(this, this.hints, [
+                    `Hint 4: The command to commit is 'git commit -m "message"`,
                     "Hint 3: You need to add, commit, and push the changes to get your powers",
                     "Hint 2: Maybe start by adding the file power.js",
                     "Hint 1: This task is just like the other ones you've done",
