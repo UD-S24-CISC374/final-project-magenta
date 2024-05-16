@@ -845,7 +845,6 @@ export default class Level2Scene extends LevelClass {
             this.spaceShip.y -= 1;
             this.cameras.main.fadeOut(4000);
             if (this.spaceShip.y < -300) {
-                //currently goes to main as lvl 3 is not in yet
                 this.scene.start("Level3Scene");
             }
         } else {
