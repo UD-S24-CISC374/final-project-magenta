@@ -44,6 +44,7 @@ export default class Level5Scene extends LevelClass {
     private hasNPCinteraction = false;
     private firstTerminalPassed = false;
     private hasNPCinteraction2 = false;
+    private shipCanLeave = false;
 
     private timerText: Phaser.GameObjects.Text;
     private timeLeft: number;
@@ -79,7 +80,7 @@ export default class Level5Scene extends LevelClass {
         this.ship = this.add.image(0, 0, "spacecraft");
         this.ship.setDepth(10);
         this.ship.setScale(2);
-        this.spaceShip = this.add.image(7900, -64, "spacecraft");
+        this.spaceShip = this.add.image(6690, -230, "spacecraft");
         this.spaceShip.setDepth(10);
         this.spaceShip.setScale(2);
 
@@ -363,6 +364,26 @@ export default class Level5Scene extends LevelClass {
         this.timerText = this.add.text(0, 0, `Time left: ${this.timeLeft}`, {
             font: "32px Arial",
         });
+
+        //decorations
+        this.add.image(200, 420, "tree").setScale(2);
+        this.add.image(-200, 420, "tree").setScale(2);
+        this.add.image(700, 420, "tree").setScale(2);
+        this.add.image(2000, 420, "tree").setScale(2);
+        this.add.image(3000, 420, "tree").setScale(2);
+        this.add.image(4000, 420, "tree").setScale(2);
+        this.add.image(5400, 420, "tree").setScale(2);
+        this.add.image(1000, 480, "vines");
+        this.add.image(920, 480, "vines");
+        this.add.image(1350, 416, "vines");
+        this.add.image(1850, 416, "vines");
+        this.add.image(2725, 288, "vines");
+        this.add.image(3800, 288, "vines");
+        this.add.image(4100, 160, "vines");
+        this.add.image(4200, 160, "vines");
+        this.add.image(4450, 160, "vines");
+        this.add.image(4700, 160, "vines");
+        this.add.image(4900, 352, "vines");
     }
 
     private passTerminal1() {
@@ -387,6 +408,16 @@ export default class Level5Scene extends LevelClass {
             ]);
         }
         this.hasNPCinteraction = true;
+    }
+
+    private handleNPC2() {
+        if (!this.hasNPCinteraction2) {
+            displayNPCText(this, 6500, -300 - 50, [
+                "It seems like he has already escaped...",
+                "I must find him...",
+            ]);
+        }
+        this.hasNPCinteraction2 = true;
     }
 
     private handleHitSpike() {
@@ -436,7 +467,7 @@ export default class Level5Scene extends LevelClass {
     }
 
     private handleCanFlyAway() {
-        if (this.canFlyAway) {
+        if (this.canFlyAway && this.shipCanLeave) {
             this.player.setVisible(false);
             this.cameras.main.startFollow(
                 this.spaceShip,
@@ -449,8 +480,7 @@ export default class Level5Scene extends LevelClass {
             this.spaceShip.y -= 1;
             this.cameras.main.fadeOut(4000);
             if (this.spaceShip.y < -300) {
-                //currently goes to main as lvl 3 is not in yet
-                this.scene.start("Level4Scene");
+                this.scene.start("Level6Scene");
             }
         } else {
             this.add.text(3200, 400, "You need to complete the task first!");
@@ -497,6 +527,9 @@ export default class Level5Scene extends LevelClass {
         this.handlePrintPos();
 
         this.timerText.setPosition(this.player.x - 500, this.player.y - 400);
+        if (this.player.y > 800) {
+            this.gameOver = true;
+        }
 
         if (this.firstTerminalPassed) {
             if (this.cursors?.left.isDown) {
@@ -519,7 +552,7 @@ export default class Level5Scene extends LevelClass {
             this.startTimerEvent();
         }
 
-        if (this.player.x > 7900) {
+        if (this.player.x > 6690) {
             this.handleCanFlyAway();
         }
         //turn on into cutscene
@@ -541,6 +574,15 @@ export default class Level5Scene extends LevelClass {
             }
         }
         */
+        if (this.player.x >= 6500) {
+            //this.hasNPCinteraction2 = false;
+            //this.player.updatePlayerFreeze();
+            //this.player.anims.play("turn", true);
+            this.handleNPC2();
+            setTimeout(() => {
+                this.shipCanLeave = true;
+            }, 5000);
+        }
         if (this.hasNPCinteraction2) {
             if (this.cursors?.left.isDown) {
                 this.player.setVelocityX(-250);

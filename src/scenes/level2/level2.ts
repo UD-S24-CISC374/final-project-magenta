@@ -740,6 +740,18 @@ export default class Level2Scene extends LevelClass {
         terminal_2_scene.events.on("Terminal2_incorrect", () => {
             console.log("incorrect terminal 2");
         });
+
+        //decorations
+        this.add.image(250, 567, "rock");
+        this.add.image(-200, 567, "rock");
+        this.add.image(900, 567, "rock");
+        this.add.image(1300, 567, "rock");
+        this.add.image(1700, 567, "rock");
+        this.add.image(2200, 567, "rock");
+        this.add.image(7200, 567, "rock");
+        this.add.image(3500, 567, "rock");
+        this.add.image(4100, 567, "rock");
+        this.add.image(4700, 567, "rock");
     }
 
     preload() {
