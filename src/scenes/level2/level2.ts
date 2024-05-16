@@ -853,7 +853,7 @@ export default class Level2Scene extends LevelClass {
     }
 
     update() {
-        console.log(this.player.x, this.player.y);
+        //console.log(this.player.x, this.player.y);
         this.player.update(this.cursors);
         this.handlePrintPos();
 
