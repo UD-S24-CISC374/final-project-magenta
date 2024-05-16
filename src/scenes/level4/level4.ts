@@ -19,8 +19,8 @@ export default class Level4Scene extends LevelClass {
     private posY = 0;
     private levelWidth: number = 2560; // Width of the level
     private levelHeight: number = 1440; // Height of the level
-    private showGrid = true;
-    private showColl = true;
+    private showGrid = false;
+    private showColl = false;
     private pauseButton: Button;
     private ship: Phaser.GameObjects.Image;
     private spaceShip: Phaser.GameObjects.Image;
@@ -31,7 +31,7 @@ export default class Level4Scene extends LevelClass {
     private fallingSpikes: Phaser.Physics.Arcade.Group;
     private terminalBody?: TerminalBody;
     private playerHasPower = false;
-    private showPos = true;
+    private showPos = false;
     private d1: Phaser.GameObjects.Text;
     private d2: Phaser.GameObjects.Text;
     private d3: Phaser.GameObjects.Text;
@@ -49,11 +49,27 @@ export default class Level4Scene extends LevelClass {
         super({ key: "Level4Scene" });
     }
     create() {
+        this.restartFunction = () => {
+            this.checkPointX = 100;
+            this.checkPointY = 500;
+            this.shipStopped = false;
+            this.player.destroy();
+            console.log("restart function");
+            this.platforms?.clear(true, true);
+            //this.spikes?.clear(true, true);
+            this.terminalBody?.destroy();
+            this.terminalBody = undefined;
+            //this.events.destroy();
+            let term1 = this.scene.get(
+                "Level4Scene_Terminal1"
+            ) as Level4Scene_Terminal2;
+            term1.terminalInputArr = [];
+        };
         //create ship and make it viasable (created as an image)
         this.ship = this.add.image(0, 0, "spacecraft");
         this.ship.setDepth(10);
         this.ship.setScale(2);
-        this.spaceShip = this.add.image(5100, 540, "spacecraft");
+        this.spaceShip = this.add.image(7900, -64, "spacecraft");
         this.spaceShip.setDepth(10);
         this.spaceShip.setScale(2);
 
@@ -165,6 +181,26 @@ export default class Level4Scene extends LevelClass {
                 texture: "white-planet-3x1",
             },
             {
+                x: offset + unit * 95,
+                y: offset + unit * 0,
+                texture: "white-planet-1x1",
+            },
+            {
+                x: offset + unit * 104,
+                y: offset + unit * 0,
+                texture: "white-planet-1x1",
+            },
+            {
+                x: offset + unit * 114,
+                y: offset + unit * 0,
+                texture: "white-planet-1x1",
+            },
+            {
+                x: offset + unit * 122,
+                y: offset + unit * 0,
+                texture: "white-planet-3x1",
+            },
+            {
                 x: 640,
                 y: 720,
                 texture: "white-planet-3x1",
@@ -220,6 +256,30 @@ export default class Level4Scene extends LevelClass {
         let spike12 = this.staticSpikes.create(5600, 580, "2x1-ice-spikes");
         spike12.setScale(3, 1);
         spike12.refreshBody();
+        let spike13 = this.staticSpikes.create(6000, 580, "2x1-ice-spikes");
+        spike13.setScale(3, 1);
+        spike13.refreshBody();
+        let spike14 = this.staticSpikes.create(6400, 580, "2x1-ice-spikes");
+        spike14.setScale(3, 1);
+        spike14.refreshBody();
+        let spike15 = this.staticSpikes.create(6800, 580, "2x1-ice-spikes");
+        spike15.setScale(3, 1);
+        spike15.refreshBody();
+        let spike16 = this.staticSpikes.create(7200, 580, "2x1-ice-spikes");
+        spike16.setScale(3, 1);
+        spike16.refreshBody();
+        let spike17 = this.staticSpikes.create(7600, 580, "2x1-ice-spikes");
+        spike17.setScale(3, 1);
+        spike17.refreshBody();
+        let spike18 = this.staticSpikes.create(8000, 580, "2x1-ice-spikes");
+        spike18.setScale(3, 1);
+        spike18.refreshBody();
+        let spike19 = this.staticSpikes.create(8400, 580, "2x1-ice-spikes");
+        spike19.setScale(3, 1);
+        spike19.refreshBody();
+        let spike20 = this.staticSpikes.create(8800, 580, "2x1-ice-spikes");
+        spike20.setScale(3, 1);
+        spike20.refreshBody();
 
         this.physics.add.collider(
             this.player,
@@ -359,7 +419,7 @@ export default class Level4Scene extends LevelClass {
             this.cameras.main.fadeOut(4000);
             if (this.spaceShip.y < -300) {
                 //currently goes to main as lvl 3 is not in yet
-                this.scene.start("Level3Scene");
+                this.scene.start("Level4Scene");
             }
         } else {
             this.add.text(3200, 400, "You need to complete the task first!");
@@ -405,8 +465,10 @@ export default class Level4Scene extends LevelClass {
             this.scene.bringToTop("RespawnScene");
             this.scene.pause("Level4Scene");
         }
+        if (this.player.x > 7900) {
+            this.handleCanFlyAway();
+        }
 
-        /*
         if (this.shipStopped) {
             if (!this.hasNPCinteraction) {
                 this.player.updatePlayerFreeze();
@@ -414,7 +476,7 @@ export default class Level4Scene extends LevelClass {
                 this.handleNPC();
             }
         }
-        */
+
         if (this.firstTerminalPassed) {
             if (!this.hasNPCinteraction2) {
                 this.player.updatePlayerFreeze();
