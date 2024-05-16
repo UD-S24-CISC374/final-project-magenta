@@ -60,6 +60,10 @@ export default class PreloadScene extends Phaser.Scene {
             "white-planet-bunker",
             "assets/Art/white-planet-bunker.png"
         );
+        this.load.image("level5-bg", "assets/Art/level5-bg.png");
+        this.load.image("level5-1x1", "assets/Art/level5-1x1.png");
+        this.load.image("level5-2x1", "assets/Art/level5-2x1.png");
+        this.load.image("level5-3x1", "assets/Art/level5-3x1.png");
 
         //Sprite sheets
         this.load.spritesheet("button", "assets/Art/buttons.png", {

@@ -7,9 +7,9 @@ import { Button } from "../../components/pauseButton"; //{ Button, createButton 
 import { TerminalBody } from "../../components/terminalAndTerminalSceneHelpers";
 import { displayNPCText } from "../../components/NPCText";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import Level4Scene_Terminal2 from "./Level4Scene_Terminal2";
+import Level5Scene_Terminal2 from "./Level5Scene_Terminal2";
 
-export default class Level4Scene extends LevelClass {
+export default class Level5Scene extends LevelClass {
     private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
     private playerPos?: Phaser.GameObjects.Text;
     private background1: Phaser.GameObjects.TileSprite;
@@ -45,8 +45,17 @@ export default class Level4Scene extends LevelClass {
     private firstTerminalPassed = false;
     private hasNPCinteraction2 = false;
 
+    private timerText: Phaser.GameObjects.Text;
+    private timeLeft: number;
+    private timerEvent: Phaser.Time.TimerEvent;
+    private timerExpired: boolean;
+    private startTimer: boolean;
+
     constructor() {
-        super({ key: "Level4Scene" });
+        super({ key: "Level5Scene" });
+        this.timeLeft = 60; // Set the timer for 60 seconds
+        this.timerExpired = false;
+        this.startTimer = false;
     }
     create() {
         this.restartFunction = () => {
@@ -60,9 +69,10 @@ export default class Level4Scene extends LevelClass {
             this.terminalBody?.destroy();
             this.terminalBody = undefined;
             //this.events.destroy();
+
             let term1 = this.scene.get(
-                "Level4Scene_Terminal2"
-            ) as Level4Scene_Terminal2;
+                "Level5Scene_Terminal2"
+            ) as Level5Scene_Terminal2;
             term1.terminalInputArr = [];
         };
         //create ship and make it viasable (created as an image)
@@ -88,17 +98,11 @@ export default class Level4Scene extends LevelClass {
             0,
             this.levelWidth * 2,
             this.levelHeight * 2,
-            "white-planet-bg"
+            "level5-bg"
         );
         this.background1.setOrigin(0);
         this.background1.setScrollFactor(0, 0);
         this.background1.setDepth(-1);
-
-        this.bunker = this.add.image(500, 540, "white-planet-bunker");
-        this.bunker.setDepth(1);
-
-        this.npc_1 = this.add.image(350, 565, "npc_1", 1);
-        this.npc_1.setScale(2);
 
         //initallize platforms and pause button
         this.platforms = this.physics.add.staticGroup();
@@ -108,178 +112,189 @@ export default class Level4Scene extends LevelClass {
         const unit = 64;
         const offset = 32;
         const platforms: Platform[] = [
-            //plat 1
-            // height=1, width=3, frame (2, 1, 3) in sprite sheet
             {
                 x: offset + unit * 15,
                 y: offset + unit * 7,
-                texture: "white-planet-3x1",
+                texture: "level5-3x1",
             },
             {
-                x: offset + unit * 22,
+                x: offset + unit * 21,
                 y: offset + unit * 6,
-                texture: "white-planet-3x1",
+                texture: "level5-2x1",
             },
             {
                 x: offset + unit * 28,
-                y: offset + unit * 5,
-                texture: "white-planet-1x1",
+                y: offset + unit * 6,
+                texture: "level5-2x1",
             },
             {
-                x: offset + unit * 33,
+                x: offset + unit * 35,
+                y: offset + unit * 6,
+                texture: "level5-2x1",
+            },
+            {
+                x: offset + unit * 42,
+                y: offset + unit * 4,
+                texture: "level5-1x1",
+            },
+            {
+                x: offset + unit * 50,
+                y: offset + unit * 4,
+                texture: "level5-1x1",
+            },
+            {
+                x: offset + unit * 58,
+                y: offset + unit * 4,
+                texture: "level5-1x1",
+            },
+            {
+                x: offset + unit * 59,
+                y: offset + unit * 4,
+                texture: "level5-1x1",
+            },
+            {
+                x: offset + unit * 59,
                 y: offset + unit * 3,
-                texture: "white-planet-1x1",
+                texture: "level5-1x1",
             },
             {
-                x: offset + unit * 40,
-                y: offset + unit * 4,
-                texture: "white-planet-1x1",
+                x: offset + unit * 60,
+                y: offset + unit * 3,
+                texture: "level5-1x1",
             },
             {
-                x: offset + unit * 47,
-                y: offset + unit * 4,
-                texture: "white-planet-1x1",
-            },
-            {
-                x: offset + unit * 54,
-                y: offset + unit * 4,
-                texture: "white-planet-1x1",
-            },
-            {
-                x: offset + unit * 61,
-                y: offset + unit * 4,
-                texture: "white-planet-1x1",
-            },
-            {
-                x: offset + unit * 66,
+                x: offset + unit * 60,
                 y: offset + unit * 2,
-                texture: "white-planet-1x1",
+                texture: "level5-1x1",
+            },
+            {
+                x: offset + unit * 62,
+                y: offset + unit * 2,
+                texture: "level5-3x1",
+            },
+            {
+                x: offset + unit * 65,
+                y: offset + unit * 2,
+                texture: "level5-3x1",
+            },
+            {
+                x: offset + unit * 68,
+                y: offset + unit * 2,
+                texture: "level5-3x1",
+            },
+            {
+                x: offset + unit * 71,
+                y: offset + unit * 2,
+                texture: "level5-3x1",
+            },
+            {
+                x: offset + unit * 73,
+                y: offset + unit * 2,
+                texture: "level5-1x1",
+            },
+            {
+                x: offset + unit * 73,
+                y: offset + unit * 1,
+                texture: "level5-1x1",
+            },
+            {
+                x: offset + unit * 73,
+                y: offset + unit * 0,
+                texture: "level5-1x1",
+            },
+            {
+                x: offset + unit * 73,
+                y: offset + unit * -1,
+                texture: "level5-1x1",
+            },
+            {
+                x: offset + unit * 73,
+                y: offset + unit * -2,
+                texture: "level5-1x1",
+            },
+            {
+                x: offset + unit * 73,
+                y: offset + unit * -3,
+                texture: "level5-1x1",
+            },
+            {
+                x: offset + unit * 73,
+                y: offset + unit * -4,
+                texture: "level5-1x1",
             },
             {
                 x: offset + unit * 71,
                 y: offset + unit * 0,
-                texture: "white-planet-1x1",
+                texture: "level5-1x1",
             },
             {
-                x: offset + unit * 77,
-                y: offset + unit * 0,
-                texture: "white-planet-3x1",
+                x: offset + unit * 69,
+                y: offset + unit * -2,
+                texture: "level5-1x1",
             },
             {
                 x: offset + unit * 80,
-                y: offset + unit * 0,
-                texture: "white-planet-3x1",
+                y: offset + unit * 5,
+                texture: "level5-2x1",
             },
             {
-                x: offset + unit * 83,
-                y: offset + unit * 0,
-                texture: "white-planet-3x1",
+                x: offset + unit * 78,
+                y: offset + unit * 5,
+                texture: "level5-2x1",
             },
             {
-                x: offset + unit * 86,
-                y: offset + unit * 0,
-                texture: "white-planet-3x1",
+                x: offset + unit * 76,
+                y: offset + unit * 5,
+                texture: "level5-2x1",
             },
             {
-                x: offset + unit * 95,
-                y: offset + unit * 0,
-                texture: "white-planet-1x1",
+                x: offset + unit * 74,
+                y: offset + unit * 5,
+                texture: "level5-2x1",
+            },
+            {
+                x: offset + unit * 85,
+                y: offset + unit * 3,
+                texture: "level5-2x1",
+            },
+            {
+                x: offset + unit * 90,
+                y: offset + unit * 1,
+                texture: "level5-2x1",
+            },
+            {
+                x: offset + unit * 96,
+                y: offset + unit * -1,
+                texture: "level5-2x1",
+            },
+            {
+                x: offset + unit * 100,
+                y: offset + unit * -3,
+                texture: "level5-2x1",
+            },
+            {
+                x: offset + unit * 102,
+                y: offset + unit * -3,
+                texture: "level5-2x1",
             },
             {
                 x: offset + unit * 104,
-                y: offset + unit * 0,
-                texture: "white-planet-1x1",
-            },
-            {
-                x: offset + unit * 114,
-                y: offset + unit * 0,
-                texture: "white-planet-1x1",
-            },
-            {
-                x: offset + unit * 122,
-                y: offset + unit * 0,
-                texture: "white-planet-3x1",
+                y: offset + unit * -3,
+                texture: "level5-2x1",
             },
             {
                 x: 640,
                 y: 720,
-                texture: "white-planet-3x1",
+                texture: "brown_plat_1",
                 scale: { x: 80, y: 4 },
             }, // Ground
         ];
         createPlatforms(this, platforms, this.platforms, [this.player]);
 
-        //trapped npc4
-        this.iceBlock = this.add.image(5500, -96, "white-planet-ice-block");
-        this.npc_2 = this.add.image(5500, -96, "npc_2", 1);
-        this.npc_2.setScale(2);
-
         // Create the static groups
         this.staticSpikes = this.physics.add.staticGroup();
         this.activeSpikes = this.physics.add.staticGroup();
         this.fallingSpikes = this.physics.add.group();
-
-        // Create and scale spikes
-        let spike1 = this.staticSpikes.create(1200, 580, "2x1-ice-spikes");
-        spike1.setScale(3, 1);
-        spike1.refreshBody();
-        let spike2 = this.staticSpikes.create(1600, 580, "2x1-ice-spikes");
-        spike2.setScale(3, 1);
-        spike2.refreshBody();
-        let spike3 = this.staticSpikes.create(2000, 580, "2x1-ice-spikes");
-        spike3.setScale(3, 1);
-        spike3.refreshBody();
-        let spike4 = this.staticSpikes.create(2400, 580, "2x1-ice-spikes");
-        spike4.setScale(3, 1);
-        spike4.refreshBody();
-        let spike5 = this.staticSpikes.create(2800, 580, "2x1-ice-spikes");
-        spike5.setScale(3, 1);
-        spike5.refreshBody();
-        let spike6 = this.staticSpikes.create(3200, 580, "2x1-ice-spikes");
-        spike6.setScale(3, 1);
-        spike6.refreshBody();
-        let spike7 = this.staticSpikes.create(3600, 580, "2x1-ice-spikes");
-        spike7.setScale(3, 1);
-        spike7.refreshBody();
-        let spike8 = this.staticSpikes.create(4000, 580, "2x1-ice-spikes");
-        spike8.setScale(3, 1);
-        spike8.refreshBody();
-        let spike9 = this.staticSpikes.create(4400, 580, "2x1-ice-spikes");
-        spike9.setScale(3, 1);
-        spike9.refreshBody();
-        let spike10 = this.staticSpikes.create(4800, 580, "2x1-ice-spikes");
-        spike10.setScale(3, 1);
-        spike10.refreshBody();
-        let spike11 = this.staticSpikes.create(5200, 580, "2x1-ice-spikes");
-        spike11.setScale(3, 1);
-        spike11.refreshBody();
-        let spike12 = this.staticSpikes.create(5600, 580, "2x1-ice-spikes");
-        spike12.setScale(3, 1);
-        spike12.refreshBody();
-        let spike13 = this.staticSpikes.create(6000, 580, "2x1-ice-spikes");
-        spike13.setScale(3, 1);
-        spike13.refreshBody();
-        let spike14 = this.staticSpikes.create(6400, 580, "2x1-ice-spikes");
-        spike14.setScale(3, 1);
-        spike14.refreshBody();
-        let spike15 = this.staticSpikes.create(6800, 580, "2x1-ice-spikes");
-        spike15.setScale(3, 1);
-        spike15.refreshBody();
-        let spike16 = this.staticSpikes.create(7200, 580, "2x1-ice-spikes");
-        spike16.setScale(3, 1);
-        spike16.refreshBody();
-        let spike17 = this.staticSpikes.create(7600, 580, "2x1-ice-spikes");
-        spike17.setScale(3, 1);
-        spike17.refreshBody();
-        let spike18 = this.staticSpikes.create(8000, 580, "2x1-ice-spikes");
-        spike18.setScale(3, 1);
-        spike18.refreshBody();
-        let spike19 = this.staticSpikes.create(8400, 580, "2x1-ice-spikes");
-        spike19.setScale(3, 1);
-        spike19.refreshBody();
-        let spike20 = this.staticSpikes.create(8800, 580, "2x1-ice-spikes");
-        spike20.setScale(3, 1);
-        spike20.refreshBody();
 
         this.physics.add.collider(
             this.player,
@@ -317,21 +332,22 @@ export default class Level4Scene extends LevelClass {
             );
         }
 
+        this.npc_1 = this.add.image(350, 550, "npc_1", 1);
+        this.npc_1.setScale(2);
+
         //Terminal 1
         let terminal_2_scene = this.scene.manager.getScene(
-            "Level4Scene_Terminal2"
+            "Level5Scene_Terminal2"
         );
         this.CorrectTerminalArr2 = [
-            `cd heater`,
-            `git pull`,
-            `git add heater-date-set.js`,
-            `git commit -m ''`,
-            "git push",
+            `git checkout main`,
+            `git fetch`,
+            `git merge cat-powers`,
         ];
         new TerminalBody(
             this,
-            5300,
-            -32,
+            500,
+            500,
             "terminal",
             this.CorrectTerminalArr2,
             "2"
@@ -343,11 +359,14 @@ export default class Level4Scene extends LevelClass {
         terminal_2_scene.events.on("Terminal2_incorrect", () => {
             console.log("incorrect terminal 2");
         });
+
+        this.timerText = this.add.text(0, 0, `Time left: ${this.timeLeft}`, {
+            font: "32px Arial",
+        });
     }
 
     private passTerminal1() {
-        this.iceBlock.setVisible(false);
-        this.npc_2.y = -32;
+        this.startTimerEvent();
         this.firstTerminalPassed = true;
     }
 
@@ -356,6 +375,18 @@ export default class Level4Scene extends LevelClass {
             frameWidth: 32,
             frameHeight: 32,
         });
+    }
+
+    private handleNPC() {
+        if (!this.hasNPCinteraction) {
+            displayNPCText(this, 350, 550 - 50, [
+                "Hello. I fear a rouge cat agent has found the location of an ancient relic of unmatched power...",
+                "Due to my old age, I am unable to pursue him myself and thus I must call on you.",
+                "Here I have set up a terminal that will give you the power needed to navigate the terrain.",
+                "This entire planet is rigged, you will only have a given amount of time to make it.",
+            ]);
+        }
+        this.hasNPCinteraction = true;
     }
 
     private handleHitSpike() {
@@ -426,30 +457,38 @@ export default class Level4Scene extends LevelClass {
         }
     }
 
-    private handleNPC() {
-        if (!this.hasNPCinteraction) {
-            displayNPCText(this, 350, 550 - 50, [
-                "Hello again...",
-                "I sent a soldier to aid your friends on a geological survey, it seems that they have not returned.",
-                "I fear that they got trapped climbing that mountain over there.",
-                "I know your capable. Would you aid me in searching for them?",
-            ]);
+    updateTimer() {
+        // Decrement the time left
+        this.timeLeft--;
+
+        // Update the timer text
+        this.timerText.setText(`Time left: ${this.timeLeft}`);
+
+        // Check if the timer has expired
+        if (this.timeLeft <= 0) {
+            this.timerEvent.remove(false);
+            this.timerExpired = true;
+            this.timerText.setText("Time left: 0"); // Ensure it displays 0
+            // Perform any additional actions when the timer expires
+            this.gameOver = true;
+            this.onTimerExpired();
         }
-        this.hasNPCinteraction = true;
     }
 
-    private handleNPC2() {
-        if (!this.hasNPCinteraction2) {
-            displayNPCText(this, 5500, -32 - 50, [
-                "Thank you sooo much! I nearly died in there!",
-                "If it wasnt for you those damn environmentalists would have gotten away with it...",
-                "I was sent to protect them and what do they do? They abandon me!",
-                "I know tensions are already high between the factions, but I never thought they would abandon a humble gaurd like me!",
-                "Anyways, thanks for helping me out, here is my climbing gear. It should help with your speed going down the mountain.",
-                "Who knows, you may need it. Good luck getting back to your ship! I wish I could come, I am so tired of the cold...",
-            ]);
-        }
-        this.hasNPCinteraction2 = true;
+    onTimerExpired() {
+        // Handle what happens when the timer expires
+        console.log("Timer has expired!");
+        this.gameOver = true;
+    }
+
+    startTimerEvent() {
+        // Create a timed event that calls the updateTimer method every second
+        this.timerEvent = this.time.addEvent({
+            delay: 1000,
+            callback: this.updateTimer,
+            callbackScope: this,
+            loop: true,
+        });
     }
 
     update() {
@@ -457,18 +496,34 @@ export default class Level4Scene extends LevelClass {
         this.player.update(this.cursors);
         this.handlePrintPos();
 
+        this.timerText.setPosition(this.player.x - 500, this.player.y - 400);
+
+        if (this.firstTerminalPassed) {
+            if (this.cursors?.left.isDown) {
+                this.player.setVelocityX(-250);
+                //this.anims.play("left", true);
+            } else if (this.cursors?.right.isDown) {
+                this.player.setVelocityX(250);
+                //this.anims.play("right", true);
+            }
+        }
+
         if (this.gameOver) {
             this.gameOver = false;
+            this.timeLeft = 60;
             updateCurrentLevel(this.scene.key);
             this.cleanup();
             this.scene.launch("RespawnScene");
             this.scene.bringToTop("RespawnScene");
-            this.scene.pause("Level4Scene");
+            this.scene.pause("Level5Scene");
+            this.startTimerEvent();
         }
+
         if (this.player.x > 7900) {
             this.handleCanFlyAway();
         }
-
+        //turn on into cutscene
+        /*
         if (this.shipStopped) {
             if (!this.hasNPCinteraction) {
                 this.player.updatePlayerFreeze();
@@ -476,7 +531,8 @@ export default class Level4Scene extends LevelClass {
                 this.handleNPC();
             }
         }
-
+        */
+        /*
         if (this.firstTerminalPassed) {
             if (!this.hasNPCinteraction2) {
                 this.player.updatePlayerFreeze();
@@ -484,6 +540,7 @@ export default class Level4Scene extends LevelClass {
                 this.handleNPC2();
             }
         }
+        */
         if (this.hasNPCinteraction2) {
             if (this.cursors?.left.isDown) {
                 this.player.setVelocityX(-250);
