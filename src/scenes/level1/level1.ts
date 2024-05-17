@@ -50,6 +50,8 @@ export default class Level1Scene extends LevelClass {
     }
 
     create() {
+        this.scene.launch("buttonsScene");
+        this.scene.bringToTop("buttonsScene");
         this.restartFunction = () => {
             this.platforms?.clear(true, true);
             this.spikes.clear(true, true);
