@@ -63,6 +63,8 @@ export default class Level2Scene extends LevelClass {
             ) as Level2Scene_Terminal2;
             term2.terminalInputArr = [];
         };
+        const arrow = this.add.image(3010, 32, "arrow");
+        arrow.setScale(0.1).setAngle(90);
         //create ship and make it viasable (created as an image)
         this.ship = this.add.image(0, 0, "spacecraft");
         this.ship.setDepth(10);
@@ -651,7 +653,7 @@ export default class Level2Scene extends LevelClass {
         this.d1 = this.add.text(
             2300,
             -300,
-            "Please help me! The unlock code for this door\n should be somewhere on that terminal!",
+            "Please help me! The code for this door\n should be somewhere on that terminal!\nPush the code so I can read it on my phone.",
             {
                 color: "#0f0",
             }
@@ -666,9 +668,9 @@ export default class Level2Scene extends LevelClass {
         );
         this.d2.setVisible(false);
         this.d3 = this.add.text(
-            2800,
+            2900,
             460,
-            "Hey, looks like you will need a little more power to get to your ship!\nThis terminal doesnt seem to have a mouse, maybe you should type what\nthe buttons would enter into the terminal.",
+            "Hey, looks like you will need a little more power to get to your ship!\nThis terminal seems to have a keyboard. You will have to type,\nPress the 'show hints' button and 'reset terminal' as needed",
             {
                 color: "#0f0",
             }
@@ -708,11 +710,7 @@ export default class Level2Scene extends LevelClass {
         );
         terminal_1_scene.events.on("Terminal1_correct", () => {
             console.log("correct terminal 1");
-            this.add.image(
-                this.player.x,
-                this.player.y - 100,
-                "check"
-            );
+            this.add.image(this.player.x, this.player.y - 100, "check");
             this.sound.add("correct").play();
             this.checkPointX = 2910;
             this.checkPointY = 32;
@@ -741,11 +739,7 @@ export default class Level2Scene extends LevelClass {
         );
         terminal_2_scene.events.on("Terminal2_correct", () => {
             console.log("correct terminal 2");
-            this.add.image(
-                this.player.x,
-                this.player.y - 100,
-                "check"
-            );
+            this.add.image(this.player.x, this.player.y - 100, "check");
             this.sound.add("correct").play();
             this.passTerminal2();
         });
@@ -914,7 +908,7 @@ export default class Level2Scene extends LevelClass {
         }
         if (this.isNpcMoving) {
             if (this.npc_2.x <= 2780) {
-                this.npc_2.x += 0.75;
+                this.npc_2.x += 0.85;
             }
         }
         if (this.player.x > 5000) {

@@ -77,12 +77,13 @@ export default class Level3Scene_Terminal1 extends LevelClass {
         );
         this.hints = this.add.group();
         let showHints = this.add
-            .text(80, 180, "Show Hints", {})
+            .text(80, 180, "Show Hints", { color: "#0f0" })
             .setInteractive()
             .on("pointerdown", () => {
                 createHints(this, this.hints, [
-                    "Hint 2: After the reset you have to push to the danger planet",
-                    "Hint 1: A soft git reset doesn't undo changes to staged or working tree files, whereas a hard git reset does exactly that.",
+                    "Hint 3: After the reset you have to push to the danger planet",
+                    "Hint 2: A mixed git reset doesn't undo changes to the working tree files.",
+                    "Hint 1: A soft git reset doesn't undo changes to staged or working tree files.",
                 ]);
             });
         showHints.on("pointerover", () => {

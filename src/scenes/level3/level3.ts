@@ -60,7 +60,8 @@ export default class Level3Scene extends LevelClass {
         this.spaceShip.setScale(2);
 
         //basic set up for player object, camera and controls, camera starts centered on ship
-        this.player = new Player(this, 100, 400);
+        this.player = new Player(this, 100, 550);
+        this.player.updatePlayerFreeze();
         this.player.setVisible(false);
         this.player.setActive(false);
         this.cameras.main.fadeIn(5000);
@@ -450,11 +451,7 @@ export default class Level3Scene extends LevelClass {
         );
         terminal_1_scene.events.on("Terminal1_correct", () => {
             console.log("correct terminal 1");
-            this.add.image(
-                this.player.x,
-                this.player.y - 100,
-                "check"
-            );
+            this.add.image(this.player.x, this.player.y - 100, "check");
             this.sound.add("correct").play();
             this.d1.setVisible(true);
             this.terminal1Complete = true;
@@ -566,13 +563,19 @@ export default class Level3Scene extends LevelClass {
 
     private handleNPC() {
         if (!this.hasNPCinteraction) {
-            displayNPCText(this, this.npcX + 10, this.npcY - 50, [
-                "Ugh. This satellite is completely destroyed. It got blown up by one of the traps.",
-                "We're trying to run a geological survey of the planet but we can't find the terminal.",
-                "Can you help us? It's somewhere on the planet. I think our last commit got corrupted.",
-                "We need to commit our old changes and push them to the Space Station's repository for review.",
-                "Come back once you've found it...and be careful! There's traps everywhere.",
-            ], "0x00ff00");
+            displayNPCText(
+                this,
+                this.npcX + 10,
+                this.npcY - 50,
+                [
+                    "Ugh. This satellite is completely destroyed. It got blown up by one of the traps.",
+                    "We're trying to run a geological survey of the planet but we can't find the terminal.",
+                    "Can you help us? It's somewhere on the planet. I think our last commit got corrupted.",
+                    "We need to commit our old changes and push them to the Space Station's repository for review.",
+                    "Come back once you've found it...and be careful! There's traps everywhere.",
+                ],
+                "0x00ff00"
+            );
         }
         this.hasNPCinteraction = true;
     }
@@ -612,7 +615,7 @@ export default class Level3Scene extends LevelClass {
 
         if (this.ship.y <= 550) {
             this.ship.y += 1.0;
-        } else {
+        } else if (!this.shipStopped) {
             this.player.setVisible(true);
             this.player.setActive(true);
             this.shipStopped = true;
@@ -657,7 +660,7 @@ export default class Level3Scene extends LevelClass {
         }
         if (this.shipStopped) {
             if (!this.hasNPCinteraction) {
-                this.player.updatePlayerFreeze();
+                //this.player.updatePlayerFreeze();
                 this.player.anims.play("turn", true);
                 this.handleNPC();
             }
