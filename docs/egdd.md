@@ -2,7 +2,7 @@
 
 ## Elevator Pitch
 
-In the game there will be checkpoints placed within the platformer levels (similar to mario) that act as respawn/progress checkpoints. To unlock these checkpoints, the player must enter a terminal. Inside this terminal there will be three options; a minigame, a problem/learning objective and hints/tips. These hints and tips will be obtained by discovering them in various levels, interacting with NPCs or completing the Among Us style minigames. 
+In the game there will be checkpoints placed within the platformer levels (similar to mario) that act as respawn/progress checkpoints. To unlock these checkpoints, the player must enter a terminal. Inside this terminal there will be a challenge closley related to the story and git concepts. Hints and tips will be obtained by discovering them in various levels, and interacting with NPCs.
 
 
 ## Influences (Brief)
@@ -26,10 +26,8 @@ In the game there will be checkpoints placed within the platformer levels (simil
 - Git terminal
     - Button’s to input commands initially
     - Typing to insert commands at later levels.
-- Among Us Style Mini Games. Drag matches together. Flick switches by clicking.
-- Collect coins
+- Collect logs
 - Spike respawn
-- Enemy interaction, projectiles, jump on to damage.
 
 # Learning Aspects
 
@@ -61,6 +59,7 @@ In the game there will be checkpoints placed within the platformer levels (simil
 
 - Very basic programming knowledge (if, for, types)
 - Know what github is. Don't have to know much about it.
+- Have heard some vocabulary around version control
 
 ## Assessment Measures
 
@@ -128,13 +127,12 @@ Players will interact with the game in a solo setting as the game is intended to
 - Basic Platformer Movement Mechanics: Wasd or arrow keys for movement. Space for jump. E to interact
 - Git terminal: Navigate UI with mouse. Button’s to input commands initially. Typing to insert commands at later levels.
 - Among Us Style Mini Games: Click and drag matches together. Flick switches by clicking.
-- Collect coins: Walking over coins with wasd
 - Spike respawn: Colliding with a spike or enemy will make you respawn at set checkpoints.
-- Enemy interaction: Projectiles either fired by you or the enemies or both, Jump on or hit enemies with projectiles to damage.
+- NPC interaction: NPCs will stop you and give important information.
     
 ## Feedback
 
-* Sound when collecting coins
+* Sound when completing or failing terminal
 * Sound when finding a log
 * Sound when reaching key checkpoints.
 * Visual feedback when “winning a level”
