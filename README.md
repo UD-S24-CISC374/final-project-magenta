@@ -27,8 +27,7 @@ To play the game go to [Game Link]https://ud-s24-cisc374.github.io/final-project
 ![Screenshot of the game Git Cat in action. The player is interacting with the terminal in-game.](https://github.com/UD-S24-CISC374/final-project-magenta/blob/main/docs/large.png)
 
 # Gameplay Video
-
-Link: (https://youtu.be/PNdYWBWqkdc)
+<iframe width="560" height="315" src="https://www.youtube.com/embed/PNdYWBWqkdc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 # Educational Game Design Document
 
@@ -37,3 +36,6 @@ Link to our [egdd](https://github.com/UD-S24-CISC374/final-project-magenta/blob/
 # Credits
 
 -   [Incorrect Terminal sound](https://opengameart.org/content/bad-sound-1) - Author remaxim on open game art
+-   [Correct Terminal Sound](https://opengameart.org/content/gold-coin-6) - Author Aeva on open game art
+-   [Checkmark](https://opengameart.org/content/animated-checkmark) - Author Grahhhhh on open game art
+-   [Arrow](https://opengameart.org/content/glow-arrow) - Author oglsdl on open game art
