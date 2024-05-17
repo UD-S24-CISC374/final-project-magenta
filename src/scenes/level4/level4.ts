@@ -129,7 +129,7 @@ export default class Level4Scene extends LevelClass {
         emitter.setFrequency(5);
 
         this.bunker = this.add.image(500, 540, "white-planet-bunker");
-        this.bunker.setDepth(1);
+        //this.bunker.setDepth(0);
 
         this.npc_1 = this.add.image(350, 565, "npc_1", 1);
         this.npc_1.setScale(2);
@@ -358,7 +358,7 @@ export default class Level4Scene extends LevelClass {
         this.CorrectTerminalArr2 = [
             `cd heater`,
             `git pull`,
-            `git add heater-date-set.js`,
+            `git add log.txt`,
             `git commit -m ''`,
             "git push",
         ];
@@ -372,6 +372,10 @@ export default class Level4Scene extends LevelClass {
         );
         terminal_2_scene.events.on("Terminal2_correct", () => {
             console.log("correct terminal 2");
+            this.add.image(this.player.x, this.player.y - 100, "check");
+            this.sound.add("correct").play();
+            this.checkPointX = this.player.x;
+            this.checkPointY = this.player.y - 10;
             this.passTerminal1();
         });
         terminal_2_scene.events.on("Terminal2_incorrect", () => {
@@ -462,32 +466,43 @@ export default class Level4Scene extends LevelClass {
 
     private handleNPC() {
         if (!this.hasNPCinteraction) {
-            displayNPCText(this, 350, 550 - 50, [
-                "Hello again...",
-                "I sent a soldier to aid your friends on a geological survey, it seems that they have not returned.",
-                "I fear that they got trapped climbing that mountain over there.",
-                "I know your capable. Would you aid me in searching for them?",
-            ]);
+            displayNPCText(
+                this,
+                350,
+                600,
+                [
+                    "Hello again...",
+                    "I sent a soldier to aid your friends on a geological survey, it seems that they have not returned.",
+                    "I fear that they got trapped climbing that mountain over there.",
+                    "I know your capable. Would you aid me in searching for them?",
+                ],
+                "#FFF"
+            );
         }
         this.hasNPCinteraction = true;
     }
 
     private handleNPC2() {
         if (!this.hasNPCinteraction2) {
-            displayNPCText(this, 5500, -32 - 50, [
-                "Thank you sooo much! I nearly died in there!",
-                "If it wasnt for you those damn environmentalists would have gotten away with it...",
-                "I was sent to protect them and what do they do? They abandon me!",
-                "I know tensions are already high between the factions, but I never thought they would abandon a humble gaurd like me!",
-                "Anyways, thanks for helping me out, here is my climbing gear. It should help with your speed going down the mountain.",
-                "Who knows, you may need it. Good luck getting back to your ship! I wish I could come, I am so tired of the cold...",
-            ]);
+            displayNPCText(
+                this,
+                5500,
+                -20,
+                [
+                    "Thank you sooo much! I nearly died in there!",
+                    "If it wasnt for you those damn environmentalists would have gotten away with it...",
+                    "I was sent to protect them and what do they do? They abandon me!",
+                    "I know tensions are already high between the factions, but I never thought they would abandon a humble gaurd like me!",
+                    "Anyways, thanks for helping me out, here is my climbing gear. It should help with your speed going down the mountain.",
+                    "Who knows, you may need it. Good luck getting back to your ship! I wish I could come, I am so tired of the cold...",
+                ],
+                "#FFF"
+            );
         }
         this.hasNPCinteraction2 = true;
     }
 
     update() {
-        console.log(this.player.x, this.player.y);
         this.player.update(this.cursors);
         this.handlePrintPos();
 
@@ -518,7 +533,7 @@ export default class Level4Scene extends LevelClass {
                 this.handleNPC2();
             }
         }
-        if (this.hasNPCinteraction2) {
+        if (this.hasNPCinteraction2 && this.player.canMove) {
             if (this.cursors?.left.isDown) {
                 this.player.setVelocityX(-250);
                 //this.anims.play("left", true);

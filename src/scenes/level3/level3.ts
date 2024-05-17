@@ -50,6 +50,18 @@ export default class Level3Scene extends LevelClass {
         super({ key: "Level3Scene" });
     }
     create() {
+        this.restartFunction = () => {
+            this.player.destroy();
+            this.platforms?.clear(true, true);
+            //this.spikes?.clear(true, true);
+            this.terminalBody?.destroy();
+            this.terminalBody = undefined;
+            //this.events.destroy();
+            let term1 = this.scene.get(
+                "Level3Scene_Terminal1"
+            ) as Level3Scene_Terminal1;
+            term1.turnOffEmitters();
+        };
         this.game.registry.set("Level3Opened", true);
         //create ship and make it viasable (created as an image)
         this.ship = this.add.image(0, 0, "spacecraft");
@@ -60,7 +72,8 @@ export default class Level3Scene extends LevelClass {
         this.spaceShip.setScale(2);
 
         //basic set up for player object, camera and controls, camera starts centered on ship
-        this.player = new Player(this, 100, 400);
+        this.player = new Player(this, 100, 550);
+        this.player.updatePlayerFreeze();
         this.player.setVisible(false);
         this.player.setActive(false);
         this.cameras.main.fadeIn(5000);
@@ -450,6 +463,8 @@ export default class Level3Scene extends LevelClass {
         );
         terminal_1_scene.events.on("Terminal1_correct", () => {
             console.log("correct terminal 1");
+            this.add.image(this.player.x, this.player.y - 100, "check");
+            this.sound.add("correct").play();
             this.d1.setVisible(true);
             this.terminal1Complete = true;
         });
@@ -498,6 +513,7 @@ export default class Level3Scene extends LevelClass {
             repeat: 0,
         });
         this.explosion.anims.play("explode", true);
+        this.player.x = 100;
         setTimeout(() => {
             this.gameOver = true;
         }, 800);
@@ -506,14 +522,20 @@ export default class Level3Scene extends LevelClass {
     //what to run after terminal 1 has passed
     passTerminal1() {
         if (!this.hasLastNPCinteraction) {
-            displayNPCText(this, this.npcX, this.npcY - 50, [
-                "Great job! Thanks for finding the terminal and doing that for us.",
-                "Now we've got to fix this satellite...",
-                "The government is not going to be happy about this. These are their satellites.",
-                "We never would have come here had we known they were here. We think they're behind these traps.",
-                "Some sort of testing...",
-                "Maybe you can investigate for us? I think the captain is on a white planet.",
-            ]);
+            displayNPCText(
+                this,
+                this.npcX + 10,
+                this.npcY - 50,
+                [
+                    "Great job! Thanks for finding the terminal and doing that for us.",
+                    "Now we've got to fix this satellite...",
+                    "The government is not going to be happy about this. These are their satellites.",
+                    "We never would have come here had we known they were here. We think they're behind these traps.",
+                    "Some sort of testing...",
+                    "Maybe you can investigate for us? I think the captain is on a white planet.",
+                ],
+                "0x00ff00"
+            );
             setTimeout(() => {
                 this.canFlyAway = true;
             }, 30000);
@@ -554,13 +576,19 @@ export default class Level3Scene extends LevelClass {
 
     private handleNPC() {
         if (!this.hasNPCinteraction) {
-            displayNPCText(this, this.npcX, this.npcY - 50, [
-                "Ugh. This satellite is completely destroyed. It got blown up by one of the traps.",
-                "We're trying to run a geological survey of the planet but we can't find the terminal.",
-                "Can you help us? It's somewhere on the planet. I think our last commit got corrupted.",
-                "We need to commit our old changes and push them to the Space Station's repository for review.",
-                "Come back once you've found it...and be careful! There's traps everywhere.",
-            ]);
+            displayNPCText(
+                this,
+                this.npcX + 10,
+                this.npcY - 50,
+                [
+                    "Ugh. This satellite is completely destroyed. It got blown up by one of the traps.",
+                    "We're trying to run a geological survey of the planet but we can't find the terminal.",
+                    "Can you help us? It's somewhere on the planet. I think our last commit got corrupted.",
+                    "We need to commit our old changes and push them to the Space Station's repository for review.",
+                    "Come back once you've found it...and be careful! There's traps everywhere.",
+                ],
+                "0x00ff00"
+            );
         }
         this.hasNPCinteraction = true;
     }
@@ -599,8 +627,8 @@ export default class Level3Scene extends LevelClass {
         this.handlePrintPos();
 
         if (this.ship.y <= 550) {
-            this.ship.y += 1.0;
-        } else {
+            this.ship.y += 1.2;
+        } else if (!this.shipStopped) {
             this.player.setVisible(true);
             this.player.setActive(true);
             this.shipStopped = true;
@@ -619,7 +647,7 @@ export default class Level3Scene extends LevelClass {
             this.cleanup();
             this.scene.launch("RespawnScene");
             this.scene.bringToTop("RespawnScene");
-            this.scene.stop("Level3Scene");
+            this.scene.pause("Level3Scene");
         }
         if (this.playerHasPower) {
             if (this.cursors?.up.isDown && this.player.body?.touching.down) {
@@ -645,7 +673,6 @@ export default class Level3Scene extends LevelClass {
         }
         if (this.shipStopped) {
             if (!this.hasNPCinteraction) {
-                this.player.updatePlayerFreeze();
                 this.player.anims.play("turn", true);
                 this.handleNPC();
             }
@@ -655,15 +682,8 @@ export default class Level3Scene extends LevelClass {
         }
     }
     private cleanup() {
-        this.player.destroy();
-        this.platforms?.clear(true, true);
-        //this.spikes?.clear(true, true);
-        this.terminalBody?.destroy();
-        this.terminalBody = undefined;
-        //this.events.destroy();
-        let term1 = this.scene.get(
-            "Level3Scene_Terminal1"
-        ) as Level3Scene_Terminal1;
-        term1.turnOffEmitters();
+        this.player.x = 100;
+        this.player.y = 550;
+        this.player.setVisible(true);
     }
 }

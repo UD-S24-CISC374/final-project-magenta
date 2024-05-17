@@ -19,8 +19,8 @@ export default class Level6Scene extends LevelClass {
     private posY = 0;
     private levelWidth: number = 2560; // Width of the level
     private levelHeight: number = 1440; // Height of the level
-    private showGrid = true;
-    private showColl = true;
+    private showGrid = false;
+    private showColl = false;
     private pauseButton: Button;
     private ship: Phaser.GameObjects.Image;
     private spaceShip: Phaser.GameObjects.Image;
@@ -45,17 +45,8 @@ export default class Level6Scene extends LevelClass {
     private firstTerminalPassed = false;
     private hasNPCinteraction2 = false;
 
-    private timerText: Phaser.GameObjects.Text;
-    private timeLeft: number;
-    private timerEvent: Phaser.Time.TimerEvent;
-    private timerExpired: boolean;
-    private startTimer: boolean;
-
     constructor() {
         super({ key: "Level6Scene" });
-        this.timeLeft = 60; // Set the timer for 60 seconds
-        this.timerExpired = false;
-        this.startTimer = false;
     }
     create() {
         this.restartFunction = () => {
@@ -474,14 +465,9 @@ export default class Level6Scene extends LevelClass {
 
         this.npc_1 = this.add.image(350, 560, "npc_1", 1);
         this.npc_1.setScale(2);
-
-        this.timerText = this.add.text(0, 0, `Time left: ${this.timeLeft}`, {
-            font: "32px Arial",
-        });
     }
 
     private passTerminal1() {
-        this.startTimerEvent();
         this.firstTerminalPassed = true;
     }
 
@@ -494,12 +480,18 @@ export default class Level6Scene extends LevelClass {
 
     private handleNPC() {
         if (!this.hasNPCinteraction) {
-            displayNPCText(this, 350, 550 - 50, [
-                "Hello. I fear a rouge cat agent has found the location of an ancient relic of unmatched power...",
-                "Due to my old age, I am unable to pursue him myself and thus I must call on you.",
-                "Here I have set up a terminal that will give you the power needed to navigate the terrain.",
-                "This entire planet is rigged, you will only have a given amount of time to make it.",
-            ]);
+            displayNPCText(
+                this,
+                350,
+                550 - 50,
+                [
+                    "Hello. I fear a rouge cat agent has found the location of an ancient relic of unmatched power...",
+                    "Due to my old age, I am unable to pursue him myself and thus I must call on you.",
+                    "Here I have set up a terminal that will give you the power needed to navigate the terrain.",
+                    "This entire planet is rigged, you will only have a given amount of time to make it.",
+                ],
+                "0x000000"
+            );
         }
         this.hasNPCinteraction = true;
     }
@@ -572,46 +564,10 @@ export default class Level6Scene extends LevelClass {
         }
     }
 
-    updateTimer() {
-        // Decrement the time left
-        this.timeLeft--;
-
-        // Update the timer text
-        this.timerText.setText(`Time left: ${this.timeLeft}`);
-
-        // Check if the timer has expired
-        if (this.timeLeft <= 0) {
-            this.timerEvent.remove(false);
-            this.timerExpired = true;
-            this.timerText.setText("Time left: 0"); // Ensure it displays 0
-            // Perform any additional actions when the timer expires
-            this.gameOver = true;
-            this.onTimerExpired();
-        }
-    }
-
-    onTimerExpired() {
-        // Handle what happens when the timer expires
-        console.log("Timer has expired!");
-        this.gameOver = true;
-    }
-
-    startTimerEvent() {
-        // Create a timed event that calls the updateTimer method every second
-        this.timerEvent = this.time.addEvent({
-            delay: 1000,
-            callback: this.updateTimer,
-            callbackScope: this,
-            loop: true,
-        });
-    }
-
     update() {
         console.log(this.player.x, this.player.y);
         this.player.update(this.cursors);
         this.handlePrintPos();
-
-        this.timerText.setPosition(this.player.x - 500, this.player.y - 400);
 
         if (this.firstTerminalPassed) {
             if (this.cursors?.left.isDown) {
@@ -625,13 +581,11 @@ export default class Level6Scene extends LevelClass {
 
         if (this.gameOver) {
             this.gameOver = false;
-            this.timeLeft = 60;
             updateCurrentLevel(this.scene.key);
             this.cleanup();
             this.scene.launch("RespawnScene");
             this.scene.bringToTop("RespawnScene");
             this.scene.pause("Level6Scene");
-            this.startTimerEvent();
         }
 
         if (this.player.x > 7900) {
@@ -669,7 +623,6 @@ export default class Level6Scene extends LevelClass {
             this.ship.y += 1;
         } else {
             if (!this.shipStopped) {
-                this.player.updatePlayerFreeze();
                 this.player.setVisible(true);
                 this.player.setActive(true);
                 this.shipStopped = true;
@@ -680,6 +633,18 @@ export default class Level6Scene extends LevelClass {
                     0.08,
                     0,
                     100
+                );
+                this.add.text(this.player.x, this.player.y - 100, "Gottcha!");
+                this.add
+                    .sprite(this.player.x + 20, this.player.y, "npc_2", 1)
+                    .setScale(2);
+                this.time.delayedCall(
+                    2000,
+                    () => {
+                        this.cameras.main.fadeOut(2000);
+                    },
+                    [],
+                    this
                 );
             }
         }

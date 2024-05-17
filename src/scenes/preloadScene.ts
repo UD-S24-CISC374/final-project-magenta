@@ -134,11 +134,15 @@ export default class PreloadScene extends Phaser.Scene {
             frameWidth: 64,
             frameHeight: 64,
         });
+        this.load.image("check", "assets/Art/Check.png");
+        this.load.image("arrow", "assets/Art/arrow.png");
 
         //Sounds
         this.load.audio("bg_music_1", "assets/Sound/gitcat_chill_demo2.mp3");
         this.load.audio("wrong", "assets/Sound/lose sound 1_0.wav");
         this.load.audio("trapClick", "assets/Sound/trapClick.mp3");
+        this.load.audio("correct", "assets/Sound/coin.flac");
+
     }
 
     create() {

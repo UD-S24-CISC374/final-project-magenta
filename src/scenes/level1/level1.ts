@@ -50,6 +50,8 @@ export default class Level1Scene extends LevelClass {
     }
 
     create() {
+        this.scene.launch("buttonsScene");
+        this.scene.bringToTop("buttonsScene");
         this.restartFunction = () => {
             this.platforms?.clear(true, true);
             this.spikes.clear(true, true);
@@ -335,6 +337,7 @@ export default class Level1Scene extends LevelClass {
 
         terminal_1_scene.events.on("Terminal1_correct", () => {
             console.log("correct terminal 1");
+            this.add.image(this.player.x, this.player.y - 100, "check");
             this.canFlyAway = true;
         });
         terminal_1_scene.events.on("Terminal1_incorrect", () => {
@@ -370,12 +373,18 @@ export default class Level1Scene extends LevelClass {
 
     private handleNPC() {
         if (!this.hasNPCinteraction) {
-            displayNPCText(this, this.npcX, this.npcY, [
-                "Hello! My name is Space Felix.",
-                "You're from the Intergalactic Space Station aren't you?",
-                "My ship is over to the right but I was tasked with sending a critical rebel message back to the station.",
-                "Can you help me? Make sure you stage the encrypted messgage and not the original. The terminal is over to the right.",
-            ]);
+            displayNPCText(
+                this,
+                this.npcX,
+                this.npcY,
+                [
+                    "Hello! My name is Space Felix.",
+                    "You're from the Intergalactic Space Station aren't you?",
+                    "My ship is over to the right but I was tasked with sending a critical rebel message back to the station.",
+                    "Can you help me? Make sure you stage the encrypted messgage and not the original. The terminal is over to the right.",
+                ],
+                "#FFF"
+            );
         }
         this.hasNPCinteraction = true;
     }

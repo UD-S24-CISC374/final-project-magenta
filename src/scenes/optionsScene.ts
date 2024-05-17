@@ -9,6 +9,8 @@ export default class OptionsScene extends Phaser.Scene {
     }
 
     create() {
+        //REMOVE
+        this.scene.start("LogScene");
         /* ---------------     BACKGROUND COLOUR    ------------------- */
         this.cameras.main.setBackgroundColor("#9C9562");
         /* ---------------     BACK BUTTON    ------------------- */

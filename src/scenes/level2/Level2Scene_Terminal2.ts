@@ -92,7 +92,7 @@ export default class Level2Scene_Terminal2 extends LevelClass {
         //Hints
         this.hints = this.add.group();
         let showHints = this.add
-            .text(80, 180, "Show Hints", {})
+            .text(80, 180, "Show Hints", { color: "#0f0" })
             .setInteractive()
             .on("pointerdown", () => {
                 createHints(this, this.hints, [

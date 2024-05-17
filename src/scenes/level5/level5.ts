@@ -355,6 +355,8 @@ export default class Level5Scene extends LevelClass {
         );
         terminal_2_scene.events.on("Terminal2_correct", () => {
             console.log("correct terminal 2");
+            this.add.image(this.player.x, this.player.y - 100, "check");
+            this.sound.add("correct").play();
             this.passTerminal1();
         });
         terminal_2_scene.events.on("Terminal2_incorrect", () => {
@@ -400,22 +402,34 @@ export default class Level5Scene extends LevelClass {
 
     private handleNPC() {
         if (!this.hasNPCinteraction) {
-            displayNPCText(this, 350, 550 - 50, [
-                "Hello. I fear a rouge cat agent has found the location of an ancient relic of unmatched power...",
-                "Due to my old age, I am unable to pursue him myself and thus I must call on you.",
-                "Here I have set up a terminal that will give you the power needed to navigate the terrain.",
-                "This entire planet is rigged, you will only have a given amount of time to make it.",
-            ]);
+            displayNPCText(
+                this,
+                400,
+                550,
+                [
+                    "Hello. I fear a rouge cat agent has found the location of an ancient relic of unmatched power...",
+                    "Due to my old age, I am unable to pursue him myself and thus I must call on you.",
+                    "Here I have set up a terminal that will give you the power needed to navigate the terrain.",
+                    "This entire planet is rigged, you will only have a given amount of time to make it.",
+                ],
+                "#FFF"
+            );
         }
         this.hasNPCinteraction = true;
     }
 
     private handleNPC2() {
         if (!this.hasNPCinteraction2) {
-            displayNPCText(this, 6500, -300 - 50, [
-                "It seems like he has already escaped...",
-                "I must find him...",
-            ]);
+            displayNPCText(
+                this,
+                6500,
+                -300 - 50,
+                [
+                    "It seems like he has already escaped...",
+                    "I must find him...",
+                ],
+                "#FFF"
+            );
         }
         this.hasNPCinteraction2 = true;
     }

@@ -26,6 +26,8 @@ import Level5Scene from "./scenes/level5/level5";
 import Level5Scene_Terminal2 from "./scenes/level5/Level5Scene_Terminal2";
 import Level6Scene from "./scenes/level6/level6";
 import Level6Scene_Terminal1 from "./scenes/level6/Level6Scene_Terminal1";
+import LogScene from "./scenes/logScene";
+import { buttonsScene } from "./scenes/buttonsScene";
 
 const DEFAULT_WIDTH = 1280;
 const DEFAULT_HEIGHT = 720;
@@ -68,6 +70,8 @@ export const CONFIG = {
         Level6Scene,
         Level6Scene_Terminal1,
         RespawnScene,
+        LogScene,
+        buttonsScene,
     ],
 
     physics: {

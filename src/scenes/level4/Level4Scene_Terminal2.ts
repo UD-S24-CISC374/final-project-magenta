@@ -1,11 +1,13 @@
 import Phaser from "phaser";
 import LevelClass from "../../Classes/LevelClass";
 import { terminalDisplay } from "../../components/terminalDisplay";
+import { createHints } from "../../components/createHints";
 
 export default class Level4Scene_Terminal2 extends LevelClass {
     private mainLevel: LevelClass;
     private terminalDisplayText: Phaser.GameObjects.Text;
     private TerminalInput: HTMLInputElement;
+    hints: Phaser.GameObjects.Group;
     constructor() {
         super({ key: "Level4Scene_Terminal2" });
     }
@@ -21,12 +23,15 @@ export default class Level4Scene_Terminal2 extends LevelClass {
             50,
             `Task: It seems like he got frozen while trying to fix the heater!
             \n    On the computer, you see a directory called "heater",
-            \n                  while serching through the files you also find a
-            \n                  file "heater-date-set.js". "He was so close" you
-            \n                  think, "if only there was a way to implement 
-            \n                  his solution..."`,
+            \n                  you know the space station has the fix
+            \n                  for the heater in the heater-fix.js file. 
+            \n                  But how are you going to get it from there.
+            \n                 Make sure you save a copy of the log.txt file\n
+                    in the global repository`,
             {
-                color: "#fff",
+                color: "#Fff",
+                stroke: "#000",
+                strokeThickness: 2,
                 fontSize: "24px",
             }
         );
@@ -91,6 +96,25 @@ export default class Level4Scene_Terminal2 extends LevelClass {
                 color: "#0f0",
             }
         );
+
+        this.hints = this.add.group();
+        let showHints = this.add
+            .text(80, 180, "Show Hints", { color: "#0f0" })
+            .setInteractive()
+            .on("pointerdown", () => {
+                createHints(this, this.hints, [
+                    `Hint 4: The order of commands is, 'cd heater',\n'git pull',\n'git add log.txt',\n'git commit -m ''',\n'git push'`,
+                    "Hint 3: After you pull the fix into your local repository, add the log.txt to the repository so the space staion can see what went wrong and commit your changes",
+                    "Hint 2: What command can get you the files from the space station?",
+                    "Hint 1: You first have to get to the directory he was working in before he froze. Try 'cd heater'",
+                ]);
+            });
+        showHints.on("pointerover", () => {
+            showHints.setStyle({ fill: "#ff0" });
+        });
+        showHints.on("pointerout", () => {
+            showHints.setStyle({ fill: "#0f0" });
+        });
 
         //Handle Feedback Events
         this.events.on("correct_terminal_input", () => {
@@ -191,11 +215,11 @@ export default class Level4Scene_Terminal2 extends LevelClass {
             scene.sound.add("wrong").play();
             //Did they push with the red platform
             if (input[2].includes("git add")) {
-                if (!input[2].includes("heater-date-set")) {
+                if (!input[2].includes("log.txt")) {
                     scene.FeedbackText = scene.add.text(
                         feedbackX,
                         feedbackY,
-                        "Make sure you add the file with the power fix",
+                        "Make sure you add your log.txt file",
                         {
                             fontSize: feedbackFontSize,
                             color: feebackColor,

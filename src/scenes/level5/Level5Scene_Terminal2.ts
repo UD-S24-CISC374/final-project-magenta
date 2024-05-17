@@ -1,11 +1,13 @@
 import Phaser from "phaser";
 import LevelClass from "../../Classes/LevelClass";
 import { terminalDisplay } from "../../components/terminalDisplay";
+import { createHints } from "../../components/createHints";
 
 export default class Level5Scene_Terminal2 extends LevelClass {
     private mainLevel: LevelClass;
     private terminalDisplayText: Phaser.GameObjects.Text;
     private TerminalInput: HTMLInputElement;
+    hints: Phaser.GameObjects.Group;
     constructor() {
         super({ key: "Level5Scene_Terminal2" });
     }
@@ -24,9 +26,7 @@ export default class Level5Scene_Terminal2 extends LevelClass {
             \n               In order to obtain these powers, you must move this
             \n               file to the "main" branch. 
             \n               (Hint: the file you need is already added to the child
-            \n               branch. You must merge these branches. Dont forget good
-            \n               git practice! git fetch and git pull should 
-            \n               be done offten!)`,
+            \n               branch. You must merge these branches.`,
             {
                 color: "#fff",
                 fontSize: "24px",
@@ -93,6 +93,23 @@ export default class Level5Scene_Terminal2 extends LevelClass {
                 color: "#0f0",
             }
         );
+        this.hints = this.add.group();
+        let showHints = this.add
+            .text(80, 180, "Show Hints", { color: "#0f0" })
+            .setInteractive()
+            .on("pointerdown", () => {
+                createHints(this, this.hints, [
+                    "Hint 3: Now you just need to git merge cat-powers into main.",
+                    "Hint 2: After you git checkout main fetch the code you need to merge.",
+                    "Hint 1: First naviate to the main branch",
+                ]);
+            });
+        showHints.on("pointerover", () => {
+            showHints.setStyle({ fill: "#ff0" });
+        });
+        showHints.on("pointerout", () => {
+            showHints.setStyle({ fill: "#0f0" });
+        });
 
         //Handle Feedback Events
         this.events.on("correct_terminal_input", () => {
@@ -188,27 +205,25 @@ export default class Level5Scene_Terminal2 extends LevelClass {
             return true;
         }
 
-        //Did they Push
-        if (input[input.length - 1] === "git push") {
+        //Did they Megre
+        if (input[input.length - 1].includes("git merge")) {
             scene.sound.add("wrong").play();
             //Did they push with the red platform
-            if (input[2].includes("git add")) {
-                if (!input[2].includes("heater-date-set")) {
-                    scene.FeedbackText = scene.add.text(
-                        feedbackX,
-                        feedbackY,
-                        "Make sure you add the file with the power fix",
-                        {
-                            fontSize: feedbackFontSize,
-                            color: feebackColor,
-                            wordWrap: { width: feedbackWrap },
-                        }
-                    );
-                    //Clear the input array for next time
-                    scene.terminalInputArr = [];
-                    return false;
-                    //scene.events.emit("incorrect_terminal_input");
-                }
+            if (input[2].includes("git pull")) {
+                scene.FeedbackText = scene.add.text(
+                    feedbackX,
+                    feedbackY,
+                    "A git fetch is what we are trying to practice here.",
+                    {
+                        fontSize: feedbackFontSize,
+                        color: feebackColor,
+                        wordWrap: { width: feedbackWrap },
+                    }
+                );
+                //Clear the input array for next time
+                scene.terminalInputArr = [];
+                return false;
+                //scene.events.emit("incorrect_terminal_input");
             }
             //Did they push without the blue platform
             if (!input[3].includes("git commit")) {
