@@ -445,6 +445,7 @@ export default class Level4Scene extends LevelClass {
     private handleCanFlyAway() {
         if (this.canFlyAway) {
             this.player.setVisible(false);
+            this.player.updatePlayerFreeze();
             this.cameras.main.startFollow(
                 this.spaceShip,
                 true,
