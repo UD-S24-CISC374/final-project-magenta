@@ -375,7 +375,7 @@ export default class Level4Scene extends LevelClass {
             this.add.image(this.player.x, this.player.y - 100, "check");
             this.sound.add("correct").play();
             this.checkPointX = this.player.x;
-            this.checkPointY = this.player.y;
+            this.checkPointY = this.player.y - 10;
             this.passTerminal1();
         });
         terminal_2_scene.events.on("Terminal2_incorrect", () => {

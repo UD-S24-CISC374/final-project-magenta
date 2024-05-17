@@ -215,11 +215,11 @@ export default class Level4Scene_Terminal2 extends LevelClass {
             scene.sound.add("wrong").play();
             //Did they push with the red platform
             if (input[2].includes("git add")) {
-                if (!input[2].includes("heater-date-set")) {
+                if (!input[2].includes("log.txt")) {
                     scene.FeedbackText = scene.add.text(
                         feedbackX,
                         feedbackY,
-                        "Make sure you add the file with the power fix",
+                        "Make sure you add your log.txt file",
                         {
                             fontSize: feedbackFontSize,
                             color: feebackColor,

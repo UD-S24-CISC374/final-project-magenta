@@ -106,20 +106,20 @@ export default class MainScene extends Phaser.Scene {
             });
 
         /* ---------------     OPTIONS BUTTON    ------------------- */
-        this.optionsButton = this.add
-            .text(400, 400, "Options")
-            .setInteractive()
-            .on("pointerdown", () => {
-                this.updateOptionsClicked();
-            })
-            .on("pointerover", () => {
-                this.enterButtonHoverState(this.optionsButton);
-                this.enterCatHoverState(this.catOptions);
-            })
-            .on("pointerout", () => {
-                this.enterButtonRestState(this.optionsButton);
-                this.exitCatHoverState(this.catOptions);
-            });
+        // this.optionsButton = this.add
+        //     .text(400, 400, "Options")
+        //     .setInteractive()
+        //     .on("pointerdown", () => {
+        //         this.updateOptionsClicked();
+        //     })
+        //     .on("pointerover", () => {
+        //         this.enterButtonHoverState(this.optionsButton);
+        //         this.enterCatHoverState(this.catOptions);
+        //     })
+        //     .on("pointerout", () => {
+        //         this.enterButtonRestState(this.optionsButton);
+        //         this.exitCatHoverState(this.catOptions);
+        //     });
 
         /* ---------------     PLAY BUTTON    ------------------- */
         this.playButton = this.add

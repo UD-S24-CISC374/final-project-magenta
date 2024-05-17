@@ -673,7 +673,6 @@ export default class Level3Scene extends LevelClass {
         }
         if (this.shipStopped) {
             if (!this.hasNPCinteraction) {
-                //this.player.updatePlayerFreeze();
                 this.player.anims.play("turn", true);
                 this.handleNPC();
             }
