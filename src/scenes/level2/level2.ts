@@ -708,6 +708,12 @@ export default class Level2Scene extends LevelClass {
         );
         terminal_1_scene.events.on("Terminal1_correct", () => {
             console.log("correct terminal 1");
+            this.add.image(
+                this.player.x,
+                this.player.y - 100,
+                "check"
+            );
+            this.sound.add("correct").play();
             this.checkPointX = 2910;
             this.checkPointY = 32;
             this.passTerminal1();
@@ -735,6 +741,12 @@ export default class Level2Scene extends LevelClass {
         );
         terminal_2_scene.events.on("Terminal2_correct", () => {
             console.log("correct terminal 2");
+            this.add.image(
+                this.player.x,
+                this.player.y - 100,
+                "check"
+            );
+            this.sound.add("correct").play();
             this.passTerminal2();
         });
         terminal_2_scene.events.on("Terminal2_incorrect", () => {

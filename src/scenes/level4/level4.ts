@@ -372,6 +372,12 @@ export default class Level4Scene extends LevelClass {
         );
         terminal_2_scene.events.on("Terminal2_correct", () => {
             console.log("correct terminal 2");
+            this.add.image(
+                this.player.x,
+                this.player.y - 100,
+                "check"
+            );
+            this.sound.add("correct").play();
             this.passTerminal1();
         });
         terminal_2_scene.events.on("Terminal2_incorrect", () => {

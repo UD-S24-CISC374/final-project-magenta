@@ -450,6 +450,12 @@ export default class Level3Scene extends LevelClass {
         );
         terminal_1_scene.events.on("Terminal1_correct", () => {
             console.log("correct terminal 1");
+            this.add.image(
+                this.player.x,
+                this.player.y - 100,
+                "check"
+            );
+            this.sound.add("correct").play();
             this.d1.setVisible(true);
             this.terminal1Complete = true;
         });

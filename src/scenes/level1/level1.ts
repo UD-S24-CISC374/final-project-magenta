@@ -335,6 +335,7 @@ export default class Level1Scene extends LevelClass {
 
         terminal_1_scene.events.on("Terminal1_correct", () => {
             console.log("correct terminal 1");
+            this.add.image(this.player.x, this.player.y - 100, "check");
             this.canFlyAway = true;
         });
         terminal_1_scene.events.on("Terminal1_incorrect", () => {

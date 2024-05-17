@@ -110,6 +110,7 @@ export default class Level1Scene_Terminal1 extends LevelClass {
         //Is the input exactly correct
         if (JSON.stringify(input) === JSON.stringify(correctInput)) {
             scene.events.emit("correct_terminal_input");
+            scene.sound.add("correct").play();
             return true;
         }
 
@@ -169,6 +170,7 @@ export default class Level1Scene_Terminal1 extends LevelClass {
 
         if (input.length > correctInput.length + 2) {
             console.log("running");
+            scene.sound.add("wrong").play();
             scene.FeedbackText = scene.add.text(
                 feedbackX,
                 feedbackY,
