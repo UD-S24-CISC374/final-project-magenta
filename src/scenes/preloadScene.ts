@@ -37,6 +37,8 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image("trap", "assets/Art/trapLvl3.png");
         this.load.image("bomb", "assets/Art/bomb.png");
         this.load.image("Lvl3Spike", "assets/Art/spikeLvl3.png");
+        this.load.image("lvl6_bg", "assets/Art/DesertForest.png");
+        this.load.image("Lvl6_ground", "assets/Art/purpleplanet.png");
         this.load.image(
             "background-1-level1",
             "assets/Art/background-1-level1.png"
@@ -63,6 +65,7 @@ export default class PreloadScene extends Phaser.Scene {
         this.load.image("level5-bg", "assets/Art/level5-bg.png");
         this.load.image("level5-1x1", "assets/Art/level5-1x1.png");
         this.load.image("level5-2x1", "assets/Art/level5-2x1.png");
+        this.load.image("level6-2x1", "assets/Art/level6-2x1.png");
         this.load.image("level5-3x1", "assets/Art/level5-3x1.png");
         this.load.image("snowflake", "assets/Art/snowflake.png");
 
