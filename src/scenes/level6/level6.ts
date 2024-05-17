@@ -494,12 +494,18 @@ export default class Level6Scene extends LevelClass {
 
     private handleNPC() {
         if (!this.hasNPCinteraction) {
-            displayNPCText(this, 350, 550 - 50, [
-                "Hello. I fear a rouge cat agent has found the location of an ancient relic of unmatched power...",
-                "Due to my old age, I am unable to pursue him myself and thus I must call on you.",
-                "Here I have set up a terminal that will give you the power needed to navigate the terrain.",
-                "This entire planet is rigged, you will only have a given amount of time to make it.",
-            ]);
+            displayNPCText(
+                this,
+                350,
+                550 - 50,
+                [
+                    "Hello. I fear a rouge cat agent has found the location of an ancient relic of unmatched power...",
+                    "Due to my old age, I am unable to pursue him myself and thus I must call on you.",
+                    "Here I have set up a terminal that will give you the power needed to navigate the terrain.",
+                    "This entire planet is rigged, you will only have a given amount of time to make it.",
+                ],
+                "0x000000"
+            );
         }
         this.hasNPCinteraction = true;
     }

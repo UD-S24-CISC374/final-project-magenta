@@ -506,14 +506,20 @@ export default class Level3Scene extends LevelClass {
     //what to run after terminal 1 has passed
     passTerminal1() {
         if (!this.hasLastNPCinteraction) {
-            displayNPCText(this, this.npcX, this.npcY - 50, [
-                "Great job! Thanks for finding the terminal and doing that for us.",
-                "Now we've got to fix this satellite...",
-                "The government is not going to be happy about this. These are their satellites.",
-                "We never would have come here had we known they were here. We think they're behind these traps.",
-                "Some sort of testing...",
-                "Maybe you can investigate for us? I think the captain is on a white planet.",
-            ]);
+            displayNPCText(
+                this,
+                this.npcX + 10,
+                this.npcY - 50,
+                [
+                    "Great job! Thanks for finding the terminal and doing that for us.",
+                    "Now we've got to fix this satellite...",
+                    "The government is not going to be happy about this. These are their satellites.",
+                    "We never would have come here had we known they were here. We think they're behind these traps.",
+                    "Some sort of testing...",
+                    "Maybe you can investigate for us? I think the captain is on a white planet.",
+                ],
+                "0x00ff00"
+            );
             setTimeout(() => {
                 this.canFlyAway = true;
             }, 30000);
@@ -554,13 +560,13 @@ export default class Level3Scene extends LevelClass {
 
     private handleNPC() {
         if (!this.hasNPCinteraction) {
-            displayNPCText(this, this.npcX, this.npcY - 50, [
+            displayNPCText(this, this.npcX + 10, this.npcY - 50, [
                 "Ugh. This satellite is completely destroyed. It got blown up by one of the traps.",
                 "We're trying to run a geological survey of the planet but we can't find the terminal.",
                 "Can you help us? It's somewhere on the planet. I think our last commit got corrupted.",
                 "We need to commit our old changes and push them to the Space Station's repository for review.",
                 "Come back once you've found it...and be careful! There's traps everywhere.",
-            ]);
+            ], "0x00ff00");
         }
         this.hasNPCinteraction = true;
     }

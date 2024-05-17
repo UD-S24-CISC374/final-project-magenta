@@ -6,12 +6,13 @@ export function displayNPCText(
     Scene: LevelClass,
     x: number,
     y: number,
-    text: string[]
+    text: string[],
+    color: string
 ) {
     const HEIGHT_OFFSET = 100;
     let textObj = Scene.add.text(x, y - HEIGHT_OFFSET, text[0], {
         fontFamily: "Arial",
-        color: "#EE4B2B",
+        color: color,
         wordWrap: { width: 300 },
     });
     for (let i = 1; i < text.length; i++) {

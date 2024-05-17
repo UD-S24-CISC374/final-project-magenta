@@ -370,12 +370,18 @@ export default class Level1Scene extends LevelClass {
 
     private handleNPC() {
         if (!this.hasNPCinteraction) {
-            displayNPCText(this, this.npcX, this.npcY, [
-                "Hello! My name is Space Felix.",
-                "You're from the Intergalactic Space Station aren't you?",
-                "My ship is over to the right but I was tasked with sending a critical rebel message back to the station.",
-                "Can you help me? Make sure you stage the encrypted messgage and not the original. The terminal is over to the right.",
-            ]);
+            displayNPCText(
+                this,
+                this.npcX,
+                this.npcY,
+                [
+                    "Hello! My name is Space Felix.",
+                    "You're from the Intergalactic Space Station aren't you?",
+                    "My ship is over to the right but I was tasked with sending a critical rebel message back to the station.",
+                    "Can you help me? Make sure you stage the encrypted messgage and not the original. The terminal is over to the right.",
+                ],
+                "#FFF"
+            );
         }
         this.hasNPCinteraction = true;
     }
