@@ -358,7 +358,7 @@ export default class Level4Scene extends LevelClass {
         this.CorrectTerminalArr2 = [
             `cd heater`,
             `git pull`,
-            `git add heater-date-set.js`,
+            `git add log.txt`,
             `git commit -m ''`,
             "git push",
         ];
@@ -372,12 +372,10 @@ export default class Level4Scene extends LevelClass {
         );
         terminal_2_scene.events.on("Terminal2_correct", () => {
             console.log("correct terminal 2");
-            this.add.image(
-                this.player.x,
-                this.player.y - 100,
-                "check"
-            );
+            this.add.image(this.player.x, this.player.y - 100, "check");
             this.sound.add("correct").play();
+            this.checkPointX = this.player.x;
+            this.checkPointY = this.player.y;
             this.passTerminal1();
         });
         terminal_2_scene.events.on("Terminal2_incorrect", () => {
@@ -505,7 +503,6 @@ export default class Level4Scene extends LevelClass {
     }
 
     update() {
-        console.log(this.player.x, this.player.y);
         this.player.update(this.cursors);
         this.handlePrintPos();
 
@@ -536,7 +533,7 @@ export default class Level4Scene extends LevelClass {
                 this.handleNPC2();
             }
         }
-        if (this.hasNPCinteraction2) {
+        if (this.hasNPCinteraction2 && this.player.canMove) {
             if (this.cursors?.left.isDown) {
                 this.player.setVelocityX(-250);
                 //this.anims.play("left", true);

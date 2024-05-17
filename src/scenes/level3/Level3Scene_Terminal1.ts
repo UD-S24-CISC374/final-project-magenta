@@ -121,11 +121,11 @@ export default class Level3Scene_Terminal1 extends LevelClass {
         console.log(input);
         console.log(correctInput);
         scene.FeedbackText?.destroy();
-        let feedbackX = 500;
-        let feedbackY = 650;
-        let feedbackWrap = 700;
+        let feedbackX = 67;
+        let feedbackY = 380;
+        let feedbackWrap = 400;
         let feebackColor = "#ff0000";
-        let feedbackFontSize = "24px";
+        let feedbackFontSize = "32px";
 
         //Is the input exactly correct
         if (JSON.stringify(input) === JSON.stringify(correctInput)) {

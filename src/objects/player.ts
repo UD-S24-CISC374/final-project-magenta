@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
-    private canMove: boolean = true;
+    public canMove: boolean = true;
 
     //private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
     constructor(scene: Phaser.Scene, x: number, y: number) {

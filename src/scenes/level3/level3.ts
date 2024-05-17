@@ -50,6 +50,18 @@ export default class Level3Scene extends LevelClass {
         super({ key: "Level3Scene" });
     }
     create() {
+        this.restartFunction = () => {
+            this.player.destroy();
+            this.platforms?.clear(true, true);
+            //this.spikes?.clear(true, true);
+            this.terminalBody?.destroy();
+            this.terminalBody = undefined;
+            //this.events.destroy();
+            let term1 = this.scene.get(
+                "Level3Scene_Terminal1"
+            ) as Level3Scene_Terminal1;
+            term1.turnOffEmitters();
+        };
         this.game.registry.set("Level3Opened", true);
         //create ship and make it viasable (created as an image)
         this.ship = this.add.image(0, 0, "spacecraft");
@@ -501,6 +513,7 @@ export default class Level3Scene extends LevelClass {
             repeat: 0,
         });
         this.explosion.anims.play("explode", true);
+        this.player.x = 100;
         setTimeout(() => {
             this.gameOver = true;
         }, 800);
@@ -614,7 +627,7 @@ export default class Level3Scene extends LevelClass {
         this.handlePrintPos();
 
         if (this.ship.y <= 550) {
-            this.ship.y += 1.0;
+            this.ship.y += 1.2;
         } else if (!this.shipStopped) {
             this.player.setVisible(true);
             this.player.setActive(true);
@@ -634,7 +647,7 @@ export default class Level3Scene extends LevelClass {
             this.cleanup();
             this.scene.launch("RespawnScene");
             this.scene.bringToTop("RespawnScene");
-            this.scene.stop("Level3Scene");
+            this.scene.pause("Level3Scene");
         }
         if (this.playerHasPower) {
             if (this.cursors?.up.isDown && this.player.body?.touching.down) {
@@ -670,15 +683,8 @@ export default class Level3Scene extends LevelClass {
         }
     }
     private cleanup() {
-        this.player.destroy();
-        this.platforms?.clear(true, true);
-        //this.spikes?.clear(true, true);
-        this.terminalBody?.destroy();
-        this.terminalBody = undefined;
-        //this.events.destroy();
-        let term1 = this.scene.get(
-            "Level3Scene_Terminal1"
-        ) as Level3Scene_Terminal1;
-        term1.turnOffEmitters();
+        this.player.x = 100;
+        this.player.y = 550;
+        this.player.setVisible(true);
     }
 }
